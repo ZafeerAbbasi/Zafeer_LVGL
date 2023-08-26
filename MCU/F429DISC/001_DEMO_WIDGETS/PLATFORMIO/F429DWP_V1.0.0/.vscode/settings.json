@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "lvgl.h": "c",
+        "lv_gpu_stm32_dma2d.h": "c",
+        "lv_obj.h": "c",
+        "stm32f429i_discovery.h": "c",
+        "stm32f429i_discovery_lcd.h": "c",
+        "fonts.h": "c",
+        "ili9341.h": "c",
+        "lv_demos.h": "c"
+    }
+}
