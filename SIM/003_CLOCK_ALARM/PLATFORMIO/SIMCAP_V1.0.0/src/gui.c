@@ -59,8 +59,14 @@ void lvglBtnStyleInit(GUI_t *const gui_element)
     lv_style_init(&gui_element->style_button_normal);
     lv_style_init(&gui_element->style_button_clicked);
 
-    /*Normal Button radius*/
-    lv_style_set_radius(&gui_element->style_button_normal, 35)
+    /*Normal Button----------------------------------------------------------------------------*/
+
+    /*button corner radius*/
+    lv_style_set_radius(&gui_element->style_button_normal, 15);
+    lv_style_get_prop
+
+
+    
 }
 
 /**
