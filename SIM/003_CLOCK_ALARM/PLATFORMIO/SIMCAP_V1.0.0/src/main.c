@@ -5,7 +5,7 @@
 # Created Date: Friday, August 18th 2023, 4:51:03 pm                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Monday, August 21st 2023, 4:36:26 am                          #
+# Last Modified: Sunday, August 27th 2023, 8:15:07 am                          #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -45,9 +45,10 @@ int main(void)
   hal_setup();
 
   /*Main Clock Alarm UI Object Constructor*/
-  clockAlarmUI_Constructor(&ClockAlarmUI_inst);
+  // clockAlarmUI_Constructor(&ClockAlarmUI_inst);
+  lv_example_style_1();
   
-  rgb_mixer_create_ui();
+  //rgb_mixer_create_ui();
 
 	hal_loop();
 }

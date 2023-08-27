@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 4:46:40 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Monday, August 21st 2023, 8:48:28 pm                          #
+# Last Modified: Sunday, August 27th 2023, 8:07:47 am                          #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -61,10 +61,17 @@ void lvglBtnStyleInit(GUI_t *const gui_element)
 
     /*Normal Button----------------------------------------------------------------------------*/
 
-    /*button corner radius*/
+    /*Button corner radius*/
     lv_style_set_radius(&gui_element->style_button_normal, 15);
-    lv_style_get_prop
+    
+    /*Background Opacity*/
+    lv_style_set_bg_opa(&gui_element->style_button_normal, LV_OPA_100);
+    
+    /*Background Color*/
+    lv_style_set_bg_color(&gui_element->style_button_normal, lv_palette_main(LV_PALETTE_BLUE));
 
+    /*Border Opacity*/
+    //lv_style_set_border_opa()
 
     
 }
