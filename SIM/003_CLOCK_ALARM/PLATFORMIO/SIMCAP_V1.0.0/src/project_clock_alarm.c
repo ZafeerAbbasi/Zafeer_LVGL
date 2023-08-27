@@ -51,7 +51,11 @@ const char *g_months[] = { "January" , "February", "March","April","May", "June"
 /*FUNCTIONS______________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-/*Main Clock Alarm UI Object Constructor*/
+/**
+ * @brief Main Clock Alarm UI Object Constructor
+ * 
+ * @param clk_object Main Clock Alarm UI Object
+ */
 void clockAlarmUI_Constructor(ClockAlarmUI_t *const clk_object)
 {
     /*Update State to STATE_TICKING*/

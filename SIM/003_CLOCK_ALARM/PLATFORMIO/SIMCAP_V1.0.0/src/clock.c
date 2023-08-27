@@ -46,7 +46,11 @@
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-/*Take in a clock instance of type Clock_t and set its date/time*/
+/**
+ * @brief Take in a clock instance of type Clock_t and set initial date/time
+ * 
+ * @param clock_element Clock_t member of the main ClockAlarmUI_t object, i.e. clock_inst 
+ */
 void createClock(Clock_t *const clock_element)
 {
     clock_element->time_now         = INITIAL_CURRENT_TIME;

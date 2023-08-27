@@ -57,9 +57,9 @@ typedef struct{
     lv_obj_t *cont;
     lv_obj_t *dropdown_list;
     lv_obj_t *dropdown_button;
-    lv_style_t *style_clock;
-    lv_style_t *style_button_normal;
-    lv_style_t *style_button_clicked;
+    lv_style_t style_clock;
+    lv_style_t style_button_normal;
+    lv_style_t style_button_clicked;
 }GUI_t;
 
 
