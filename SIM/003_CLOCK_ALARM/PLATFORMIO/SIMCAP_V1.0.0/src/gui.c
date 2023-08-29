@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 4:46:40 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Sunday, August 27th 2023, 8:07:47 am                          #
+# Last Modified: Sunday, August 27th 2023, 7:48:25 pm                          #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -59,8 +59,11 @@ void lvglBtnStyleInit(GUI_t *const gui_element)
     lv_style_init(&gui_element->style_button_normal);
     lv_style_init(&gui_element->style_button_clicked);
 
-    /*Normal Button----------------------------------------------------------------------------*/
+    /*Border vs Outline
+    Border - increasing the border width on a rectangle will consume more of its interior space
+    Outline - increasing the outline width expands outward without altering the interior content of the object*/
 
+    /*Normal Button----------------------------------------------------------------------------*/
     /*Button corner radius*/
     lv_style_set_radius(&gui_element->style_button_normal, 15);
     
@@ -71,10 +74,41 @@ void lvglBtnStyleInit(GUI_t *const gui_element)
     lv_style_set_bg_color(&gui_element->style_button_normal, lv_palette_main(LV_PALETTE_BLUE));
 
     /*Border Opacity*/
-    //lv_style_set_border_opa()
+    lv_style_set_bg_opa(&gui_element->style_button_normal, LV_OPA_40);
+
+    /*Border width*/
+    lv_style_set_border_width(&gui_element->style_button_normal, 2);
+
+    /*Border color*/
+    lv_style_set_border_color(&gui_element->style_button_normal, lv_palette_main(LV_PALETTE_GREY));
+
+    /*Outline Opacity*/
+    lv_style_set_outline_opa(&gui_element->style_button_normal, LV_OPA_100);
+    
+    /*Outline color*/
+    lv_style_set_outline_color(&gui_element->style_button_normal, lv_palette_main(LV_PALETTE_BLUE));
+    
+    /*Text color*/
+    lv_style_set_text_color(&gui_element->style_button_normal, lv_color_white());
+    
+    /*Set padding*/
+    lv_style_set_pad_all(&gui_element->style_button_normal, 10);
+
+    /*Clicked Button----------------------------------------------------------------------------*/
+    /*Set outline width when pressed*/
+    lv_style_set_outline_width(&gui_element->style_button_clicked, 30);
+
+    /*Outline opacity when pressed*/
+    lv_style_set_outline_opa(&gui_element->style_button_clicked, LV_OPA_TRANSP);    
+
+    /*Add slight vertical translation after pressing*/
+    lv_style_set_translate_y(&gui_element->style_button_clicked, 5);
+
+    /*Set background color of the ripple (Darker shade of original background color)*/
+    lv_style_set_bg_color(&gui_element->style_button_clicked, lv_palette_darken(LV_PALETTE_BLUE, 2));
 
     
-}
+}   
 
 /**
  * @brief Initialize default settings for clock style and call button style init
