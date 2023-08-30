@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 3:03:30 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Monday, August 21st 2023, 4:27:04 am                          #
+# Last Modified: Tuesday, August 29th 2023, 7:09:34 pm                         #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -53,11 +53,11 @@
  */
 void createClock(Clock_t *const clock_element)
 {
-    clock_element->time_now         = INITIAL_CURRENT_TIME;
-    clock_element->time_mode        =  MODE_24H;
-    clock_element->alarm_time       = INITIAL_ALARM_TIME;
-    clock_element->date_now.day     = INITIAL_DAY;
-    clock_element->date_now.date    = INITIAL_DATE;
-    clock_element->date_now.month   = INITIAL_MONTH;
-    clock_element->date_now.year    = INITIAL_YEAR;
+    clock_element->timeNow         = INITIAL_CURRENT_TIME;
+    clock_element->timeMode        =  MODE_24H;
+    clock_element->alarmTime       = INITIAL_alarmTime;
+    clock_element->dateNow.day     = INITIAL_DAY;
+    clock_element->dateNow.date    = INITIAL_DATE;
+    clock_element->dateNow.month   = INITIAL_MONTH;
+    clock_element->dateNow.year    = INITIAL_YEAR;
 }

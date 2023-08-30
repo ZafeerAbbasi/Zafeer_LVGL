@@ -5,7 +5,7 @@
 # Created Date: Sunday, August 20th 2023, 10:45:20 pm                          #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Monday, August 21st 2023, 4:54:10 am                          #
+# Last Modified: Tuesday, August 29th 2023, 8:16:12 pm                         #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -55,11 +55,11 @@ typedef struct{
     lv_obj_t *year;
     lv_obj_t *menu;
     lv_obj_t *cont;
-    lv_obj_t *dropdown_list;
-    lv_obj_t *dropdown_button;
-    lv_style_t style_clock;
-    lv_style_t style_button_normal;
-    lv_style_t style_button_clicked;
+    lv_obj_t *dropDownList;
+    lv_obj_t *dropDownBtn;
+    lv_style_t styleClock;
+    lv_style_t styleBtnNormal;
+    lv_style_t styleBtnClicked;
 }GUI_t;
 
 
@@ -68,8 +68,9 @@ typedef struct{
 /*##############################################################################################################################################*/
 
 
-void guiCreator(GUI_t *const gui_element);
-
-
+void guiStyleCreator(GUI_t *const gui_element);
+void lvglStyleInit(GUI_t *const gui_element);
+void lvglBtnStyleInit(GUI_t *const gui_element);
+void guiLabelAndDropDownCreator(GUI_t *const gui_element);
 
 #endif

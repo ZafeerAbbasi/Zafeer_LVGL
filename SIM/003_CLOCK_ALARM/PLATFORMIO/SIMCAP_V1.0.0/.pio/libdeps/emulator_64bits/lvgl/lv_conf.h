@@ -5,7 +5,7 @@
 # Created Date: Friday, August 18th 2023, 4:08:01 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Sunday, August 27th 2023, 8:23:20 am                          #
+# Last Modified: Tuesday, August 29th 2023, 10:21:29 pm                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -209,7 +209,7 @@
  *-----------*/
 
 /*Enable the log module*/
-#define LV_USE_LOG 0
+#define LV_USE_LOG 1
 #if LV_USE_LOG
 
     /*How important log should be added:
@@ -223,17 +223,17 @@
 
     /*1: Print the log with 'printf';
     *0: User need to register a callback with `lv_log_register_print_cb()`*/
-    #define LV_LOG_PRINTF 0
+    #define LV_LOG_PRINTF 1
 
     /*Enable/disable LV_LOG_TRACE in modules that produces a huge number of logs*/
-    #define LV_LOG_TRACE_MEM        1
-    #define LV_LOG_TRACE_TIMER      1
-    #define LV_LOG_TRACE_INDEV      1
-    #define LV_LOG_TRACE_DISP_REFR  1
-    #define LV_LOG_TRACE_EVENT      1
-    #define LV_LOG_TRACE_OBJ_CREATE 1
-    #define LV_LOG_TRACE_LAYOUT     1
-    #define LV_LOG_TRACE_ANIM       1
+    #define LV_LOG_TRACE_MEM        0
+    #define LV_LOG_TRACE_TIMER      0
+    #define LV_LOG_TRACE_INDEV      0
+    #define LV_LOG_TRACE_DISP_REFR  0
+    #define LV_LOG_TRACE_EVENT      0
+    #define LV_LOG_TRACE_OBJ_CREATE 0
+    #define LV_LOG_TRACE_LAYOUT     0
+    #define LV_LOG_TRACE_ANIM       0
 
 #endif  /*LV_USE_LOG*/
 

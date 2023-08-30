@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 2:09:43 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Monday, August 21st 2023, 4:52:48 am                          #
+# Last Modified: Tuesday, August 29th 2023, 10:47:38 pm                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -64,6 +64,9 @@ void clockAlarmUI_Constructor(ClockAlarmUI_t *const clk_object)
     /*Create a Clock (i.e. Initalize Clock_t element of main clock object)*/
     createClock(&clk_object->clock_inst);
 
-    /*Create a GUI (i.e. Initialize the GUI Screen)*/
-    guiCreator(&clk_object->gui_inst);
+    /*Create a GUI (i.e. Initialize the GUI Screen styles)*/
+    guiStyleCreator(&clk_object->gui_inst);
+
+    /*Assign label objects to each element of gui_inst of main clock object and callbacks to screen and main dropDownBtn*/
+    guiLabelAndDropDownCreator(&clk_object->gui_inst);
 }

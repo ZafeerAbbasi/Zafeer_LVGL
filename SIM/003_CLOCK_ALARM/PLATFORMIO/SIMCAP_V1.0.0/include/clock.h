@@ -5,7 +5,7 @@
 # Created Date: Sunday, August 20th 2023, 9:51:28 pm                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Monday, August 21st 2023, 4:39:33 am                          #
+# Last Modified: Tuesday, August 29th 2023, 7:09:34 pm                         #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -40,12 +40,12 @@
 #define JUNE  5
 #define MAX_TIME  (864000UL)
 #define INITIAL_CURRENT_TIME  FORMAT_TIME(10, 10, 10)
-#define INITIAL_ALARM_TIME  FORMAT_TIME(8, 0, 0)
+#define INITIAL_alarmTime  FORMAT_TIME(8, 0, 0)
 #define INITIAL_DAY SUNDAY
 #define INITIAL_MONTH  JUNE
 #define INITIAL_YEAR  2022ul
 #define INITIAL_DATE  12
-#define INITIAL_ALARM_STATUS ALARM_ON
+#define INITIAL_alarmStatus ALARM_ON
 #define BASE_YEAR 2000
 
 /*##############################################################################################################################################*/
@@ -62,27 +62,27 @@ typedef struct{
 
 /*Clock Structure*/
 typedef struct{
-    uint32_t time_now;
-    uint32_t alarm_time;
-    uint32_t time_format;
-    uint8_t alarm_time_format;
-    uint32_t alarm_status;
-    uint32_t time_mode;
-    date_t date_now;
+    uint32_t timeNow;
+    uint32_t alarmTime;
+    uint32_t timeFormat;
+    uint8_t alarmTimeFormat;
+    uint32_t alarmStatus;
+    uint32_t timeMode;
+    date_t dateNow;
 }Clock_t;
 
 /*Time Mode (24HR/12HR)*/
 typedef enum{
     MODE_24H,
     MODE_12H
-}time_mode_t;
+}timeMode_t;
 
 /*Time Format (24HR/AM/PM)*/
 typedef enum{
     FORMAT_24HR,
     FORMAT_AM,
     FORMAT_PM
-}time_format_t;
+}timeFormat_t;
 
 /*##############################################################################################################################################*/
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/

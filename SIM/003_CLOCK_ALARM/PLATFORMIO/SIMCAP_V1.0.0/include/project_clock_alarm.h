@@ -5,7 +5,7 @@
 # Created Date: Sunday, August 20th 2023, 9:49:53 pm                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Monday, August 21st 2023, 4:52:29 am                          #
+# Last Modified: Wednesday, August 30th 2023, 12:38:19 am                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -30,7 +30,6 @@
 /*##############################################################################################################################################*/
 /*GLOBALS_______________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
-
 
 
 /*##############################################################################################################################################*/
@@ -72,7 +71,7 @@ typedef struct{
 /*Events that are generated in the application*/
 typedef enum{
     E_SETTING,                      /*Event generated when user clicks the 'Settings' option from the drop down list*/
-    E_ROOT_BACK,                    /*Event generated when user clicks the '<' (Back) button on the settings screen*/
+    E_ROOT_BACK,                    /*Event generated when user clicks the '<' (Back) Btn on the settings screen*/
     E_SETTING_CLOCK_HOUR,           /*Event generated when user rolls the roller to set a new value on the Time hour roller*/
     E_SETTING_CLOCK_MIN,            /*Event generated when user rolls the roller to set a new value on the Minute hour roller*/
     E_SETTING_CLOCK_SEC,            /*Event generated when user rolls the roller to set a new value on the Second hour roller*/
@@ -92,6 +91,10 @@ typedef enum{
     E_NONE
 }event_t;
 
+typedef struct {
+    event_t     sig;
+}UI_Event_t;
+
 
 
 /*##############################################################################################################################################*/
@@ -101,5 +104,9 @@ typedef enum{
 void clockAlarmUI_Constructor(ClockAlarmUI_t *const clk_object);
 
 
+
+
+
+extern ClockAlarmUI_t clockAlarmUI_inst;
 
 #endif
