@@ -5,7 +5,7 @@
 # Created Date: Tuesday, August 29th 2023, 7:31:05 pm                          #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Wednesday, August 30th 2023, 12:46:34 am                      #
+# Last Modified: Wednesday, August 30th 2023, 10:49:50 pm                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -103,8 +103,9 @@ void eventHandlerDropDownBtnOptionSettings(lv_event_t *e)
     /*If code is LV_EVENT_CLICKED then call clockAlarmUIProcessEvent*/
     if( code == LV_EVENT_CLICKED )
     {
-        /*Create an evetn and set its signal to E_SETTING*/
-        UI_Event_t event = {E_SETTING};
+        /*Create an event and set its signal to E_SETTING*/
+        UI_Event_t event;
+        event.sig = E_SETTING; 
         
         /*Process the event of opening the menu after clicking the 'Settings' option from list*/
         clockAlarmUIProcessEvent(&clockAlarmUI_inst, &event);

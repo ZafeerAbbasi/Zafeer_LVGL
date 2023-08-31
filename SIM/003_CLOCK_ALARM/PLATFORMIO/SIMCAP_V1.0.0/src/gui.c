@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 4:46:40 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Tuesday, August 29th 2023, 10:47:38 pm                        #
+# Last Modified: Wednesday, August 30th 2023, 10:40:30 pm                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -49,6 +49,62 @@
 /*##############################################################################################################################################*/
 
 /**
+ * @brief Initialize style for main page of GUI
+ * 
+ * @param gui_element GUI_t member of the main ClockAlarmUI_t object, i.e. gui_inst
+ */
+void guiMainPageStyleInit(GUI_t *const gui_element)
+{
+    /*Set background color of main page*/
+    lv_obj_set_style_bg_color(gui_element->screen, lv_palette_main(LV_PALETTE_AMBER), LV_PART_MAIN);
+
+    /*Set clock text font*/
+    lv_obj_set_style_text_font(gui_element->clock, &lv_font_montserrat_40, LV_PART_MAIN);
+
+    /*Set Various Date elements fonts*/
+    lv_obj_set_style_text_font(gui_element->day, &lv_font_montserrat_16, LV_PART_MAIN);
+    lv_obj_set_style_text_font(gui_element->month, &lv_font_montserrat_12, LV_PART_MAIN);
+    lv_obj_set_style_text_font(gui_element->date, &lv_font_montserrat_40, LV_PART_MAIN);
+    lv_obj_set_style_text_font(gui_element->year, &lv_font_montserrat_12, LV_PART_MAIN);
+
+    /*Clock Alignment using percentanges*/
+    lv_obj_align(gui_element->clock, LV_ALIGN_TOP_RIGHT, lv_pct(-5), lv_pct(40));
+
+    /*Set various date elements alignment*/
+    lv_obj_align(gui_element->clock, LV_ALIGN_TOP_RIGHT, LV_PCT(-5), LV_PCT(40));
+    lv_obj_align(gui_element->date, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(40));
+    lv_obj_align(gui_element->day, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(35));
+    lv_obj_align(gui_element->month, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(30));
+    lv_obj_align(gui_element->year, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(55));  
+
+    /*Dropdown Button Setup-----------------------------------------------------------------------------------------------------*/
+
+    /*Set Btn size and alignment*/
+    lv_obj_set_size(gui_element->dropDownBtn, 30, 30);
+    lv_obj_align(gui_element->dropDownBtn, LV_ALIGN_TOP_RIGHT, 0, 0);
+
+    /*Set background opacity to 90% ONLY when pressed*/
+    lv_obj_set_style_bg_opa(gui_element->dropDownBtn, LV_OPA_90, LV_STATE_PRESSED);
+    
+    /*Set corner radius to 5 pixels ONLY when pressed*/
+    lv_obj_set_style_radius(gui_element->dropDownBtn, 5, LV_STATE_PRESSED);
+
+    /*Set background color to amber(2 shades darker) ONLY when pressed*/
+    lv_obj_set_style_bg_color(gui_element->dropDownBtn, lv_palette_darken(LV_PALETTE_AMBER, 2), LV_STATE_PRESSED);
+    
+    /*Create a label, using Drop Down btn as Parent*/
+    lv_obj_t* label = lv_label_create(gui_element->dropDownBtn);
+
+    /*Set the icon and icon color for dropdown label*/
+    lv_label_set_text(label, LV_SYMBOL_LIST);
+    lv_obj_set_style_text_color(label, lv_color_black(), 0);
+    lv_obj_set_style_text_font(label, &lv_font_montserrat_30, LV_PART_MAIN);
+
+    /*Center the label to center of its parent(droppdwnbtn)*/
+    lv_obj_center(label);        
+}
+
+/**
  * @brief Create and assign label objects to each element of gui_inst of main object, assign callback to screen and dropDownBtn
  * 
  * @param gui_element GUI_t member of the main ClockAlarmUI_t object, i.e. gui_inst
@@ -66,6 +122,9 @@ void guiLabelAndDropDownCreator(GUI_t *const gui_element)
 
     /*Create button for drop down button on main screen*/
     gui_element->dropDownBtn = lv_btn_create(gui_element->screen);
+
+    /*Remove all the syle properties, so button exits, but cannot be seen and has no style elements, style init @fn guiMainPageStyleInit*/
+    lv_obj_remove_style_all(gui_element->dropDownBtn);
 
     /*Add callback for screen*/
     lv_obj_add_event_cb(gui_element->screen, eventHandlerScreen, LV_EVENT_PRESSED, (void *)gui_element);
@@ -154,7 +213,6 @@ void lvglBtnStyleInit(GUI_t *const gui_element)
 
     /*Set the transition to the style: lv_Btn_style_clicked*/
     lv_style_set_transition(&gui_element->styleBtnClicked, &transition);
-
 }
 
 /**
@@ -176,9 +234,9 @@ void lvglStyleInit(GUI_t *const gui_element)
 }
 
 /**
- * @brief Set the screen element of gui_element of main object to current active screen and call LVGL style init func for screen element of gui_element of main object
+ * @brief Set the screen element of gui_element of main object to current active screen and call LVGL style init func for button
  * 
- * @param gui_element GUI_t member of the main ClockAlarmUI_t object, i.e. gui_inst
+ *  @param gui_element GUI_t member of the main ClockAlarmUI_t object, i.e. gui_inst
  */
 void guiStyleCreator(GUI_t *const gui_element)
 {

@@ -5,7 +5,7 @@
 # Created Date: Sunday, August 20th 2023, 9:51:28 pm                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Tuesday, August 29th 2023, 7:09:34 pm                         #
+# Last Modified: Thursday, August 31st 2023, 12:46:24 am                       #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -23,6 +23,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "project_clock_alarm.h"
 
 
 
@@ -36,14 +37,14 @@
 /*DEFINES_______________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-#define SUNDAY 0
-#define JUNE  5
+#define THURSDAY 4
+#define AUGUST  7
 #define MAX_TIME  (864000UL)
-#define INITIAL_CURRENT_TIME  FORMAT_TIME(10, 10, 10)
+#define INITIAL_CURRENT_TIME  FORMAT_TIME(12, 22, 22)
 #define INITIAL_alarmTime  FORMAT_TIME(8, 0, 0)
-#define INITIAL_DAY SUNDAY
-#define INITIAL_MONTH  JUNE
-#define INITIAL_YEAR  2022ul
+#define INITIAL_DAY THURSDAY
+#define INITIAL_MONTH  AUGUST
+#define INITIAL_YEAR  2023ul
 #define INITIAL_DATE  12
 #define INITIAL_alarmStatus ALARM_ON
 #define BASE_YEAR 2000
@@ -62,13 +63,13 @@ typedef struct{
 
 /*Clock Structure*/
 typedef struct{
-    uint32_t timeNow;
-    uint32_t alarmTime;
-    uint32_t timeFormat;
-    uint8_t alarmTimeFormat;
-    uint32_t alarmStatus;
-    uint32_t timeMode;
-    date_t dateNow;
+    uint32_t    timeNow;
+    uint32_t    alarmTime;
+    uint32_t    timeFormat;
+    uint8_t     alarmTimeFormat;
+    uint32_t    alarmStatus;
+    uint32_t    timeMode;
+    date_t      dateNow;
 }Clock_t;
 
 /*Time Mode (24HR/12HR)*/

@@ -5,7 +5,7 @@
 # Created Date: Sunday, August 20th 2023, 10:45:20 pm                          #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Tuesday, August 29th 2023, 8:16:12 pm                         #
+# Last Modified: Wednesday, August 30th 2023, 11:58:24 pm                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -62,6 +62,30 @@ typedef struct{
     lv_style_t styleBtnClicked;
 }GUI_t;
 
+/**
+ * @brief Setting Page Data struct
+ * 
+ */
+typedef struct{
+    
+    uint8_t clockHour;
+    uint8_t clockMin;
+    uint8_t clockSecond;
+    uint8_t clockFormat;
+    uint8_t clockMode;
+    uint8_t alarmStatus;
+    uint8_t alarmHour;
+    uint8_t alarmMinute;
+    uint8_t alarmSecond;
+    uint8_t alarmFormat;
+    uint8_t soundStatus;
+    uint8_t brightness;
+    uint8_t day;
+    uint8_t date;
+    uint8_t month;
+    uint8_t year;
+}settingPageData_t;
+
 
 /*##############################################################################################################################################*/
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
@@ -72,5 +96,6 @@ void guiStyleCreator(GUI_t *const gui_element);
 void lvglStyleInit(GUI_t *const gui_element);
 void lvglBtnStyleInit(GUI_t *const gui_element);
 void guiLabelAndDropDownCreator(GUI_t *const gui_element);
+void guiMainPageStyleInit(GUI_t *const gui_element);
 
 #endif

@@ -5,7 +5,7 @@
 # Created Date: Sunday, August 20th 2023, 9:49:53 pm                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Wednesday, August 30th 2023, 12:38:19 am                      #
+# Last Modified: Thursday, August 31st 2023, 12:15:53 am                       #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -42,8 +42,10 @@
 #define DIGIT1(d)                               ((uint8_t)(d/10U))                  /*Get 1st Digit of a two digit number*/
 #define DIGIT2(d)                               ((uint8_t)(d%10U))                  /*Get 2nd Digit of a two digit number*/
 #define UI_STATE_CHANGE(object, new_state)      (object->state = new_state)         /*Change the State*/
+
+/*Given hour, min and sec, convert to Timeformat*/
 #define FORMAT_TIME(hour, min, sec)             ( ( (unsigned long)(hour)*\
-(unsigned long)(3600) ) + ( (unsigned long)(min)*(unsigned long)(60) ) +  ( (unsigned long)(sec) ) ) /*Given hour, min and sec, convert to Timeformat*/
+(unsigned long)(3600) ) + ( (unsigned long)(min)*(unsigned long)(60) ) +  ( (unsigned long)(sec) ) )
 
 
 
@@ -102,6 +104,7 @@ typedef struct {
 /*##############################################################################################################################################*/
 
 void clockAlarmUI_Constructor(ClockAlarmUI_t *const clk_object);
+void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, UI_Event_t *event);
 
 
 

@@ -1,3 +1,18 @@
+/*
+# ##############################################################################
+# File: app_hal.c                                                              #
+# Project: sdl2                                                                #
+# Created Date: Wednesday, August 30th 2023, 7:15:28 pm                        #
+# Author: Zafeer Abbasi                                                        #
+# ----------------------------------------------                               #
+# Last Modified: Wednesday, August 30th 2023, 7:19:22 pm                       #
+# Modified By: Zafeer Abbasi                                                   #
+# ----------------------------------------------                               #
+# Copyright (c) 2023 Zafeer.A                                                  #
+# ----------------------------------------------                               #
+# HISTORY:                                                                     #
+*//**/
+
 #include <unistd.h>
 #define SDL_MAIN_HANDLED        /*To fix SDL's "undefined reference to WinMain" issue*/
 #include <SDL2/SDL.h>
@@ -18,8 +33,8 @@ static int tick_thread(void * data)
     (void)data;
 
     while(1) {
-        SDL_Delay(5);   /*Sleep for 5 millisecond*/
-        lv_tick_inc(5); /*Tell LittelvGL that 5 milliseconds were elapsed*/
+        SDL_Delay(1);   /*Sleep for 5 millisecond*/
+        lv_tick_inc(1); /*Tell LittelvGL that 5 milliseconds were elapsed*/
     }
 
     return 0;
@@ -70,7 +85,7 @@ void hal_setup(void)
 void hal_loop(void)
 {
     while(1) {
-        SDL_Delay(5);
+        SDL_Delay(1);
         lv_task_handler();
     }
 }

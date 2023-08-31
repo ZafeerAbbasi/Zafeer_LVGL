@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 3:03:30 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Tuesday, August 29th 2023, 7:09:34 pm                         #
+# Last Modified: Thursday, August 31st 2023, 12:37:46 am                       #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -54,7 +54,7 @@
 void createClock(Clock_t *const clock_element)
 {
     clock_element->timeNow         = INITIAL_CURRENT_TIME;
-    clock_element->timeMode        =  MODE_24H;
+    clock_element->timeMode        = MODE_24H;
     clock_element->alarmTime       = INITIAL_alarmTime;
     clock_element->dateNow.day     = INITIAL_DAY;
     clock_element->dateNow.date    = INITIAL_DATE;
