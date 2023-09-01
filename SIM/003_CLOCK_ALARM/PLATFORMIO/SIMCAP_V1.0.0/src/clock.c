@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 3:03:30 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Friday, September 1st 2023, 2:57:04 am                        #
+# Last Modified: Friday, September 1st 2023, 3:22:43 am                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -46,9 +46,18 @@
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+/**
+ * @brief Gets date info from clk inst and adds it to second arg
+ * 
+ * @param clk_inst Source of date info
+ * @param date Destination of date info
+ */
 clockGetDate(Clock_t *const clk_inst, date_t *const date)
 {
-    
+    date->date = clk_inst->dateNow.date;
+    date->day = clk_inst->dateNow.day;
+    date->month = clk_inst->dateNow.month;
+    date->year = clk_inst->dateNow.year;
 }
 
 /**

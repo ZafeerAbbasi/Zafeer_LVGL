@@ -5,7 +5,7 @@
 # Created Date: Sunday, August 20th 2023, 9:51:28 pm                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Friday, September 1st 2023, 2:03:12 am                        #
+# Last Modified: Friday, September 1st 2023, 3:26:52 am                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -91,5 +91,6 @@ typedef enum{
 
 void createClock(Clock_t *const clock_element);
 uint8_t clockGetAMorPM(uint32_t time24h);
+clockGetDate(Clock_t *const clk_inst, date_t *const date);
 
 #endif

@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 2:09:43 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Friday, September 1st 2023, 2:54:11 am                        #
+# Last Modified: Friday, September 1st 2023, 3:30:47 am                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -142,7 +142,12 @@ void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, UI_Event_t *even
         date_t currentDate;
         
         /*Get current date and store into temp var currentDate*/
-        clockGetDate()
+        clockGetDate(&clk_object->clock_inst, &currentDate);
+
+        /*Set Date in User settings*/
+        clk_object->usr_setting.dateNow = currentDate;
+        
+        
 
 
 
