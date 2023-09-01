@@ -5,14 +5,14 @@
 # Created Date: Monday, August 21st 2023, 3:03:30 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Friday, September 1st 2023, 3:22:43 am                        #
+# Last Modified: Friday, September 1st 2023, 8:13:40 am                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
 # ----------------------------------------------                               #
 # HISTORY:                                                                     #
 *//**/
-/*This file is about manipulating data regarding the Clock_t element of the Main Clock object*/
+/*This file is about manipulating data regarding the clock_t element of the Main Clock object*/
 
 
 /*##############################################################################################################################################*/
@@ -52,7 +52,7 @@
  * @param clk_inst Source of date info
  * @param date Destination of date info
  */
-clockGetDate(Clock_t *const clk_inst, date_t *const date)
+void clockGetDate(clock_t *const clk_inst, date_t *const date)
 {
     date->date = clk_inst->dateNow.date;
     date->day = clk_inst->dateNow.day;
@@ -61,11 +61,11 @@ clockGetDate(Clock_t *const clk_inst, date_t *const date)
 }
 
 /**
- * @brief Take in a clock instance of type Clock_t and set initial date/time
+ * @brief Take in a clock instance of type clock_t and set initial date/time
  * 
- * @param clock_element Clock_t member of the main ClockAlarmUI_t object, i.e. clock_inst 
+ * @param clock_element clock_t member of the main ClockAlarmUI_t object, i.e. clock_inst 
  */
-void createClock(Clock_t *const clock_element)
+void createClock(clock_t *const clock_element)
 {
     clock_element->timeNow         = INITIAL_CURRENT_TIME;
     clock_element->timeMode        = MODE_24H;

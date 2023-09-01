@@ -5,7 +5,7 @@
 # Created Date: Sunday, August 20th 2023, 9:49:53 pm                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Thursday, August 31st 2023, 12:15:53 am                       #
+# Last Modified: Friday, September 1st 2023, 8:12:03 am                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -62,12 +62,12 @@ typedef enum{
 
 /*Main Clock Object*/
 typedef struct{
-    Clock_t         clock_inst;     /*Clock element*/
+    clock_t         clock_inst;     /*Clock element*/
     GUI_t           gui_inst;       /*GUI element*/
     GUI_state_t     state;          /*GUI state */
     GUI_state_t     history;        /*GUI history*/
-    Clock_t         usr_setting;    /*User Clock settings*/
-    Clock_t         setting_save;   /*Clock settings save*/
+    clock_t         usr_setting;    /*User Clock settings*/
+    clock_t         setting_save;   /*Clock settings save*/
 }ClockAlarmUI_t;
 
 /*Events that are generated in the application*/
@@ -105,7 +105,7 @@ typedef struct {
 
 void clockAlarmUI_Constructor(ClockAlarmUI_t *const clk_object);
 void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, UI_Event_t *event);
-
+static uint32_t convert24HourFormatTo12Hour(uint32_t time24h);
 
 
 

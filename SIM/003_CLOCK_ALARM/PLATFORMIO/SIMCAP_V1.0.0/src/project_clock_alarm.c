@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 2:09:43 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Friday, September 1st 2023, 3:30:47 am                        #
+# Last Modified: Friday, September 1st 2023, 8:12:03 am                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -179,7 +179,7 @@ void clockAlarmUI_Constructor(ClockAlarmUI_t *const clk_object)
     /*Update State to STATE_TICKING*/
     UI_STATE_CHANGE(clk_object, STATE_TICKING);
 
-    /*Create a Clock (i.e. Initalize Clock_t element of main clock object)*/
+    /*Create a Clock (i.e. Initalize clock_t element of main clock object)*/
     createClock(&clk_object->clock_inst);
 
     /*Create a GUI (i.e. Initialize the GUI button styles)*/
@@ -198,7 +198,8 @@ void clockAlarmUI_Constructor(ClockAlarmUI_t *const clk_object)
  * @param time24h 
  * @return uint32_t 
  */
-static uint32_t convert24HourFormatTo12Hour(uint32_t time24h) {
+static uint32_t convert24HourFormatTo12Hour(uint32_t time24h) 
+{
     
     /*Place holder variables*/
     uint8_t hour;

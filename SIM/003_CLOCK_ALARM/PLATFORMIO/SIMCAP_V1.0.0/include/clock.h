@@ -5,7 +5,7 @@
 # Created Date: Sunday, August 20th 2023, 9:51:28 pm                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Friday, September 1st 2023, 3:26:52 am                        #
+# Last Modified: Friday, September 1st 2023, 8:13:28 am                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -23,7 +23,6 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "project_clock_alarm.h"
 
 
 
@@ -70,7 +69,7 @@ typedef struct{
     uint32_t    alarmStatus;
     uint32_t    timeMode;
     date_t      dateNow;
-}Clock_t;
+}clock_t;
 
 /*Time Mode (24HR/12HR)*/
 typedef enum{
@@ -89,8 +88,8 @@ typedef enum{
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-void createClock(Clock_t *const clock_element);
+void createClock(clock_t *const clock_element);
 uint8_t clockGetAMorPM(uint32_t time24h);
-clockGetDate(Clock_t *const clk_inst, date_t *const date);
+void clockGetDate(clock_t *const clk_inst, date_t *const date);
 
 #endif
