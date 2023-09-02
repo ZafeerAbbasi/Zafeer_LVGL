@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 4:49:16 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Wednesday, August 30th 2023, 12:14:35 am                      #
+# Last Modified: Saturday, September 2nd 2023, 6:16:59 am                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -46,7 +46,7 @@
 
 void eventHandlerDropDownBtn(lv_event_t *e);
 void guiDropDownListCreator(GUI_t *const gui_element);
-static void collapseDropDownList(GUI_t *gui_element);
+void collapseDropDownList(GUI_t *gui_element);
 void eventHandlerScreen( lv_event_t * e );
 void test(lv_event_t *e);
 void test1(lv_event_t *e);

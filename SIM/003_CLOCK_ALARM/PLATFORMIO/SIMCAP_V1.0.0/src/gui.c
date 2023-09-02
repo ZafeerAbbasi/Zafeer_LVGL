@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 4:46:40 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Saturday, September 2nd 2023, 2:26:29 am                      #
+# Last Modified: Saturday, September 2nd 2023, 6:11:50 am                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -67,7 +67,7 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
 void screenCleanup(GUI_t *gui_element)
 {
     lv_obj_clean(gui_element->screen);
-    gui_element->dropDownList = NULL
+    gui_element->dropDownList = NULL;
 }
 
 /**

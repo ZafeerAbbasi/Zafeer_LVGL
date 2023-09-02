@@ -5,7 +5,7 @@
 # Created Date: Sunday, August 20th 2023, 9:49:53 pm                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Friday, September 1st 2023, 8:12:03 am                        #
+# Last Modified: Saturday, September 2nd 2023, 6:17:05 am                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -105,7 +105,7 @@ typedef struct {
 
 void clockAlarmUI_Constructor(ClockAlarmUI_t *const clk_object);
 void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, UI_Event_t *event);
-static uint32_t convert24HourFormatTo12Hour(uint32_t time24h);
+uint32_t convert24HourFormatTo12Hour(uint32_t time24h);
 
 
 

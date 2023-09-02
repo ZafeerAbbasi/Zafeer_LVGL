@@ -5,7 +5,7 @@
 # Created Date: Sunday, August 20th 2023, 10:45:20 pm                          #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Saturday, September 2nd 2023, 1:59:09 am                      #
+# Last Modified: Saturday, September 2nd 2023, 6:16:39 am                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -97,5 +97,6 @@ void lvglStyleInit(GUI_t *const gui_element);
 void lvglBtnStyleInit(GUI_t *const gui_element);
 void guiLabelAndDropDownCreator(GUI_t *const gui_element);
 void guiMainPageStyleInit(GUI_t *const gui_element);
+void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingpagedata);
 
 #endif

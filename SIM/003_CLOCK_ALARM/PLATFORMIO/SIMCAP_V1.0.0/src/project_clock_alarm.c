@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 2:09:43 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Saturday, September 2nd 2023, 2:04:52 am                      #
+# Last Modified: Saturday, September 2nd 2023, 6:17:21 am                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -63,9 +63,7 @@ void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, UI_Event_t *even
     event_t currEvent = event->sig;
 
     /*Main Event Process switch statement*/
-    switch (currEvent)
-    {
-    case E_SETTING:
+    if(currEvent == E_SETTING){
         
         /*CLOCK USER SETTINGS---------------------------------------------------------------------------------------------------*/
         /*Create a variable of type settingPageData_t to hold setting page data*/
@@ -165,24 +163,6 @@ void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, UI_Event_t *even
 
         /*Create Settings Page*/
         guiCreateSettingsPage(&clk_object->gui_inst, &settingPageData);
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        break;
-    
-    default:
-        break;
     }
 }
 
@@ -215,7 +195,7 @@ void clockAlarmUI_Constructor(ClockAlarmUI_t *const clk_object)
  * @param time24h 
  * @return uint32_t 
  */
-static uint32_t convert24HourFormatTo12Hour(uint32_t time24h) 
+uint32_t convert24HourFormatTo12Hour(uint32_t time24h) 
 {
     
     /*Place holder variables*/

@@ -5,7 +5,7 @@
 # Created Date: Tuesday, August 29th 2023, 7:31:05 pm                          #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Wednesday, August 30th 2023, 10:49:50 pm                      #
+# Last Modified: Saturday, September 2nd 2023, 6:17:12 am                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -53,7 +53,7 @@
  * 
  * @param gui_element GUI_t member of the main ClockAlarmUI_t object, i.e. gui_inst
  */
-static void collapseDropDownList(GUI_t *gui_element)
+void collapseDropDownList(GUI_t *gui_element)
 {
     /*Check if theres an active drop down list, if so then delete it*/
     if( gui_element->dropDownList != NULL)
