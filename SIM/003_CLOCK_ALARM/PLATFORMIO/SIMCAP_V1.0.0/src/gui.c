@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 4:46:40 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Saturday, September 2nd 2023, 6:11:50 am                      #
+# Last Modified: Saturday, September 2nd 2023, 7:39:48 am                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -49,6 +49,39 @@
 /*##############################################################################################################################################*/
 
 /**
+ * @brief Create Time and Date Header for settings page
+ * 
+ * @param gui_element 
+ */
+void guiCreateTimeDateHeader(GUI_t *const gui_element)
+{
+    /*Since gui_inst is cleaned we can assign the headers to the clock and date*/
+    /*CLOCK-------------------------------------------------------------------------------------------------------------------------------------*/
+    gui_element->clock = lv_label_create(gui_element->screen);
+    
+    /*Assign blank text at first, will update later*/
+    lv_label_set_text(gui_element->clock, "");
+    
+    /*Set Font*/
+    lv_obj_set_style_text_font(gui_element->clock, &lv_font_montserrat_14, 0);
+    
+    /*Align Clock to Top right*/
+    lv_obj_align(gui_element->clock, LV_ALIGN_TOP_RIGHT, -5, 0);
+
+    /*DATE--------------------------------------------------------------------------------------------------------------------------------------*/
+    gui_element->date = lv_label_create(gui_element->screen);
+    
+    /*Assign blank text at first, will update later*/
+    lv_label_set_text(gui_element->date, "");
+
+    /*Set font*/
+    lv_obj_set_style_text_font(gui_element->date, &lv_font_montserrat_14, 0);
+
+    /*Align date to top left*/
+    lv_obj_align(gui_element->date, LV_ALIGN_TOP_LEFT, 5, 0);
+}
+
+/**
  * @brief Create Settings Page
  * 
  * @param gui_element Gui Instance
@@ -57,10 +90,15 @@
 void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingpagedata)
 {
     
+    /*Create Time and Date Header*/
+    guiCreateTimeDateHeader(gui_element);
+
+    /*Create main settings menu*/
+    lv_obj_t *menu = createMenu()
 }
 
 /**
- * @brief Clear Screen and remove Drop Down List
+ * @brief Clear Screen(All child objects) and remove Drop Down List
  * 
  * @param gui_element 
  */

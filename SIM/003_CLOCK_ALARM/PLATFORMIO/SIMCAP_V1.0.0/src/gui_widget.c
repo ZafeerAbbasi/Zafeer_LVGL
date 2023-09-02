@@ -5,7 +5,7 @@
 # Created Date: Tuesday, August 29th 2023, 7:31:05 pm                          #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Saturday, September 2nd 2023, 6:17:12 am                      #
+# Last Modified: Saturday, September 2nd 2023, 8:11:42 am                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -47,6 +47,18 @@
 /*##############################################################################################################################################*/
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
+
+/**
+ * @brief Create a Menu object
+ * 
+ * @param parent Parent of which to place the Menu Child on
+ * @param enableRootBtn True, or False, Enable Root Button
+ * @param eventCallBack Callback for when Root Button is pressed
+ */
+void createMenu(lv_obj_t *parent, bool enableRootBtn, lv_event_cb_t eventCallBack)
+{
+    
+}
 
 /**
  * @brief Collapse the Drop Down List whenever the screen is tapped
