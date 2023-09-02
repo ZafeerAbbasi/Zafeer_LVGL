@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 2:09:43 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Saturday, September 2nd 2023, 6:17:21 am                      #
+# Last Modified: Saturday, September 2nd 2023, 6:35:38 am                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -65,74 +65,44 @@ void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, UI_Event_t *even
     /*Main Event Process switch statement*/
     if(currEvent == E_SETTING){
         
+        /*User Has Pressed the Setting button
+        retrieve current user settings,clock, date info
+        set the settings save config
+        open the settings menu*/
+        
         /*CLOCK USER SETTINGS---------------------------------------------------------------------------------------------------*/
         /*Create a variable of type settingPageData_t to hold setting page data*/
         settingPageData_t settingPageData;
-
-        /*Clear the settingPageData variable*/
         memset(&settingPageData, 0, sizeof(settingPageData_t));
 
         /*Set user_setting->current time in 12 Hour format*/
         clk_object->usr_setting.timeNow = convert24HourFormatTo12Hour(clk_object->clock_inst.timeNow);
-
-        /*Set Time format*/
         clk_object->usr_setting.alarmTimeFormat = clockGetAMorPM(clk_object->clock_inst.timeFormat);
-
-        /*Set Alarm time*/
         clk_object->usr_setting.alarmTime = convert24HourFormatTo12Hour(clk_object->clock_inst.alarmTime);
-
-        /*Set Alarm time format*/
         clk_object->usr_setting.alarmTimeFormat = clockGetAMorPM(clk_object->clock_inst.alarmTime);
 
         /*CLOCK SETTING SAVE----------------------------------------------------------------------------------------------------*/
-        /*Set Current time*/
         clk_object->setting_save.timeNow = clk_object->usr_setting.timeNow;
-
-        /*Set time format*/
         clk_object->setting_save.timeFormat = clk_object->usr_setting.timeFormat;
-
-        /*Set Alarm time*/
         clk_object->setting_save.alarmTime = clk_object->usr_setting.timeFormat;
-
-        /*Set Alarm time format*/
         clk_object->setting_save.alarmTimeFormat = clk_object->usr_setting.alarmTimeFormat;
 
         /*SETTING PAGE DATA - CLOCK---------------------------------------------------------------------------------------------*/
         /*Store current time in a temp variable*/
         uint32_t currentTime = clk_object->usr_setting.timeNow;
-
-        /*Set Clock Hour*/
         settingPageData.clockHour = GET_HOUR(currentTime);
-
-        /*Set Clock Min*/
         settingPageData.clockMin = GET_MIN(currentTime);
-
-        /*Set Clock Second*/
         settingPageData.clockSecond = GET_SEC(currentTime);
-
-        /*Set Clock format*/
         settingPageData.clockFormat = clockGetAMorPM(clk_object->clock_inst.timeNow);
-
-        /*Set Clock Mode*/
         settingPageData.clockMode = clk_object->clock_inst.timeMode;
 
         /*SETTING PAGE DATA - ALARM---------------------------------------------------------------------------------------------*/
         /*Store current Alarm time in temp variable*/
         currentTime = clk_object->usr_setting.alarmTime;
-
-        /*Set Alarm Hour*/
         settingPageData.alarmHour = GET_HOUR(currentTime);
-
-        /*Set Alarm Minute*/
         settingPageData.alarmMinute = GET_MIN(currentTime);
-
-        /*Set Alarm Second*/
         settingPageData.alarmSecond = GET_SEC(currentTime);
-
-        /*Set Alarm Format*/
         settingPageData.alarmFormat = clockGetAMorPM(clk_object->clock_inst.alarmTime);
-
-        /*Set Alarm Status*/
         settingPageData.alarmStatus = clk_object->clock_inst.alarmStatus;
         
         /*DATE - SETTING PAGE DATA, USER SETTING, SETTING SAVE------------------------------------------------------------------*/
@@ -141,11 +111,7 @@ void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, UI_Event_t *even
         
         /*Get current date and store into temp var currentDate*/
         clockGetDate(&clk_object->clock_inst, &currentDate);
-
-        /*Set Date in User settings*/
         clk_object->usr_setting.dateNow = currentDate;
-
-        /*Set Date in Settings save*/
         clk_object->setting_save.dateNow = currentDate;
 
         /*Set Date in Setting Page data*/
