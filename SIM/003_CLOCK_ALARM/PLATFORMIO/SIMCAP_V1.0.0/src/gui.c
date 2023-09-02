@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 4:46:40 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Wednesday, August 30th 2023, 10:40:30 pm                      #
+# Last Modified: Saturday, September 2nd 2023, 2:26:29 am                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -47,6 +47,28 @@
 /*##############################################################################################################################################*/
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
+
+/**
+ * @brief Create Settings Page
+ * 
+ * @param gui_element Gui Instance
+ * @param settingpagedata Setting Page data
+ */
+void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingpagedata)
+{
+    
+}
+
+/**
+ * @brief Clear Screen and remove Drop Down List
+ * 
+ * @param gui_element 
+ */
+void screenCleanup(GUI_t *gui_element)
+{
+    lv_obj_clean(gui_element->screen);
+    gui_element->dropDownList = NULL
+}
 
 /**
  * @brief Initialize style for main page of GUI

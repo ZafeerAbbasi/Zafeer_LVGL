@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 2:09:43 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Friday, September 1st 2023, 8:12:03 am                        #
+# Last Modified: Saturday, September 2nd 2023, 2:04:52 am                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -146,9 +146,26 @@ void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, UI_Event_t *even
 
         /*Set Date in User settings*/
         clk_object->usr_setting.dateNow = currentDate;
-        
-        
 
+        /*Set Date in Settings save*/
+        clk_object->setting_save.dateNow = currentDate;
+
+        /*Set Date in Setting Page data*/
+        settingPageData.date = currentDate.date;
+        settingPageData.day = currentDate.day;
+        settingPageData.month = currentDate.month;
+        settingPageData.year = currentDate.year;
+        
+        /*SCREEN UPDATES--------------------------------------------------------------------------------------------------------*/
+        /*Clean Screen*/
+        screenCleanup(&clk_object->gui_inst);
+
+        /*Update State*/
+        clk_object->state = STATE_SETTING;
+
+        /*Create Settings Page*/
+        guiCreateSettingsPage(&clk_object->gui_inst, &settingPageData);
+        
 
 
 

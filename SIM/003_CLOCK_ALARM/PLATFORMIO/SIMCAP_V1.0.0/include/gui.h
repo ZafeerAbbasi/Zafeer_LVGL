@@ -5,7 +5,7 @@
 # Created Date: Sunday, August 20th 2023, 10:45:20 pm                          #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Wednesday, August 30th 2023, 11:58:24 pm                      #
+# Last Modified: Saturday, September 2nd 2023, 1:59:09 am                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -91,7 +91,7 @@ typedef struct{
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-
+void screenCleanup(GUI_t *gui_element);
 void guiStyleCreator(GUI_t *const gui_element);
 void lvglStyleInit(GUI_t *const gui_element);
 void lvglBtnStyleInit(GUI_t *const gui_element);
