@@ -1,0 +1,15 @@
+../lvgl/src/widgets/lv_roller.c:760:13:set_y_anim	1
+../lvgl/src/widgets/lv_roller.c:706:13:inf_normalize.part.0	1
+../lvgl/src/widgets/lv_roller.c:571:13:refr_position	12
+../lvgl/src/widgets/lv_roller.c:753:13:scroll_anim_ready_cb	2
+../lvgl/src/widgets/lv_roller.c:290:13:lv_roller_constructor	4
+../lvgl/src/widgets/lv_roller.c:410:13:lv_roller_label_event	10
+../lvgl/src/widgets/lv_roller.c:311:13:lv_roller_event	49
+../lvgl/src/widgets/lv_roller.c:77:12:lv_roller_create	1
+../lvgl/src/widgets/lv_roller.c:95:6:lv_roller_set_options	9
+../lvgl/src/widgets/lv_roller.c:151:6:lv_roller_set_selected	4
+../lvgl/src/widgets/lv_roller.c:187:6:lv_roller_set_visible_row_count	1
+../lvgl/src/widgets/lv_roller.c:206:10:lv_roller_get_selected	2
+../lvgl/src/widgets/lv_roller.c:226:6:lv_roller_get_selected_str	12
+../lvgl/src/widgets/lv_roller.c:259:14:lv_roller_get_options	1
+../lvgl/src/widgets/lv_roller.c:272:10:lv_roller_get_option_cnt	2

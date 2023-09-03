@@ -1,0 +1,2 @@
+../src/rgb_mixer.c:39:6:slider_callback	4
+../src/rgb_mixer.c:74:6:rgb_mixer_create_ui	1

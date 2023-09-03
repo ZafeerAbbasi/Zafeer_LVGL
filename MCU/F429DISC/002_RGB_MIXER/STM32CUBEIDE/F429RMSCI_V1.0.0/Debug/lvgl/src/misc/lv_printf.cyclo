@@ -1,0 +1,6 @@
+../lvgl/src/misc/lv_printf.c:126:20:_out_buffer	2
+../lvgl/src/misc/lv_printf.c:134:20:_out_null	1
+../lvgl/src/misc/lv_printf.c:198:15:_ntoa_format	57
+../lvgl/src/misc/lv_printf.c:551:12:_vsnprintf.constprop	106
+../lvgl/src/misc/lv_printf.c:855:5:lv_snprintf	1
+../lvgl/src/misc/lv_printf.c:864:5:lv_vsnprintf	1

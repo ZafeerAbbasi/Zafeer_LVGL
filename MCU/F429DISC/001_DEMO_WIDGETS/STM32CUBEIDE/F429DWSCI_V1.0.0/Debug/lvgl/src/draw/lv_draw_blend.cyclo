@@ -1,0 +1,4 @@
+../lvgl/src/draw/lv_draw_blend.c:963:26:color_blend_true_color_additive	3
+../lvgl/src/draw/lv_draw_blend.c:1014:26:color_blend_true_color_subtractive	3
+../lvgl/src/draw/lv_draw_blend.c:126:28:_lv_blend_fill	94
+../lvgl/src/draw/lv_draw_blend.c:188:28:_lv_blend_map	91

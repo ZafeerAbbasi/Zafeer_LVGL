@@ -1,0 +1,2 @@
+../hal_stm_lvgl/touchpad/touchpad.c:68:13:touchpad_read	32	static
+../hal_stm_lvgl/touchpad/touchpad.c:45:6:touchpad_init	16	static

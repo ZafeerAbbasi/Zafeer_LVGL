@@ -1,0 +1,4 @@
+../HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c:2183:19:HAL_RCCEx_PeriphCLKConfig	32	static,ignoring_inline_asm
+../HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c:2406:6:HAL_RCCEx_GetPeriphCLKConfig	8	static,ignoring_inline_asm
+../HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c:2447:10:HAL_RCCEx_GetPeriphCLKFreq	0	static
+../HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c:2921:6:HAL_RCC_DeInit	4	static
