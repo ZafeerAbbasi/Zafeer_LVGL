@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 4:49:16 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Saturday, September 2nd 2023, 7:41:01 am                      #
+# Last Modified: Sunday, September 3rd 2023, 2:31:06 am                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -49,6 +49,6 @@ void collapseDropDownList(GUI_t *gui_element);
 void eventHandlerScreen( lv_event_t * e );
 void eventHandlerDropDownBtnOptionSettings(lv_event_t *e);
 void eventHandlerDropDownBtnOptionAbout(lv_event_t* e);
-
+lv_obj_t *createMenu(lv_obj_t *parent, bool enableRootBtn, lv_event_cb_t eventCallBack);
 
 #endif

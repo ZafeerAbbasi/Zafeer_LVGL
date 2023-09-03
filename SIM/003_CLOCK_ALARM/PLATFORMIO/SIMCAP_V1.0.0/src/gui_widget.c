@@ -5,7 +5,7 @@
 # Created Date: Tuesday, August 29th 2023, 7:31:05 pm                          #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Saturday, September 2nd 2023, 8:11:42 am                      #
+# Last Modified: Sunday, September 3rd 2023, 2:31:59 am                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -54,8 +54,9 @@
  * @param parent Parent of which to place the Menu Child on
  * @param enableRootBtn True, or False, Enable Root Button
  * @param eventCallBack Callback for when Root Button is pressed
+ * @return lv_obj_t* Pointer to menu object
  */
-void createMenu(lv_obj_t *parent, bool enableRootBtn, lv_event_cb_t eventCallBack)
+lv_obj_t *createMenu(lv_obj_t *parent, bool enableRootBtn, lv_event_cb_t eventCallBack)
 {
     
 }
