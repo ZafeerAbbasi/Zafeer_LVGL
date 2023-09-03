@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 4:46:40 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Saturday, September 2nd 2023, 7:39:48 am                      #
+# Last Modified: Sunday, September 3rd 2023, 3:59:00 pm                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -25,6 +25,7 @@
 #include "project_clock_alarm.h"
 #include "gui_widget.h"
 #include <stdio.h>
+#include "examples/lv_examples.h"
 
 /*##############################################################################################################################################*/
 /*GLOBALS_______________________________________________________________________________________________________________________________________*/
@@ -61,6 +62,7 @@ void guiCreateTimeDateHeader(GUI_t *const gui_element)
     
     /*Assign blank text at first, will update later*/
     lv_label_set_text(gui_element->clock, "");
+    lv_obj_set_style_text_color(gui_element->clock, lv_color_white(), LV_PART_MAIN);
     
     /*Set Font*/
     lv_obj_set_style_text_font(gui_element->clock, &lv_font_montserrat_14, 0);
@@ -73,6 +75,7 @@ void guiCreateTimeDateHeader(GUI_t *const gui_element)
     
     /*Assign blank text at first, will update later*/
     lv_label_set_text(gui_element->date, "");
+    lv_obj_set_style_text_color(gui_element->date, lv_color_white(), LV_PART_MAIN);
 
     /*Set font*/
     lv_obj_set_style_text_font(gui_element->date, &lv_font_montserrat_14, 0);
@@ -94,7 +97,32 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     guiCreateTimeDateHeader(gui_element);
 
     /*Create main settings menu*/
-    lv_obj_t *menu = createMenu()
+    lv_obj_t *menu = createMenu(gui_element->screen, true, eventHandlerRootBackBtn);
+
+    /*Store Background color of menu in a variable*/
+    lv_color_t bgColor = lv_obj_get_style_bg_color(menu, LV_PART_MAIN);
+
+    /*Adjust color based on brightness of color*/
+    if(lv_color_brightness(bgColor) > 127)
+    {
+        lv_obj_set_style_bg_color(menu, lv_color_darken(bgColor, 10), LV_PART_MAIN);
+    }
+    else
+    {
+        lv_obj_set_style_bg_color(menu, lv_color_darken(bgColor, 50), LV_PART_MAIN);
+    }
+
+    /*Set size and align menu*/
+    lv_obj_set_size(menu, lv_disp_get_hor_res(NULL), lv_disp_get_ver_res(NULL) - 20);
+    lv_obj_align(menu, LV_ALIGN_BOTTOM_MID, 0, 0);
+
+    /*SUB PAGE CREATION-------------------------------------------------------------------------------------------------------------------------*/
+    
+    /*DATE PAGE---------------------------------------------------------------------------------------------------------------------------------*/
+    /*ROOT PAGE---------------------------------------------------------------------------------------------------------------------------------*/
+
+
+    
 }
 
 /**
@@ -116,8 +144,10 @@ void screenCleanup(GUI_t *gui_element)
 void guiMainPageStyleInit(GUI_t *const gui_element)
 {
     /*Set background color of main page*/
-    lv_obj_set_style_bg_color(gui_element->screen, lv_palette_main(LV_PALETTE_AMBER), LV_PART_MAIN);
-
+    lv_obj_set_style_bg_color(gui_element->screen, lv_color_make(11, 11, 69), LV_PART_MAIN);
+    lv_obj_set_style_bg_grad_color(gui_element->screen, lv_color_make(138, 138, 162), LV_PART_MAIN);
+    lv_obj_set_style_bg_grad_dir(gui_element->screen, LV_GRAD_DIR_VER, LV_PART_MAIN);
+    
     /*Set clock text font*/
     lv_obj_set_style_text_font(gui_element->clock, &lv_font_montserrat_40, LV_PART_MAIN);
 
@@ -149,15 +179,15 @@ void guiMainPageStyleInit(GUI_t *const gui_element)
     /*Set corner radius to 5 pixels ONLY when pressed*/
     lv_obj_set_style_radius(gui_element->dropDownBtn, 5, LV_STATE_PRESSED);
 
-    /*Set background color to amber(2 shades darker) ONLY when pressed*/
-    lv_obj_set_style_bg_color(gui_element->dropDownBtn, lv_palette_darken(LV_PALETTE_AMBER, 2), LV_STATE_PRESSED);
+    /*Set background color to Deep purple(2 shades darker) ONLY when pressed*/
+    lv_obj_set_style_bg_color(gui_element->dropDownBtn, lv_palette_darken(LV_PALETTE_DEEP_PURPLE, 2), LV_STATE_PRESSED);
     
     /*Create a label, using Drop Down btn as Parent*/
     lv_obj_t* label = lv_label_create(gui_element->dropDownBtn);
 
     /*Set the icon and icon color for dropdown label*/
     lv_label_set_text(label, LV_SYMBOL_LIST);
-    lv_obj_set_style_text_color(label, lv_color_black(), 0);
+    lv_obj_set_style_text_color(label, lv_color_white(), 0);
     lv_obj_set_style_text_font(label, &lv_font_montserrat_30, LV_PART_MAIN);
 
     /*Center the label to center of its parent(droppdwnbtn)*/
@@ -173,12 +203,17 @@ void guiLabelAndDropDownCreator(GUI_t *const gui_element)
 {
     /*Create label object and assign to clock element of gui_element*/
     gui_element->clock = lv_label_create(gui_element->screen);
+    lv_obj_set_style_text_color(gui_element->clock, lv_color_white(), LV_PART_MAIN);
 
     /*Create label objects and assign to date elements of gui_element*/
     gui_element->day = lv_label_create(gui_element->screen);
+    lv_obj_set_style_text_color(gui_element->day, lv_color_white(), LV_PART_MAIN);
     gui_element->month = lv_label_create(gui_element->screen);
+    lv_obj_set_style_text_color(gui_element->month, lv_color_white(), LV_PART_MAIN);
     gui_element->year = lv_label_create(gui_element->screen);
+    lv_obj_set_style_text_color(gui_element->year, lv_color_white(), LV_PART_MAIN);
     gui_element->date = lv_label_create(gui_element->screen);
+    lv_obj_set_style_text_color(gui_element->date, lv_color_white(), LV_PART_MAIN);
 
     /*Create button for drop down button on main screen*/
     gui_element->dropDownBtn = lv_btn_create(gui_element->screen);
@@ -217,7 +252,7 @@ void lvglBtnStyleInit(GUI_t *const gui_element)
     lv_style_set_bg_opa(&gui_element->styleBtnNormal, LV_OPA_100);
     
     /*Background Color*/
-    lv_style_set_bg_color(&gui_element->styleBtnNormal, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_bg_color(&gui_element->styleBtnNormal, lv_color_make(11, 11, 69));
 
     /*Border Opacity*/
     lv_style_set_bg_opa(&gui_element->styleBtnNormal, LV_OPA_40);
@@ -232,7 +267,7 @@ void lvglBtnStyleInit(GUI_t *const gui_element)
     lv_style_set_outline_opa(&gui_element->styleBtnNormal, LV_OPA_100);
     
     /*Outline color*/
-    lv_style_set_outline_color(&gui_element->styleBtnNormal, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_outline_color(&gui_element->styleBtnNormal, lv_color_white());
     
     /*Text color*/
     lv_style_set_text_color(&gui_element->styleBtnNormal, lv_color_white());
@@ -250,12 +285,12 @@ void lvglBtnStyleInit(GUI_t *const gui_element)
     /*Add slight vertical translation after pressing*/
     lv_style_set_translate_y(&gui_element->styleBtnClicked, 5);
 
-    /*Set background color of the ripple (Darker shade of original background color)*/
-    lv_style_set_bg_color(&gui_element->styleBtnClicked, lv_palette_darken(LV_PALETTE_BLUE, 2));
+    /*Set background color of the button when clicked (Darker shade of original background color)*/
+    lv_style_set_bg_color(&gui_element->styleBtnClicked, lv_color_make(11, 11, 69));
 
     /*Set background gradient color, when pressed, color goes from bg color to bg grad color, giving a depth effect
     making the Btn look more 3-dimensional, top to bottom gradient */
-    lv_style_set_bg_grad_color(&gui_element->styleBtnClicked, lv_palette_darken(LV_PALETTE_BLUE, 4));
+    lv_style_set_bg_grad_color(&gui_element->styleBtnClicked, lv_color_make(138, 138, 162));
 
     /*Set gradient direction*/
     lv_style_set_bg_grad_dir(&gui_element->styleBtnClicked, LV_GRAD_DIR_VER);

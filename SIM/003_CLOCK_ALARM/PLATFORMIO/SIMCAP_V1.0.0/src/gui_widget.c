@@ -5,7 +5,7 @@
 # Created Date: Tuesday, August 29th 2023, 7:31:05 pm                          #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Sunday, September 3rd 2023, 2:31:59 am                        #
+# Last Modified: Sunday, September 3rd 2023, 9:15:21 am                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -48,6 +48,7 @@
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+
 /**
  * @brief Create a Menu object
  * 
@@ -58,7 +59,19 @@
  */
 lv_obj_t *createMenu(lv_obj_t *parent, bool enableRootBtn, lv_event_cb_t eventCallBack)
 {
-    
+    /*Create menu object*/
+    lv_obj_t *menu = lv_menu_create(parent);
+
+    if(enableRootBtn)
+    {
+        /*Enable Root Button*/
+        lv_menu_set_mode_root_back_btn(menu, LV_MENU_ROOT_BACK_BTN_ENABLED);
+    }
+
+    /*Add callback*/
+    lv_obj_add_event_cb(menu, eventCallBack, LV_EVENT_CLICKED, (void *)menu);
+
+    return menu;
 }
 
 /**
@@ -76,6 +89,31 @@ void collapseDropDownList(GUI_t *gui_element)
 
         /*Set the element to NULL*/
         gui_element->dropDownList = NULL;
+    }
+}
+
+/*EVENT HANDLERS--------------------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @brief Event Handler when Root Back Button on Settings Page has been pressed
+ * 
+ * @param event 
+ */
+void eventHandlerRootBackBtn(lv_event_t *event)
+{
+    /*Get Target*/
+    lv_obj_t *target = lv_event_get_target(event);
+
+    /*Get User data, in this case the pointer to menu object*/
+    lv_obj_t *menu = lv_event_get_user_data(event);
+
+    /*Check if target object is rootback button of menu*/
+    if( lv_menu_back_btn_is_root(menu, target))
+    {
+        /*Create an Event and Process it*/
+        UI_Event_t event;
+        event.sig = E_ROOT_BACK;
+        clockAlarmUIProcessEvent(&clockAlarmUI_inst, &event);
     }
 }
 
