@@ -20,14 +20,14 @@ void Lvgl_btn_style_init(Lvgl* const me) {
 
     lv_style_set_radius(&me->style_btn_normal, 15);
     lv_style_set_bg_opa(&me->style_btn_normal, LV_OPA_100);
-    lv_style_set_bg_color(&me->style_btn_normal, lv_color_make(11, 11, 69));
+    lv_style_set_bg_color(&me->style_btn_normal, lv_palette_main(LV_PALETTE_BLUE));
     lv_style_set_border_opa(&me->style_btn_normal, LV_OPA_40);
     lv_style_set_border_width(&me->style_btn_normal, 2);
     lv_style_set_border_color(&me->style_btn_normal, lv_palette_main(LV_PALETTE_GREY));
 
 
     lv_style_set_outline_opa(&me->style_btn_normal, LV_OPA_COVER);
-    lv_style_set_outline_color(&me->style_btn_normal, lv_color_white());
+    lv_style_set_outline_color(&me->style_btn_normal, lv_palette_main(LV_PALETTE_BLUE));
 
     lv_style_set_text_color(&me->style_btn_normal, lv_color_white());
     lv_style_set_pad_all(&me->style_btn_normal, 10);
@@ -38,9 +38,9 @@ void Lvgl_btn_style_init(Lvgl* const me) {
     lv_style_set_outline_opa(&me->style_btn_clicked, LV_OPA_TRANSP);
 
     lv_style_set_translate_y(&me->style_btn_clicked, 5);
-    lv_style_set_bg_color(&me->style_btn_clicked, lv_color_make(11, 11, 69));
-    lv_style_set_bg_grad_color(&me->style_btn_clicked, lv_color_make(138, 138, 162));
-    lv_style_set_bg_grad_dir(&me->style_btn_clicked, LV_GRAD_DIR_VER);
+    lv_style_set_bg_color(&me->style_btn_clicked, lv_palette_darken(LV_PALETTE_BLUE, 2));
+    lv_style_set_bg_grad_color(&me->style_btn_clicked, lv_palette_darken(LV_PALETTE_BLUE, 4));
+
 
     /*Add a transition to the outline*/
     static lv_style_transition_dsc_t trans;
@@ -189,7 +189,7 @@ void Lvgl_create_setting_page(Lvgl * const me, lvgl_setting_page_data_t* data) {
 
     ///////////////Create Time page//////////////////////////////
     lv_obj_t* time_page = lv_menu_page_create(menu, NULL);
-    lv_obj_set_style_pad_hor(time_page, lv_obj_get_style_pad_left(lv_menu_get_main_header(menu), 0), 0);
+    //lv_obj_set_style_pad_hor(time_page, lv_obj_get_style_pad_left(lv_menu_get_main_header(menu), 0), 0);
     lv_menu_separator_create(time_page);
     section = lv_menu_section_create(time_page);
     static roller_data time_h, time_m, time_s;
