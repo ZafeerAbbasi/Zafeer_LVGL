@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 4:46:40 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Sunday, September 3rd 2023, 3:59:00 pm                        #
+# Last Modified: Monday, September 4th 2023, 8:10:48 pm                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -119,8 +119,26 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     /*SUB PAGE CREATION-------------------------------------------------------------------------------------------------------------------------*/
     
     /*DATE PAGE---------------------------------------------------------------------------------------------------------------------------------*/
-    /*ROOT PAGE---------------------------------------------------------------------------------------------------------------------------------*/
+    /*Create Date Page on the Menu*/
+    lv_obj_t *datePage = lv_menu_page_create(menu, NULL);
 
+    /*Set Horizontal Padding equal to Header of the page*/
+    lv_obj_set_style_pad_hor(datePage, lv_obj_get_style_pad_left(lv_menu_get_main_header(menu), 0), 0);
+
+    /*Create a separator, separates sections, in this case separates page content from page header*/
+    lv_menu_separator_create(datePage);
+
+    /*Create and load Calendar Data variable*/
+    calendarData_t calendarData;
+    calendarData.date = settingpagedata->date;
+    calendarData.day = settingpagedata->day;
+    calendarData.month = settingpagedata->month;
+    calendarData.year = settingpagedata->year;
+    
+    /*Create Calendar Widget*/
+    createCalendar();
+    
+    /*ROOT PAGE---------------------------------------------------------------------------------------------------------------------------------*/
 
     
 }

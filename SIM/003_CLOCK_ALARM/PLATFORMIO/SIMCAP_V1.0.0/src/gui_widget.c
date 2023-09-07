@@ -5,7 +5,7 @@
 # Created Date: Tuesday, August 29th 2023, 7:31:05 pm                          #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Sunday, September 3rd 2023, 9:15:21 am                        #
+# Last Modified: Monday, September 4th 2023, 8:24:09 pm                        #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -48,6 +48,27 @@
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+/**
+ * @brief Create a Calendar object
+ * 
+ * @param parent Parent of which to place the Calendar Child on 
+ * @param data Calendar Data used to initialize the Calendar
+ */
+createCalendar(lv_obj_t *parent, calendarData_t *data)
+{
+    /*Create Calendar*/
+    lv_obj_t *calendar = lv_calendar_create(parent);
+
+    /*Set size and align*/
+    lv_obj_set_size(calendar, 185, 185);
+    lv_obj_align(calendar, LV_ALIGN_CENTER, 0, 27);
+    
+    /*Set Calendar year and month preset*/
+    lv_calendar_set_showed_date(calendar, data->year, data->month);
+
+    /*Set Calendar date preset*/
+    lv_calendar_set_today_date(cal)
+}
 
 /**
  * @brief Create a Menu object
