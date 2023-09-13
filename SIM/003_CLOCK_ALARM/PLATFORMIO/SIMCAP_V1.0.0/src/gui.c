@@ -31,13 +31,16 @@
 /*GLOBALS_______________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-
+static void guiCreateTimeDateHeader(GUI_t *const gui_element);
+static lv_obj_t *createSettingsTimeAlarmRollersRow(lv_obj_t *parent, rollerData_t *rollerHour, rollerData_t *rollerMin, rollerData_t *rollerSec, lv_event_cb_t eventCallBack);
+static void createTimeFormatCheckBoxes(lv_obj_t *parent, radioBtnData_t *radioBtnData);
 
 /*##############################################################################################################################################*/
 /*DEFINES_______________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-
+#define RADIO_BUTTON_INDEX_AM 0
+#define RADIO_BUTTON_INDEX_PM 1
 
 /*##############################################################################################################################################*/
 /*TYPEDEFS/STRUCTS/ENUMS________________________________________________________________________________________________________________________*/
@@ -50,11 +53,125 @@
 /*##############################################################################################################################################*/
 
 /**
+ * @brief Create a Time Format Check Boxes object
+ * 
+ * @param parent 
+ * @param radioBtnData 
+ */
+static void createTimeFormatCheckBoxes(lv_obj_t *parent, radioBtnData_t *radioBtnData)
+{
+    /*Create container on parent param passed into this function*/
+    lv_obj_t *container = lv_obj_create(parent);
+
+    /*Set Flex Flow of container to coloumn to add buttons in vertical order*/
+    lv_obj_set_flex_flow(container, LV_FLEX_FLOW_COLUMN);
+
+    /*Set height and width of container*/
+    lv_obj_set_width(container, LV_SIZE_CONTENT);
+    lv_obj_set_height(container, LV_SIZE_CONTENT);
+
+    /*Add event callback*/
+    lv_obj_add_event_cb(container, eventHandlerSettingsTimeFormatCheckBoxes, LV_EVENT_CLICKED, radioBtnData);
+
+    /*Create Radio Buttons*/
+    createRadioBtn(container, "AM", NULL, NULL); /*Created first, thus ID for this Btn = 0*/
+    createRadioBtn(container, "PM", NULL, NULL); /*Created second, thus ID for this Btn = 1*/
+
+    /*Set Checked State for the Button depending on Time format */
+    lv_obj_add_state(lv_obj_get_child(container, radioBtnData->radioBtnBoxIndex), LV_STATE_CHECKED);
+
+}
+
+/**
+ * @brief Create a Row of Rollers for Settings Page Time and Alarm
+ * 
+ * @param parent Parent to which to place the Roller objects on
+ * @param rollerHour Pointer to Hour rollerData_t struct
+ * @param rollerMin Pointer to Minute rollerData_t struct
+ * @param rollerSec Pointer to Second rollerData_t struct
+ * @param eventCallBack eventCallBack Roller Event Callback
+ * @return lv_obj_t* Pointer to Parent Row object
+ */
+static lv_obj_t *createSettingsTimeAlarmRollersRow(lv_obj_t *parent, rollerData_t *rollerHour, rollerData_t *rollerMin, rollerData_t *rollerSec, lv_event_cb_t eventCallBack)
+{
+    /*Set texts containing roller selections*/
+    const char* optsHour = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12";
+
+    const char* optsMinSec = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12 \
+                          \n13\n14\n15\n16\n17\n18\n19\n20\n21\n22      \
+                          \n23\n24\n25\n26\n27\n28\n29\n30\n31\n32      \
+                          \n33\n34\n35\n36\n37\n38\n39\n40\n41\n42      \
+                          \n43\n44\n45\n46\n47\n48\n49\n50\n51\n52      \
+                          \n53\n54\n55\n56\n57\n58\n59";
+
+    
+    /*Create roller objects for Hour, Minute, and Second*/
+    lv_obj_t *rollerHourObject;
+    lv_obj_t *rollerMinObject;
+    lv_obj_t *rollerSecObject;
+
+    /*Create a Parent object to place the roller containers on*/
+    lv_obj_t *containerRow = lv_obj_create(parent);
+
+    /*Set size, set width to LV_SIZE_CONTENT so that LVGL will dynamically adjust the width of the
+    containerRow object when we add child objects to it, and set height to 100*/
+    lv_obj_set_size(containerRow, LV_SIZE_CONTENT, 100);
+
+    /*Set Flex Flow, the flex flow function is used to set the flow direction of children inside a
+    container. So now child items will be laid horizontally instead of vertically*/
+    lv_obj_set_flex_flow(containerRow, LV_FLEX_FLOW_ROW);
+
+    /*Create label for hour roller*/
+    lv_obj_t *labelHour = lv_label_create(containerRow);
+    lv_label_set_text(labelHour, "hh");
+
+    /*Create Hour roller*/
+    rollerHourObject = createRoller(containerRow, optsHour, rollerHour->rollerActiveVal);
+
+    /*Set Roller type for the Roller Hour Struct passed into the function*/
+    rollerHour->rollerType = ROLLER_HOUR;
+
+    /*Add Callback for the rollerHourObject that we created in this function*/
+    lv_obj_add_event_cb(rollerHourObject, eventCallBack, LV_EVENT_VALUE_CHANGED, rollerHour);
+
+    /*Create Label for Minute Roller*/
+    lv_obj_t *labelMin = lv_label_create(containerRow);
+    lv_label_set_text(labelMin, "mm");
+
+    /*Create Minute Roller*/
+    rollerMinObject = createRoller(containerRow, optsMinSec, rollerMin->rollerActiveVal);
+
+    /*Set Roller type for the Roller Min struct passed into this function*/
+    rollerMin->rollerType = ROLLER_MIN;
+
+    /*Add Callback for the RollerMin object created in this function*/
+    lv_obj_add_event_cb(rollerMinObject, eventCallBack, LV_EVENT_VALUE_CHANGED, rollerMin);
+
+    if ( rollerSec != NULL )
+    {
+        /*If rollerSec exits*/
+        /*Create Lable for Second Roller*/
+        lv_obj_t *labelSec = lv_label_create(containerRow);
+        lv_label_set_text(labelSec, "ss");
+
+        /*Create Second roller*/
+        rollerSecObject = createRoller(containerRow, optsMinSec, rollerSec->rollerActiveVal);
+
+        /*Set Roller type for the roller sec struct passed into this function*/
+        rollerSec->rollerType = ROLLER_SEC;
+
+        /*Add callback for the RolleSec object created in this function*/
+        lv_obj_add_event_cb(rollerSecObject, eventCallBack, LV_EVENT_VALUE_CHANGED, rollerSec);
+    }
+    return containerRow;
+}
+
+/**
  * @brief Create Time and Date Header for settings page
  * 
  * @param gui_element 
  */
-void guiCreateTimeDateHeader(GUI_t *const gui_element)
+static void guiCreateTimeDateHeader(GUI_t *const gui_element)
 {
     /*Since gui_inst is cleaned we can assign the headers to the clock and date*/
     /*CLOCK-------------------------------------------------------------------------------------------------------------------------------------*/
@@ -92,12 +209,19 @@ void guiCreateTimeDateHeader(GUI_t *const gui_element)
  */
 void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingpagedata)
 {
-    
+    /*Placeholder variables*/
+    lv_obj_t* rootPage;
+    lv_obj_t* container;
+    lv_obj_t* defaultcontainerToShow;
+    lv_obj_t* section;
+    lv_obj_t* parentRow;
+    lv_obj_t* menu;
+
     /*Create Time and Date Header*/
     guiCreateTimeDateHeader(gui_element);
 
     /*Create main settings menu*/
-    lv_obj_t *menu = createMenu(gui_element->screen, true, eventHandlerRootBackBtn);
+    menu = createMenu(gui_element->screen, true, eventHandlerRootBackBtn);
 
     /*Store Background color of menu in a variable*/
     lv_color_t bgColor = lv_obj_get_style_bg_color(menu, LV_PART_MAIN);
@@ -114,18 +238,20 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
 
     /*Set size and align menu*/
     lv_obj_set_size(menu, lv_disp_get_hor_res(NULL), lv_disp_get_ver_res(NULL) - 20);
+
+    /*Align to bottom mid, so timedate header is at top*/
     lv_obj_align(menu, LV_ALIGN_BOTTOM_MID, 0, 0);
 
     /*SUB PAGE CREATION-------------------------------------------------------------------------------------------------------------------------*/
-    
-    /*DATE PAGE---------------------------------------------------------------------------------------------------------------------------------*/
+
+    /*DATE PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
     /*Create Date Page on the Menu*/
     lv_obj_t *datePage = lv_menu_page_create(menu, NULL);
 
     /*Set Horizontal Padding equal to Header of the page*/
-    lv_obj_set_style_pad_hor(datePage, lv_obj_get_style_pad_left(lv_menu_get_main_header(menu), 0), 0);
+    lv_obj_set_style_pad_hor(datePage, lv_obj_get_style_pad_left(lv_menu_get_main_header(menu), LV_PART_MAIN), LV_PART_MAIN);
 
-    /*Create a separator, separates sections, in this case separates page content from page header*/
+    /*Create a separator, separates sections, in this case separates calendar from page header*/
     lv_menu_separator_create(datePage);
 
     /*Create and load Calendar Data variable*/
@@ -136,11 +262,79 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     calendarData.year = settingpagedata->year;
     
     /*Create Calendar Widget*/
-    createCalendar();
-    
-    /*ROOT PAGE---------------------------------------------------------------------------------------------------------------------------------*/
+    createCalendar(datePage, &calendarData);
 
+    /*Create a separator, separates sections, in this case separates save button from calendar*/
+    lv_menu_separator_create(datePage);
+
+    /*Create 'Save' Button*/
+    createSaveBtn(datePage,"Save",&gui_element->styleBtnNormal,&gui_element->styleBtnClicked,eventHandlerDateSave);
+    /*END DATE PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
     
+
+    /*TIME PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+    /*Create Time Page*/
+    lv_obj_t *timePage = lv_menu_page_create(menu, NULL);
+
+    /*Set Horizontal padding of page equal to header of page*/
+    lv_obj_set_style_pad_hor(timePage, lv_obj_get_style_pad_left(lv_menu_get_main_header(menu), LV_PART_MAIN), LV_PART_MAIN);
+
+    /*Seperate from header*/
+    lv_menu_separator_create(timePage);
+
+    /*Create section*/
+    section = lv_menu_section_create(timePage);
+
+    /*Create Roller data placeholders, since there will be 3 rollers, one for hour, minute and second
+    Make the roller static since we want the roller to retain values between calls to this function*/
+    static rollerData_t rollerTimeHour, rollerTimeMinute, rollerTimeSecond;
+
+    /*Set active ID's for rollers*/
+    rollerTimeHour.rollerActiveVal = settingpagedata->clockHour - 1; //Subtract one since roller hour starts at 1, when clock data starts from 0
+    rollerTimeMinute.rollerActiveVal = settingpagedata->clockMin;
+    rollerTimeSecond.rollerActiveVal = settingpagedata->clockSecond;
+
+    /*Create Parent row*/
+    parentRow = createSettingsTimeAlarmRollersRow(section, &rollerTimeHour, &rollerTimeMinute, &rollerTimeSecond, eventHandlerTimeRollers);
+
+    /*Create Radio buttons, make them static so they retain values between calls to this function*/
+    static radioBtnData_t timeFormat;
+
+    /*Set Radio Button Data Setting Type*/
+    timeFormat.radioBtnSettingType = SETTING_TIME;
+
+    /*Adjust Initial Radio Button Data based on Clock Format*/
+    if( settingpagedata->clockFormat == FORMAT_AM )
+    {
+        /*Set Radio Button Active Value*/
+        timeFormat.radioBtnBoxIndex = RADIO_BUTTON_INDEX_AM;
+    }
+    else if( settingpagedata->clockFormat == FORMAT_PM )
+    {
+        /*Set Radio button active value*/
+        timeFormat.radioBtnBoxIndex = RADIO_BUTTON_INDEX_PM;
+    }
+
+    /*Set Active Index equal to the active val */
+    timeFormat.radioBtnActiveIndex1 = timeFormat.radioBtnBoxIndex;
+
+    /*Create Time Format CheckBoxes*/
+    createTimeFormatCheckBoxes(parentRow, &timeFormat);
+
+
+    /*END TIME PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+
+    /*ROOT PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+    /*Create Root page*/
+    rootPage = lv_menu_page_create(menu, "Settings");
+
+    /*Create section on Root Page for the all the menu options*/
+    section = lv_menu_section_create(rootPage);
+
+
+    /*Set the Root page as sidebar page for menu*/
+    lv_menu_set_sidebar_page(menu, rootPage);
 }
 
 /**
@@ -252,7 +446,7 @@ void guiLabelAndDropDownCreator(GUI_t *const gui_element)
  * 
  * @param gui_element GUI_t member of the main ClockAlarmUI_t object, i.e. gui_inst
  */
-void lvglBtnStyleInit(GUI_t *const gui_element)
+void guiBtnStyleInit(GUI_t *const gui_element)
 {
     /*Initialize default style for normal and clicked*/
     lv_style_init(&gui_element->styleBtnNormal);
@@ -260,7 +454,7 @@ void lvglBtnStyleInit(GUI_t *const gui_element)
 
     /*Border vs Outline
     Border - increasing the border width on a rectangle will consume more of its interior space
-    Outline - increasing the outline width expands outward without altering the interior content of the object*/
+    Outline - increasing the outline width expands outward without altering the interior container of the object*/
 
     /*Normal Btn----------------------------------------------------------------------------------------------------------*/
     /*Btn corner radius*/
@@ -292,6 +486,10 @@ void lvglBtnStyleInit(GUI_t *const gui_element)
     
     /*Set padding, increase distance from text to edge of container in all directions by 10 pixels*/
     lv_style_set_pad_all(&gui_element->styleBtnNormal, 10);
+
+    /*Add shadow*/
+    lv_style_set_shadow_color(&gui_element->styleBtnNormal, lv_palette_main(LV_PALETTE_GREY));
+    // lv_style_set_shadow_spread(&gui_element->styleBtnNormal, )
 
     /*Clicked Btn---------------------------------------------------------------------------------------------------------*/
     /*Set outline width when pressed*/
@@ -343,7 +541,7 @@ void lvglStyleInit(GUI_t *const gui_element)
     lv_style_init(&gui_element->styleClock);
 
     /*Initialize style for 'Save' Btn object*/
-    lvglBtnStyleInit(gui_element);
+    guiBtnStyleInit(gui_element);
 }
 
 /**

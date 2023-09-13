@@ -53,23 +53,6 @@
 /*TYPEDEFS/STRUCTS/ENUMS________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-/*UI_state_t structure*/
-typedef enum{
-    STATE_TICKING,
-    STATE_SETTING,
-    STATE_ALARM
-}GUI_state_t;
-
-/*Main Clock Object*/
-typedef struct{
-    clock_t         clock_inst;     /*Clock element*/
-    GUI_t           gui_inst;       /*GUI element*/
-    GUI_state_t     state;          /*GUI state */
-    GUI_state_t     history;        /*GUI history*/
-    clock_t         usr_setting;    /*User Clock settings*/
-    clock_t         setting_save;   /*Clock settings save*/
-}ClockAlarmUI_t;
-
 /*Events that are generated in the application*/
 typedef enum{
     E_SETTING,                      /*Event generated when user clicks the 'Settings' option from the drop down list*/
@@ -93,9 +76,46 @@ typedef enum{
     E_NONE
 }event_t;
 
-typedef struct {
-    event_t     sig;
-}UI_Event_t;
+/*GUI Event Structure*/
+typedef struct 
+{
+    event_t     signal;
+}guiEvent_t;
+
+typedef struct
+{
+    guiEvent_t  mainEvent;
+    uint32_t    param;
+}guiTimeChangeEvent_t;
+
+
+/*GUI Date Change Event Structure*/
+typedef struct
+{
+    guiEvent_t  mainEvent;
+    uint32_t    date;
+    uint32_t    day;
+    uint32_t    month;
+    uint32_t    year;
+}guiDateChangeEvent_t;
+
+/*UI_state_t structure*/
+typedef enum{
+    STATE_TICKING,
+    STATE_SETTING,
+    STATE_ALARM
+}GUI_state_t;
+
+/*Main Clock Object*/
+typedef struct{
+    clock_t         clock_inst;     /*Clock element*/
+    GUI_t           gui_inst;       /*GUI element*/
+    GUI_state_t     state;          /*GUI state */
+    GUI_state_t     history;        /*GUI history*/
+    clock_t         usr_setting;    /*User Clock settings*/
+    clock_t         setting_save;   /*Clock settings save*/
+}ClockAlarmUI_t;
+
 
 
 
@@ -104,8 +124,7 @@ typedef struct {
 /*##############################################################################################################################################*/
 
 void clockAlarmUI_Constructor(ClockAlarmUI_t *const clk_object);
-void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, UI_Event_t *event);
-uint32_t convert24HourFormatTo12Hour(uint32_t time24h);
+void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, guiEvent_t *event);
 
 
 

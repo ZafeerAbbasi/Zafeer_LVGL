@@ -33,6 +33,7 @@ const  char *g_days[] = { "Sunday", "Monday", "Tuesday", "Wednseday", "Thursday"
 const char *g_months[] = { "January" , "February", "March","April","May", "June", "July", "August","September",\
                           "October","November","December" };
 
+static uint32_t convert24HourFormatTo12Hour(uint32_t time24h);
 
 
 /*##############################################################################################################################################*/
@@ -57,10 +58,10 @@ const char *g_months[] = { "January" , "February", "March","April","May", "June"
  * @param clk_object Main Clock Alarm UI Object
  * @param event Pointer to the event which occurred
  */
-void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, UI_Event_t *event)
+void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, guiEvent_t *event)
 {
     /*Extract event signal from event*/
-    event_t currEvent = event->sig;
+    event_t currEvent = event->signal;
 
     /*Main Event Process switch statement*/
     if(currEvent == E_SETTING){
@@ -161,7 +162,7 @@ void clockAlarmUI_Constructor(ClockAlarmUI_t *const clk_object)
  * @param time24h 
  * @return uint32_t 
  */
-uint32_t convert24HourFormatTo12Hour(uint32_t time24h) 
+static uint32_t convert24HourFormatTo12Hour(uint32_t time24h) 
 {
     
     /*Place holder variables*/

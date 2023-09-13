@@ -94,7 +94,7 @@ typedef struct{
 void screenCleanup(GUI_t *gui_element);
 void guiStyleCreator(GUI_t *const gui_element);
 void lvglStyleInit(GUI_t *const gui_element);
-void lvglBtnStyleInit(GUI_t *const gui_element);
+void guiBtnStyleInit(GUI_t *const gui_element);
 void guiLabelAndDropDownCreator(GUI_t *const gui_element);
 void guiMainPageStyleInit(GUI_t *const gui_element);
 void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingpagedata);
