@@ -71,7 +71,7 @@ static void createTimeFormatCheckBoxes(lv_obj_t *parent, radioBtnData_t *radioBt
     lv_obj_set_height(container, LV_SIZE_CONTENT);
 
     /*Add event callback*/
-    lv_obj_add_event_cb(container, eventHandlerSettingsTimeFormatCheckBoxes, LV_EVENT_CLICKED, radioBtnData);
+    lv_obj_add_event_cb(container, eventHandlerSettingsTimeFormatRadioBtns, LV_EVENT_CLICKED, radioBtnData);
 
     /*Create Radio Buttons*/
     createRadioBtn(container, "AM", NULL, NULL); /*Created first, thus ID for this Btn = 0*/
@@ -314,9 +314,6 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
         /*Set Radio button active value*/
         timeFormat.radioBtnBoxIndex = RADIO_BUTTON_INDEX_PM;
     }
-
-    /*Set Active Index equal to the active val */
-    timeFormat.radioBtnActiveIndex1 = timeFormat.radioBtnBoxIndex;
 
     /*Create Time Format CheckBoxes*/
     createTimeFormatCheckBoxes(parentRow, &timeFormat);

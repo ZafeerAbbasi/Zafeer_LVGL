@@ -45,9 +45,7 @@
 typedef struct
 {
     uint8_t     radioBtnSettingType;
-    uint32_t    radioBtnActiveIndex1;
-    uint32_t    radioBtnActiveIndex2;
-    int         radioBtnBoxIndex;
+    uint32_t    radioBtnBoxIndex;
 }radioBtnData_t;
 
 /**

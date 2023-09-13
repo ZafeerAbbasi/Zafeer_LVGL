@@ -205,6 +205,51 @@ void collapseDropDownList(GUI_t *gui_element)
 /*EVENT HANDLERS--------------------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @brief Event Handler for the container containing the radio buttons for time format, the boxes will be b
+ *bubbled so when the boxes trigger an event it causes the parent container to cause an event.
+ * 
+ * @param event 
+ */
+void eventHandlerSettingsTimeFormatRadioBtns(lv_event_t *event)
+{
+    /*Create Time Change Event*/
+    guiTimeChangeEvent_t timeChangeEventRadioBtns;
+
+    /*Get User data (radio btn data)*/
+    radioBtnData_t *userDataRadioBtn = (radioBtnData_t *)lv_event_get_user_data(event);
+
+    /*Get the current active Button index, 0 = AM, 1 = PM*/
+    uint32_t *prevRadioBtnIndex = userDataRadioBtn->radioBtnBoxIndex;
+
+    /*Get Container, since we add callback to Container, and the radio btn is bubbled, the event came
+    from Container, but it originated from radio btn*/
+    lv_obj_t *container = lv_event_get_current_target(event);
+
+    /*Get the box which caused the event originally*/
+    lv_obj_t *newRadioBtn = lv_event_get_target(event);
+
+    /*Get the previously checked box, stored in radioBtnIndex*/
+    lv_obj_t *prevRadioBtn = lv_obj_get_child(container, prevRadioBtnIndex);
+
+
+    if( newRadioBtn == container )
+    {
+        /*If the original event came from container, i.e. user clicked on container then do nothing*/
+
+        return;
+    }
+    else
+    {
+        /*User clicked either AM or PM Box at this point*/
+
+        
+    }
+
+
+}
+
+
+/**
  * @brief Event Handler for when any of the Time rollers value is changed
  * 
  * @param event lv_event_t event
