@@ -33,7 +33,7 @@
 
 static void guiCreateTimeDateHeader(GUI_t *const gui_element);
 static lv_obj_t *createSettingsTimeAlarmRollersRow(lv_obj_t *parent, rollerData_t *rollerHour, rollerData_t *rollerMin, rollerData_t *rollerSec, lv_event_cb_t eventCallBack);
-static void createTimeFormatCheckBoxes(lv_obj_t *parent, radioBtnData_t *radioBtnData);
+static void createTimeFormatCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBoxData);
 
 /*##############################################################################################################################################*/
 /*DEFINES_______________________________________________________________________________________________________________________________________*/
@@ -56,9 +56,9 @@ static void createTimeFormatCheckBoxes(lv_obj_t *parent, radioBtnData_t *radioBt
  * @brief Create a Time Format Check Boxes object
  * 
  * @param parent 
- * @param radioBtnData 
+ * @param CheckBoxData 
  */
-static void createTimeFormatCheckBoxes(lv_obj_t *parent, radioBtnData_t *radioBtnData)
+static void createTimeFormatCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBoxData)
 {
     /*Create container on parent param passed into this function*/
     lv_obj_t *container = lv_obj_create(parent);
@@ -71,14 +71,14 @@ static void createTimeFormatCheckBoxes(lv_obj_t *parent, radioBtnData_t *radioBt
     lv_obj_set_height(container, LV_SIZE_CONTENT);
 
     /*Add event callback*/
-    lv_obj_add_event_cb(container, eventHandlerSettingsTimeFormatRadioBtns, LV_EVENT_CLICKED, radioBtnData);
+    lv_obj_add_event_cb(container, eventHandlerSettingsTimeFormatCheckBoxs, LV_EVENT_CLICKED, CheckBoxData);
 
-    /*Create Radio Buttons*/
-    createRadioBtn(container, "AM", NULL, NULL); /*Created first, thus ID for this Btn = 0*/
-    createRadioBtn(container, "PM", NULL, NULL); /*Created second, thus ID for this Btn = 1*/
+    /*Create CheckBoxes*/
+    createCheckBox(container, "AM", NULL, NULL); /*Created first, thus ID for this Btn = 0*/
+    createCheckBox(container, "PM", NULL, NULL); /*Created second, thus ID for this Btn = 1*/
 
     /*Set Checked State for the Button depending on Time format */
-    lv_obj_add_state(lv_obj_get_child(container, radioBtnData->radioBtnBoxIndex), LV_STATE_CHECKED);
+    lv_obj_add_state(lv_obj_get_child(container, CheckBoxData->CheckBoxBoxIndex), LV_STATE_CHECKED);
 
 }
 
@@ -297,28 +297,36 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     /*Create Parent row*/
     parentRow = createSettingsTimeAlarmRollersRow(section, &rollerTimeHour, &rollerTimeMinute, &rollerTimeSecond, eventHandlerTimeRollers);
 
-    /*Create Radio buttons, make them static so they retain values between calls to this function*/
-    static radioBtnData_t timeFormat;
+    /*Create CheckBox Data type, make them static so they retain values between calls to this function*/
+    static CheckBoxData_t timeFormat;
 
-    /*Set Radio Button Data Setting Type*/
-    timeFormat.radioBtnSettingType = SETTING_TIME;
+    /*Set CheckBox Data Setting Type*/
+    timeFormat.CheckBoxSettingType = SETTING_TIME;
 
-    /*Adjust Initial Radio Button Data based on Clock Format*/
+    /*Adjust Initial CheckBox Data based on Clock Format*/
     if( settingpagedata->clockFormat == FORMAT_AM )
     {
-        /*Set Radio Button Active Value*/
-        timeFormat.radioBtnBoxIndex = RADIO_BUTTON_INDEX_AM;
+        /*Set CheckBox Active Value*/
+        timeFormat.CheckBoxBoxIndex = RADIO_BUTTON_INDEX_AM;
     }
     else if( settingpagedata->clockFormat == FORMAT_PM )
     {
-        /*Set Radio button active value*/
-        timeFormat.radioBtnBoxIndex = RADIO_BUTTON_INDEX_PM;
+        /*Set CheckBox active value*/
+        timeFormat.CheckBoxBoxIndex = RADIO_BUTTON_INDEX_PM;
     }
 
     /*Create Time Format CheckBoxes*/
     createTimeFormatCheckBoxes(parentRow, &timeFormat);
 
+    /*Create a seperator, separates the parentRow from the 24 Hour Switch*/
+    lv_menu_separator_create(timePage);
 
+    /*Create New section for 24 Hour switch*/
+    section = lv_menu_section_create(timePage);
+
+    /*Create meridiem Switch */
+    lv_obj_t *meridiemSwitch = createMeridiemSwitch(section, LV_SYMBOL_SETTINGS, "24H", false, eventHandlerMeridiemSwitch);
+    
     /*END TIME PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 

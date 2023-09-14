@@ -49,6 +49,59 @@
 /*##############################################################################################################################################*/
 
 /**
+ * @brief Create a Label object
+ * 
+ * @param parent Parent to place the label on
+ * @param icon Icon used in the Label
+ * @param txt Text for the Label
+ * @param builderVariant Builder Variant
+ * @return lv_obj_t* Pointer to the created label object
+ */
+lv_obj_t *createLabel(lv_obj_t *parent, const char *icon, const char *txt, menuItemBuilderVariant_t builderVariant)
+{
+    
+}
+
+/**
+ * @brief Create a Meridiem Switch object
+ * 
+ * @param parent Parent to place the Meridiem Switch on
+ * @param icon Icon to add to the switch label
+ * @param txt Text for the switch label 
+ * @param currSwitchVal Should the switch be checked
+ * @param eventCallBack Callback for the switch
+ * @return lv_obj_t* Pointer to the created switch
+ */
+lv_obj_t *createMeridiemSwitch(lv_obj_t *parent, const char *icon, const char *txt, bool currSwitchVal, lv_event_cb_t eventCallBack)
+{
+    /*Create Label*/
+    lv_obj_t *label = createLabel(parent, icon, txt, LV_MENU_ITEM_BUILDER_VARIANT_1);
+}
+
+/**
+ * @brief Create a Check Box object
+ * 
+ * @param parent Parent to place the child Check Boxes on 
+ * @param txt Text to Add to Check Box
+ * @param styleCheckBox Style for the normal Check Box
+ * @param styleCheckBoxSelected Style for when the Check Box is checked
+ * @return lv_obj_t* Pointer to the created checkbox
+ */
+lv_obj_t *createCheckBox(lv_obj_t *parent, const char *txt, lv_style_t *styleCheckBox, lv_style_t *styleCheckBoxSelected)
+{
+    /*Create Check box*/
+    lv_obj_t *checkBox = lv_checkbox_create(parent);
+
+    /*Set text*/
+    lv_checkbox_set_text(checkBox, txt);
+
+    /*Add Flag to make the box bubbled so an event from the checkbox causes a event for the parent container*/
+    lv_obj_add_flag(checkBox, LV_OBJ_FLAG_EVENT_BUBBLE);
+
+    return checkBox;
+}
+
+/**
  * @brief Create a Roller object
  * 
  * @param parent Parent to place child roller object on
@@ -205,34 +258,35 @@ void collapseDropDownList(GUI_t *gui_element)
 /*EVENT HANDLERS--------------------------------------------------------------------------------------------------------------------------------*/
 
 /**
- * @brief Event Handler for the container containing the radio buttons for time format, the boxes will be b
- *bubbled so when the boxes trigger an event it causes the parent container to cause an event.
+ * @brief Event Handler for the container containing the CheckBoxes for CLOCK and ALARM format, the boxes will be
+ *  bubbled so when the boxes trigger an event it causes the parent container to cause an event.
  * 
  * @param event 
  */
-void eventHandlerSettingsTimeFormatRadioBtns(lv_event_t *event)
+void eventHandlerSettingsTimeFormatCheckBoxs(lv_event_t *event)
 {
     /*Create Time Change Event*/
-    guiTimeChangeEvent_t timeChangeEventRadioBtns;
+    guiTimeChangeEvent_t timeChangeEventCheckBoxes;
 
     /*Get User data (radio btn data)*/
-    radioBtnData_t *userDataRadioBtn = (radioBtnData_t *)lv_event_get_user_data(event);
+    CheckBoxData_t *userDataCheckBox = (CheckBoxData_t *)lv_event_get_user_data(event);
 
     /*Get the current active Button index, 0 = AM, 1 = PM*/
-    uint32_t *prevRadioBtnIndex = userDataRadioBtn->radioBtnBoxIndex;
+    uint32_t *prevCheckBoxIndex = &userDataCheckBox->CheckBoxBoxIndex;
 
     /*Get Container, since we add callback to Container, and the radio btn is bubbled, the event came
     from Container, but it originated from radio btn*/
     lv_obj_t *container = lv_event_get_current_target(event);
 
     /*Get the box which caused the event originally*/
-    lv_obj_t *newRadioBtn = lv_event_get_target(event);
+    lv_obj_t *newCheckBox = lv_event_get_target(event);
+    uint32_t newCheckBoxIndex = lv_obj_get_index(newCheckBox);
 
-    /*Get the previously checked box, stored in radioBtnIndex*/
-    lv_obj_t *prevRadioBtn = lv_obj_get_child(container, prevRadioBtnIndex);
+    /*Get the previously checked box, stored in CheckBoxIndex*/
+    lv_obj_t *prevCheckBox = lv_obj_get_child(container, *prevCheckBoxIndex);
 
 
-    if( newRadioBtn == container )
+    if( newCheckBox == container )
     {
         /*If the original event came from container, i.e. user clicked on container then do nothing*/
 
@@ -242,10 +296,34 @@ void eventHandlerSettingsTimeFormatRadioBtns(lv_event_t *event)
     {
         /*User clicked either AM or PM Box at this point*/
 
-        
+        /*Remove state from the previously selected radio btn*/
+        lv_obj_clear_state(prevCheckBox, LV_STATE_CHECKED);
+
+        /*Add state to newly selected radio btn*/
+        lv_obj_add_state(newCheckBox, LV_STATE_CHECKED);
+
+        /*Check weather the CheckBox Event Came from Time or Alarm*/
+        if( userDataCheckBox->CheckBoxSettingType == SETTING_TIME )
+        {
+            /*Event came from Clock Format*/
+            timeChangeEventCheckBoxes.mainEvent.signal = E_SETTING_CLOCK_FORMAT;
+        }
+        else if( userDataCheckBox->CheckBoxSettingType == SETTING_ALARM )
+        {
+            /*Event came from Alarm Format*/
+            timeChangeEventCheckBoxes.mainEvent.signal = E_SETTING_ALARM_FORMAT;
+        }
+        else
+        {
+            timeChangeEventCheckBoxes.mainEvent.signal = E_NONE;
+        }
+
+        /*Store the Index of the newly selected as paramter to the event*/
+        timeChangeEventCheckBoxes.param = newCheckBoxIndex;
+
+        /*Process the event*/
+        clockAlarmUIProcessEvent(&clockAlarmUI_inst, &timeChangeEventCheckBoxes.mainEvent);
     }
-
-
 }
 
 

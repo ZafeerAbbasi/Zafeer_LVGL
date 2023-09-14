@@ -44,9 +44,9 @@
  */
 typedef struct
 {
-    uint8_t     radioBtnSettingType;
-    uint32_t    radioBtnBoxIndex;
-}radioBtnData_t;
+    uint8_t     CheckBoxSettingType;
+    uint32_t    CheckBoxBoxIndex;
+}CheckBoxData_t;
 
 /**
  * @brief Roller Settings Enum
@@ -97,6 +97,7 @@ typedef struct
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+void eventHandlerSettingsTimeFormatCheckBoxs(lv_event_t *event);
 void eventHandlerTimeRollers(lv_event_t *event);
 void eventHandlerDateSave(lv_event_t *event);
 void eventHandlerDateChange(lv_event_t *event);
@@ -110,5 +111,6 @@ lv_obj_t *createMenu(lv_obj_t *parent, bool enableRootBtn, lv_event_cb_t eventCa
 lv_obj_t *createCalendar(lv_obj_t *parent, calendarData_t *data);
 lv_obj_t *createSaveBtn(lv_obj_t *parent, const char* txt, lv_style_t *normal, lv_style_t *clicked, lv_event_cb_t eventCallBack);
 lv_obj_t *createRoller(lv_obj_t *parent, const char *opts, int currVal);
+lv_obj_t *createCheckBox(lv_obj_t *parent, const char *txt, lv_style_t *styleCheckBox, lv_style_t *styleCheckBoxSelected);
 
 #endif

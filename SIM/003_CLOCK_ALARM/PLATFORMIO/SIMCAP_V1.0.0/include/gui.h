@@ -40,6 +40,12 @@
 /*TYPEDEFS/STRUCTS/ENUMS________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+/*Menu Item Builder Variant*/
+typedef enum {
+    LV_MENU_ITEM_BUILDER_VARIANT_1,
+    LV_MENU_ITEM_BUILDER_VARIANT_2
+}menuItemBuilderVariant_t;
+
 /*GUI Structure*/
 typedef struct{
     /*private*/
