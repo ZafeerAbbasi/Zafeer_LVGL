@@ -327,6 +327,8 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     /*Create meridiem Switch */
     lv_obj_t *meridiemSwitch = createMeridiemSwitch(section, LV_SYMBOL_SETTINGS, "24H", false, eventHandlerMeridiemSwitch);
     
+
+    
     /*END TIME PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 
@@ -416,7 +418,7 @@ void guiMainPageStyleInit(GUI_t *const gui_element)
  * 
  * @param gui_element GUI_t member of the main ClockAlarmUI_t object, i.e. gui_inst
  */
-void guiLabelAndDropDownCreator(GUI_t *const gui_element)
+void guiMainLabelsAndDropDownCreator(GUI_t *const gui_element)
 {
     /*Create label object and assign to clock element of gui_element*/
     gui_element->clock = lv_label_create(gui_element->screen);

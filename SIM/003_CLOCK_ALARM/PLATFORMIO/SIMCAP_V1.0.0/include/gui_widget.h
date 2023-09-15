@@ -97,6 +97,7 @@ typedef struct
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+void eventHandlerMeridiemSwitch(lv_event_t *event);
 void eventHandlerSettingsTimeFormatCheckBoxs(lv_event_t *event);
 void eventHandlerTimeRollers(lv_event_t *event);
 void eventHandlerDateSave(lv_event_t *event);
@@ -112,5 +113,7 @@ lv_obj_t *createCalendar(lv_obj_t *parent, calendarData_t *data);
 lv_obj_t *createSaveBtn(lv_obj_t *parent, const char* txt, lv_style_t *normal, lv_style_t *clicked, lv_event_cb_t eventCallBack);
 lv_obj_t *createRoller(lv_obj_t *parent, const char *opts, int currVal);
 lv_obj_t *createCheckBox(lv_obj_t *parent, const char *txt, lv_style_t *styleCheckBox, lv_style_t *styleCheckBoxSelected);
+lv_obj_t *createMeridiemSwitch(lv_obj_t *parent, const char *icon, const char *txt, bool currSwitchVal, lv_event_cb_t eventCallBack);
+lv_obj_t *createLabelContainer(lv_obj_t *parent, const char *icon, const char *txt, menuItemBuilderVariant_t builderVariant);
 
 #endif

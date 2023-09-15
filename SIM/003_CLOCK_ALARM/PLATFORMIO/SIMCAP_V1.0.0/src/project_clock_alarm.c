@@ -150,7 +150,7 @@ void clockAlarmUI_Constructor(ClockAlarmUI_t *const clk_object)
     guiStyleCreator(&clk_object->gui_inst);
 
     /*Assign label objects to each element of gui_inst of main clock object and callbacks to screen and main dropDownBtn*/
-    guiLabelAndDropDownCreator(&clk_object->gui_inst);
+    guiMainLabelsAndDropDownCreator(&clk_object->gui_inst);
 
     /*Initialize style for main page*/
     guiMainPageStyleInit(&clk_object->gui_inst);

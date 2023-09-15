@@ -57,9 +57,57 @@
  * @param builderVariant Builder Variant
  * @return lv_obj_t* Pointer to the created label object
  */
-lv_obj_t *createLabel(lv_obj_t *parent, const char *icon, const char *txt, menuItemBuilderVariant_t builderVariant)
+lv_obj_t *createLabelContainer(lv_obj_t *parent, const char *icon, const char *txt, menuItemBuilderVariant_t builderVariant)
 {
-    
+    /*Create container for the Label on the Menu Section*/
+    lv_obj_t *container = lv_menu_cont_create(parent);
+
+    /*Placeholders for image and label pointers*/
+    lv_obj_t *img = NULL;
+    lv_obj_t *label = NULL;
+
+    if( icon )
+    {
+        /*If icon param is valid*/
+        /*create image*/
+        img = lv_img_create(container);
+
+        /*Set source for img, i.e. the icon*/
+        lv_img_set_src(img, icon);
+    }
+
+    if( txt )
+    {
+        /*If txt param is valid*/
+        /*Create lable*/
+        label = lv_label_create(container);
+
+        /*Set label text*/
+        lv_label_set_text( label, txt );
+
+        /*Set long mode, so circular scroll when text is too long*/
+        lv_label_set_long_mode(label, LV_LABEL_LONG_SCROLL_CIRCULAR);
+
+        /*Set Flex Grow of Label so it fills the whitespace
+        Explanation: Usage:
+        If you have a flex container with two children, and you set the "flex grow" value of the first child to 1 
+        and the second child to 2, the second child will take up twice as much of the extra space as the first child.*/
+        lv_obj_set_flex_grow(label, 1);
+    }
+
+    if( builderVariant == LV_MENU_ITEM_BUILDER_VARIANT_2 && icon && txt )
+    {
+        /*Add Flag Flex in New Track Flag
+        Explanation: The LV_OBJ_FLAG_FLEX_IN_NEW_TRACK flag is used to indicate that an object inside a flex 
+        container should start a new track (line or column, depending on the flex direction). This is especially 
+        useful when you're working with flex layouts that wrap, and you want to force a particular object to 
+        start on a new line or column, regardless of the available space in the current track*/
+        lv_obj_add_flag(img, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
+        lv_obj_swap(img, label);
+
+    }
+
+    return container;
 }
 
 /**
@@ -74,8 +122,22 @@ lv_obj_t *createLabel(lv_obj_t *parent, const char *icon, const char *txt, menuI
  */
 lv_obj_t *createMeridiemSwitch(lv_obj_t *parent, const char *icon, const char *txt, bool currSwitchVal, lv_event_cb_t eventCallBack)
 {
-    /*Create Label*/
-    lv_obj_t *label = createLabel(parent, icon, txt, LV_MENU_ITEM_BUILDER_VARIANT_1);
+    /*Create Container with Label*/
+    lv_obj_t *labelContainer = createLabelContainer(parent, icon, txt, LV_MENU_ITEM_BUILDER_VARIANT_1);
+
+    /*Create switch on label object*/
+    lv_obj_t *meridiemSwitch = lv_switch_create(labelContainer);
+
+    /*Add state based on currSwitchVal*/
+    lv_obj_add_state( meridiemSwitch, ( currSwitchVal ? LV_STATE_CHECKED : 0 ) );
+
+    /*Get Label from labelContainer, 0 is img, 1 is label*/
+    lv_obj_t *meridiemSwitchLabel = lv_obj_get_child( labelContainer, 1 );
+
+    /*Add event callback to meridiem switch*/
+    lv_obj_add_event_cb( meridiemSwitch, eventCallBack, LV_EVENT_VALUE_CHANGED, NULL );
+
+    return meridiemSwitch;
 }
 
 /**
@@ -256,6 +318,44 @@ void collapseDropDownList(GUI_t *gui_element)
 }
 
 /*EVENT HANDLERS--------------------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @brief Event Handler for when the 24Hour switch changes value
+ * 
+ * @param event 
+ */
+void eventHandlerMeridiemSwitch(lv_event_t *event)
+{
+    /*Create Time Change Event*/
+    guiTimeChangeEvent_t timeChangeEventMeridiemSwitch;
+
+    /*Get event Code*/
+    lv_event_code_t eventCode = lv_event_get_code(event);
+
+    /*Get Target, in this case its the switch*/
+    lv_obj_t *meridiemSwitch = lv_event_get_target(event);
+
+    /*Get current state of Meridiem Switch*/
+    bool meridiemSwitchState = lv_obj_get_state(meridiemSwitch);
+
+    /*Set signal of created Time Change Event*/
+    timeChangeEventMeridiemSwitch.mainEvent.signal = E_SETTING_CLOCK_MODE;
+
+    if( meridiemSwitch )
+    {
+        /*If meridiemSwitchState = 1, means its on, means user wants 24H*/
+        timeChangeEventMeridiemSwitch.param = MODE_24H;
+    }
+    else
+    {
+        /*Switch is off, means 12H*/
+        timeChangeEventMeridiemSwitch.param = MODE_12H;
+    }
+
+    /*Process Event*/
+    clockAlarmUIProcessEvent(&clockAlarmUI_inst, &timeChangeEventMeridiemSwitch.mainEvent);
+
+}
 
 /**
  * @brief Event Handler for the container containing the CheckBoxes for CLOCK and ALARM format, the boxes will be
