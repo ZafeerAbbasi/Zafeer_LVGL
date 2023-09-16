@@ -52,6 +52,13 @@
 /*TYPEDEFS/STRUCTS/ENUMS________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+/*Alarm ON/OFF Enum*/
+typedef enum
+{
+    ALARM_ON,
+    ALARM_OFF,
+}alarmONOFF_t;
+
 /*Date structure*/
 typedef struct{
     uint32_t day;
@@ -71,13 +78,13 @@ typedef struct{
     date_t      dateNow;
 }clock_t;
 
-/*Time Mode (24HR/12HR)*/
+/*Time Mode (24HR/12HR) Enum*/
 typedef enum{
     MODE_24H,
     MODE_12H
 }timeMode_t;
 
-/*Time Format (24HR/AM/PM)*/
+/*Time Format (24HR/AM/PM) Enum*/
 typedef enum{
     FORMAT_24HR,
     FORMAT_AM,

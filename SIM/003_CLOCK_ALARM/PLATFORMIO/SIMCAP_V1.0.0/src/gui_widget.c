@@ -120,24 +120,24 @@ lv_obj_t *createLabelContainer(lv_obj_t *parent, const char *icon, const char *t
  * @param eventCallBack Callback for the switch
  * @return lv_obj_t* Pointer to the created switch
  */
-lv_obj_t *createMeridiemSwitch(lv_obj_t *parent, const char *icon, const char *txt, bool currSwitchVal, lv_event_cb_t eventCallBack)
+lv_obj_t *createONOFFSwitch(lv_obj_t *parent, const char *icon, const char *txt, bool currSwitchVal, lv_event_cb_t eventCallBack)
 {
     /*Create Container with Label*/
     lv_obj_t *labelContainer = createLabelContainer(parent, icon, txt, LV_MENU_ITEM_BUILDER_VARIANT_1);
 
     /*Create switch on label object*/
-    lv_obj_t *meridiemSwitch = lv_switch_create(labelContainer);
+    lv_obj_t *ONOFFSwitch = lv_switch_create(labelContainer);
 
     /*Add state based on currSwitchVal*/
-    lv_obj_add_state( meridiemSwitch, ( currSwitchVal ? LV_STATE_CHECKED : 0 ) );
+    lv_obj_add_state( ONOFFSwitch, ( currSwitchVal ? LV_STATE_CHECKED : 0 ) );
 
     /*Get Label from labelContainer, 0 is img, 1 is label*/
-    lv_obj_t *meridiemSwitchLabel = lv_obj_get_child( labelContainer, 1 );
+    lv_obj_t *ONOFFSwitchLabel = lv_obj_get_child( labelContainer, 1 );
 
     /*Add event callback to meridiem switch*/
-    lv_obj_add_event_cb( meridiemSwitch, eventCallBack, LV_EVENT_VALUE_CHANGED, NULL );
+    lv_obj_add_event_cb( ONOFFSwitch, eventCallBack, LV_EVENT_VALUE_CHANGED, ONOFFSwitchLabel );
 
-    return meridiemSwitch;
+    return ONOFFSwitch;
 }
 
 /**
@@ -191,8 +191,10 @@ lv_obj_t *createRoller(lv_obj_t *parent, const char *opts, int currVal)
     /*Set roller options and mode, normal = normal, infinite = infinite scroll*/
     lv_roller_set_options(roller, opts, LV_ROLLER_MODE_NORMAL);
 
-    /*Set visible rows, if chaning this then make sure to adjust line below: lv_obj_set_height(roller, LV_PCT(100))
-    lv_roller_set_visible_row_count(roller, 2);
+    /*Set visible rows, if chaning this then make sure to adjust line below: lv_obj_set_height(roller, LV_PCT(100))*/
+    /*The way the below function sets the visible row count is by adjusting the height of the roller, however
+    we manually adjust the height ourselves after, thus this function is functionally useless*/
+    //lv_roller_set_visible_row_count(roller, 2);
 
     /*Set the current selected option on the roller*/
     lv_roller_set_selected(roller, currVal, LV_ANIM_ON);
@@ -318,6 +320,132 @@ void collapseDropDownList(GUI_t *gui_element)
 }
 
 /*EVENT HANDLERS--------------------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @brief Event Handler for when the Alarm ON/OFF switch changes value
+ * 
+ * @param event 
+ */
+void eventHandlerAlarmONOFFSwitch(lv_event_t *event)
+{
+    /*Create Time change event*/
+    guiTimeChangeEvent_t timeChangeEventAlarmSwitch;
+
+    /*Get event code*/
+    lv_event_code_t eventCode = lv_event_get_code( event );
+
+    /*Get target*/
+    lv_obj_t *alarmONOFFSwitch = lv_event_get_target( event );
+
+    /*Get current state of Alarm ON OFF Switch*/
+    bool alarmSwitchState = lv_obj_get_state( alarmONOFFSwitch );
+
+    /*Set signal of the created Time Change event*/
+    timeChangeEventAlarmSwitch.mainEvent.signal = E_ALARM_ON_OFF;
+
+    /*Get label of the Switch*/
+    lv_obj_t *ONOFFSwitchLabel = lv_event_get_user_data( event );
+
+    if( alarmSwitchState )
+    {
+        /*If alarm switch state = 1, means its on , means user activated Alarm*/
+
+        /*Set text and event param accordingly*/
+        lv_label_set_text( ONOFFSwitchLabel, "Alarm : ON");
+        timeChangeEventAlarmSwitch.param = ALARM_ON;
+    }
+    else
+    {
+        /*Switch is off, set text accordingly*/
+        lv_label_set_text( ONOFFSwitchLabel, "Alarm : OFF");
+        timeChangeEventAlarmSwitch.param = ALARM_OFF;
+    }
+
+    /*Process the event*/
+    clockAlarmUIProcessEvent( &clockAlarmUI_inst, &timeChangeEventAlarmSwitch.mainEvent );
+}
+
+/**
+ * @brief Event Handler for when any of the Alarm Rollers value is changed
+ * 
+ * @param event z6
+ */
+void eventHandlerAlarmRollers(lv_event_t *event)
+{
+    event_t sig;
+    uint8_t rollerVal;
+    guiTimeChangeEvent_t timeChangeEvent;
+
+    /*Get event code*/
+    lv_event_code_t eventCode = lv_event_get_code(event);
+
+    /*Get target*/
+    lv_obj_t *target = lv_event_get_target(event);
+
+    /*Get User data, in this case its the roller, (hour or minute)*/
+    rollerData_t *rollerData = ( rollerData_t *)lv_event_get_user_data( event );
+
+    if( eventCode == LV_EVENT_VALUE_CHANGED )
+    {
+        char str[3];
+
+        /*Get the current value*/
+        lv_roller_get_selected_str( target, str, sizeof( str ) );
+
+        /*Convert string to value*/
+        rollerVal = atoi( str );
+
+        /*Check which roller caused the event (hour or min)*/
+        if( rollerData->rollerType == ROLLER_HOUR )
+        {
+            /*Set the appropriate signal*/
+            sig = E_SETTING_ALARM_HOUR;
+        }
+        else if( rollerData->rollerType == ROLLER_MIN )
+        {
+            /*Set the appropriate signal*/
+            sig = E_SETTING_ALARM_MIN;
+        }
+        else
+        {
+            sig = E_NONE;
+        }
+
+        /*Add the signal to the time change event*/
+        timeChangeEvent.mainEvent.signal = sig;
+
+        /*Add current roller value as a param to the time change event*/
+        timeChangeEvent.param = rollerVal;
+
+        /*Process the event*/
+        clockAlarmUIProcessEvent( &clockAlarmUI_inst, &timeChangeEvent.mainEvent );
+    }
+
+}
+
+/**
+ * @brief Event Handler for when the user clicks the 'Save' button on the Time Page
+ * 
+ * @param event 
+ */
+void eventHandlerTimeSave(lv_event_t *event)
+{
+    /*Create Event*/
+    guiEvent_t timeSaveEvent;
+
+    /*Get event code*/
+    lv_event_code_t eventCode = lv_event_get_code(event);
+
+    /*Check if code matches*/
+    if( eventCode == LV_EVENT_CLICKED )
+    {
+        /*Set event signal*/
+        timeSaveEvent.signal = E_CLOCK_SAVE;
+
+        /*Process Event*/
+        clockAlarmUIProcessEvent(&clockAlarmUI_inst, &timeSaveEvent);
+    }
+}
 
 /**
  * @brief Event Handler for when the 24Hour switch changes value
@@ -536,14 +664,14 @@ void eventHandlerDateChange(lv_event_t *event)
     {
         /*If the event was caused by a value being changed*/
 
-        if( lv_calendar_get_pressed_date(calendarObject, &date) )
+        if( lv_calendar_get_pressed_date( calendarObject, &date ) )
         {
             /*If the pressed date is valid*/
 
             /*Get selected button*/
             int currBtn = lv_btnmatrix_get_selected_btn(btnMatrix);
             
-            /*Clear the previous selection highlight*/
+            /*Clear the previous selection highlight for all buttons*/
             lv_btnmatrix_clear_btn_ctrl_all(btnMatrix, LV_BTNMATRIX_CTRL_CUSTOM_2);
 
             /*Highlight current selected Day*/

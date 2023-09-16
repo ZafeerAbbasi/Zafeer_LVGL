@@ -39,8 +39,8 @@ static void createTimeFormatCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBo
 /*DEFINES_______________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-#define RADIO_BUTTON_INDEX_AM 0
-#define RADIO_BUTTON_INDEX_PM 1
+#define CHECK_BOX_INDEX_AM 0
+#define CHECK_BOX_INDEX_PM 1
 
 /*##############################################################################################################################################*/
 /*TYPEDEFS/STRUCTS/ENUMS________________________________________________________________________________________________________________________*/
@@ -244,6 +244,8 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
 
     /*SUB PAGE CREATION-------------------------------------------------------------------------------------------------------------------------*/
 
+
+
     /*DATE PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
     /*Create Date Page on the Menu*/
     lv_obj_t *datePage = lv_menu_page_create(menu, NULL);
@@ -271,6 +273,7 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     createSaveBtn(datePage,"Save",&gui_element->styleBtnNormal,&gui_element->styleBtnClicked,eventHandlerDateSave);
     /*END DATE PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
     
+
 
     /*TIME PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
     /*Create Time Page*/
@@ -307,12 +310,12 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     if( settingpagedata->clockFormat == FORMAT_AM )
     {
         /*Set CheckBox Active Value*/
-        timeFormat.CheckBoxBoxIndex = RADIO_BUTTON_INDEX_AM;
+        timeFormat.CheckBoxBoxIndex = CHECK_BOX_INDEX_AM;
     }
     else if( settingpagedata->clockFormat == FORMAT_PM )
     {
         /*Set CheckBox active value*/
-        timeFormat.CheckBoxBoxIndex = RADIO_BUTTON_INDEX_PM;
+        timeFormat.CheckBoxBoxIndex = CHECK_BOX_INDEX_PM;
     }
 
     /*Create Time Format CheckBoxes*/
@@ -325,11 +328,105 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     section = lv_menu_section_create(timePage);
 
     /*Create meridiem Switch */
-    lv_obj_t *meridiemSwitch = createMeridiemSwitch(section, LV_SYMBOL_SETTINGS, "24H", false, eventHandlerMeridiemSwitch);
+    lv_obj_t *meridiemSwitch = createONOFFSwitch(section, LV_SYMBOL_SETTINGS, "24H", false, eventHandlerMeridiemSwitch);
     
+    /*Set the state of the meridiem switch based on current mode*/
+    if( settingpagedata->clockMode == MODE_12H )
+    {
+        /*Set the switch off*/
+        lv_obj_add_state( meridiemSwitch, LV_STATE_DEFAULT );
+    }
+    else if( settingpagedata->clockMode == MODE_24H )
+    {
+        /*Turn on the switch*/
+        lv_obj_add_state( meridiemSwitch, LV_STATE_CHECKED );
+    }
 
-    
+    /*Create separator, separates 24hour switch from 'Save' button*/
+    lv_menu_separator_create( timePage );
+
+    /*Create Save Button with Time Change Handler*/
+    createSaveBtn(timePage, "Save", &gui_element->styleBtnNormal, &gui_element->styleBtnClicked, eventHandlerTimeSave );  
     /*END TIME PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+
+
+    /*DISPLAY PAGE//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+    
+    /*END DISPLAY PAGE//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+
+
+    /*ALARM PAGE////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+    /*Create Alarm Page*/
+    lv_obj_t *alarmPage = lv_menu_page_create(menu, NULL);
+
+    /*Set Horizontal padding of page equal to header of page*/
+    lv_obj_set_style_pad_hor(alarmPage, lv_obj_get_style_pad_left(lv_menu_get_main_header(menu), LV_PART_MAIN), LV_PART_MAIN);
+
+    /*Seperate from header*/
+    lv_menu_separator_create(alarmPage);
+
+    /*Create section*/
+    section = lv_menu_section_create(alarmPage);
+
+    /*Create Roller data placeholders, since there will be 2 rollers, one for hour and minute
+    Make the roller static since we want the roller to retain values between calls to this function*/
+    static rollerData_t rollerAlarmHour, rollerAlarmMinute;
+
+    /*Set active ID's for Alarm Rollers*/
+    rollerAlarmHour.rollerActiveVal = settingpagedata->alarmHour - 1; //Subtract 1 since the roller hour starts at 1, when the alarm data starts at 0
+    rollerAlarmMinute.rollerActiveVal = settingpagedata->alarmMinute;
+
+    /*Create Parent row*/
+    parentRow = createSettingsTimeAlarmRollersRow( section, &rollerAlarmHour, &rollerAlarmMinute, NULL, eventHandlerAlarmRollers );
+
+    /*Create checkbox data type for Alarm, make it static so it retains values between calls to this function*/
+    static CheckBoxData_t alarmFormat;
+
+    /*Set checkbox data type*/
+    alarmFormat.CheckBoxSettingType = SETTING_ALARM;
+
+    /*Adjust initial value of checkbox based on Alarm Format*/
+    if( settingpagedata->clockFormat == FORMAT_AM )
+    {
+        /*Set Checkbox Acive value*/
+        alarmFormat.CheckBoxBoxIndex = CHECK_BOX_INDEX_AM;
+    }
+    else if( settingpagedata->clockFormat == FORMAT_PM )
+    {
+        /*Set CheckBox active value*/
+        alarmFormat.CheckBoxBoxIndex = CHECK_BOX_INDEX_PM;
+    }
+
+    /*Create Alarm Check Boxes*/
+    createTimeFormatCheckBoxes( parentRow, &alarmFormat );
+
+    /*Create Variables to store Alarm ON/OFF status and text of the Alarm lable*/
+    char *alarmTxt;
+    bool alarmCurrVal;
+
+    /*Set Alarm Text and Current val based on current data*/
+    if( settingpagedata->alarmStatus == ALARM_ON )
+    {
+        alarmTxt = "Alarm : ON";
+        alarmCurrVal = true;
+    }
+    else if( settingpagedata->alarmStatus == ALARM_OFF )
+    {
+        alarmTxt = "Alarm : OFF";
+        alarmCurrVal = false;
+    }
+
+    /*Create separator, separates the parent row from the Alarm ON/OFF switch label*/
+    lv_menu_separator_create(alarmPage);
+
+    /*Create a section for the Alarm ON/OFF lable*/
+    section = lv_menu_section_create( alarmPage );
+
+    /*Create the ON/OFF Switch on the section*/
+    createONOFFSwitch( section, LV_SYMBOL_BELL, alarmTxt, alarmCurrVal, eventHandlerAlarmONOFFSwitch );
+    /*END ALARM PAGE////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 
     /*ROOT PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
@@ -338,7 +435,6 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
 
     /*Create section on Root Page for the all the menu options*/
     section = lv_menu_section_create(rootPage);
-
 
     /*Set the Root page as sidebar page for menu*/
     lv_menu_set_sidebar_page(menu, rootPage);
