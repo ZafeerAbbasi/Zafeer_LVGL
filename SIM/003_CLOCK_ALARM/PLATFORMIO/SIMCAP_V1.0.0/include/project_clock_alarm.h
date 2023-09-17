@@ -123,10 +123,9 @@ typedef struct{
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+void GUIUpdateCurrentTime( ClockAlarmUI_t *const clk_object );
 void clockAlarmUI_Constructor(ClockAlarmUI_t *const clk_object);
 void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, guiEvent_t *event);
-
-
 
 
 extern ClockAlarmUI_t clockAlarmUI_inst;

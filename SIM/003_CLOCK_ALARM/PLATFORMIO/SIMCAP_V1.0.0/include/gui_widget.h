@@ -97,26 +97,28 @@ typedef struct
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-void eventHandlerAlarmONOFFSwitch(lv_event_t *event);
-void eventHandlerAlarmRollers(lv_event_t *event);
-void eventHandlerTimeSave(lv_event_t *event);
-void eventHandlerMeridiemSwitch(lv_event_t *event);
-void eventHandlerSettingsTimeFormatCheckBoxs(lv_event_t *event);
-void eventHandlerTimeRollers(lv_event_t *event);
-void eventHandlerDateSave(lv_event_t *event);
-void eventHandlerDateChange(lv_event_t *event);
-void eventHandlerRootBackBtn(lv_event_t *event);
-void eventHandlerDropDownBtn(lv_event_t *e);
-void collapseDropDownList(GUI_t *gui_element);
+void eventHandlerDisplaySlider( lv_event_t *event );
+void eventHandlerAlarmONOFFSwitch( lv_event_t *event );
+void eventHandlerAlarmRollers( lv_event_t *event );
+void eventHandlerTimeSave( lv_event_t *event );
+void eventHandlerMeridiemSwitch( lv_event_t *event );
+void eventHandlerSettingsTimeFormatCheckBoxs( lv_event_t *event );
+void eventHandlerTimeRollers( lv_event_t *event );
+void eventHandlerDateSave( lv_event_t *event );
+void eventHandlerDateChange( lv_event_t *event );
+void eventHandlerRootBackBtn( lv_event_t *event );
+void eventHandlerDropDownBtn( lv_event_t *e );
 void eventHandlerScreen( lv_event_t * e );
-void eventHandlerDropDownBtnOptionSettings(lv_event_t *e);
-void eventHandlerDropDownBtnOptionAbout(lv_event_t* e);
-lv_obj_t *createMenu(lv_obj_t *parent, bool enableRootBtn, lv_event_cb_t eventCallBack);
-lv_obj_t *createCalendar(lv_obj_t *parent, calendarData_t *data);
-lv_obj_t *createSaveBtn(lv_obj_t *parent, const char* txt, lv_style_t *normal, lv_style_t *clicked, lv_event_cb_t eventCallBack);
-lv_obj_t *createRoller(lv_obj_t *parent, const char *opts, int currVal);
-lv_obj_t *createCheckBox(lv_obj_t *parent, const char *txt, lv_style_t *styleCheckBox, lv_style_t *styleCheckBoxSelected);
-lv_obj_t *createONOFFSwitch(lv_obj_t *parent, const char *icon, const char *txt, bool currSwitchVal, lv_event_cb_t eventCallBack);
-lv_obj_t *createLabelContainer(lv_obj_t *parent, const char *icon, const char *txt, menuItemBuilderVariant_t builderVariant);
+void eventHandlerDropDownBtnOptionSettings( lv_event_t *e );
+void eventHandlerDropDownBtnOptionAbout( lv_event_t* e );
+void collapseDropDownList( GUI_t *gui_element );
+lv_obj_t *createMenu( lv_obj_t *parent, bool enableRootBtn, lv_event_cb_t eventCallBack );
+lv_obj_t *createCalendar( lv_obj_t *parent, calendarData_t *data );
+lv_obj_t *createSaveBtn( lv_obj_t *parent, const char* txt, lv_style_t *normal, lv_style_t *clicked, lv_event_cb_t eventCallBack );
+lv_obj_t *createRoller( lv_obj_t *parent, const char *opts, int currVal );
+lv_obj_t *createCheckBox( lv_obj_t *parent, const char *txt, lv_style_t *styleCheckBox, lv_style_t *styleCheckBoxSelected );
+lv_obj_t *createONOFFSwitch( lv_obj_t *parent, const char *icon, const char *txt, bool currSwitchVal, lv_event_cb_t eventCallBack );
+lv_obj_t *createLabelContainer( lv_obj_t *parent, const char *icon, const char *txt, menuItemBuilderVariant_t builderVariant );
+lv_obj_t *createDisplaySlider( lv_obj_t *parent, const char *icon, const char*txt, int32_t min, int32_t max, int32_t currVal, lv_event_cb_t eventCallBack );
 
 #endif

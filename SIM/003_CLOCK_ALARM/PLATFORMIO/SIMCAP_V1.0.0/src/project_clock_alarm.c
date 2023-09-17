@@ -34,6 +34,7 @@ const char *g_months[] = { "January" , "February", "March","April","May", "June"
                           "October","November","December" };
 
 static uint32_t convert24HourFormatTo12Hour(uint32_t time24h);
+static void convertTimeToString( uint32_t time, char *const buffer);
 
 
 /*##############################################################################################################################################*/
@@ -51,6 +52,52 @@ static uint32_t convert24HourFormatTo12Hour(uint32_t time24h);
 /*##############################################################################################################################################*/
 /*FUNCTIONS______________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
+
+/**
+ * @brief Converts Integer Time into string
+ * 
+ * @param time Time represented in seconds
+ * @param buffer Buffer to place string in, format: HH:MM:SS
+ */
+static void convertTimeToString( uint32_t time, char *const buffer)
+{
+    uint8_t hour, minute, second;
+    hour = ( uint8_t )GET_HOUR( time );
+    minute = ( uint8_t )GET_MIN( time );
+    second = ( uint8_t )GET_SEC( time );
+
+    sprintf( buffer, "%02d:%02d:%02d", hour, minute, second);
+}
+
+/**
+ * @brief Update the Clock Display to Current Time
+ * 
+ * @param clk_object Main Clock Alarm UI Object
+ */
+void GUIUpdateCurrentTime( ClockAlarmUI_t *const clk_object )
+{
+    /*Get the time in 24 Hours*/
+    uint32_t time24H = clockGetCurrentTime( &clk_object->clock_inst );
+
+    /*Get Time Mode*/
+    uint32_t timeMode = clockGetTimeMode( &clk_object->clock_inst );
+
+    /*Depending on mode get time in 12H or 24H*/
+    uint32_t time;
+    if( timeMode == MODE_12H )
+    {   
+        time = convert24HourFormatTo12Hour( time24H );
+    }
+    else if( timeMode == MODE_24H )
+    {
+        time = time24H;
+    }
+
+    /*Convert time to string*/
+    char stringTime[10];
+    convertTimeToString( time, stringTime );
+    GUIDisplayCurrentTime( &clk_object->gui_inst, stringTime );
+}
 
 /**
  * @brief Main function to process all events 
@@ -130,6 +177,9 @@ void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clk_object, guiEvent_t *even
 
         /*Create Settings Page*/
         guiCreateSettingsPage(&clk_object->gui_inst, &settingPageData);
+
+        /*Update Current time*/
+        GUIUpdateCurrentTime( clk_object );
     }
 }
 

@@ -3,7 +3,7 @@
 #include "ClockAlarmUI.h"
 
 void Clock_update_current_time(Clock * const me) {
-    if(++me->time_now == MAX_TIME){
+    if(++me->time_now == 86400){
         me->time_now = 0;
         //send update date event to UI obj
     }

@@ -52,6 +52,12 @@ static void createTimeFormatCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBo
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+void GUIDisplayCurrentTime( GUI_t *const guiElement, char *const stringTime )
+{
+    /*Update Clock Time Label*/
+    lv_label_set_text( guiElement->clock, stringTime );
+}
+
 /**
  * @brief Create a Time Format Check Boxes object
  * 
@@ -351,12 +357,6 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
 
 
 
-    /*DISPLAY PAGE//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-    
-    /*END DISPLAY PAGE//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-
-
-
     /*ALARM PAGE////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
     /*Create Alarm Page*/
     lv_obj_t *alarmPage = lv_menu_page_create(menu, NULL);
@@ -429,6 +429,26 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     /*END ALARM PAGE////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 
+
+    /*DISPLAY PAGE//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+    /*Create Display page*/
+    lv_obj_t *displayPage = lv_menu_page_create( menu, NULL );
+
+    /*Set Horizontal padding of the page equal to the header of the page*/
+    lv_obj_set_style_pad_hor( displayPage, lv_obj_get_style_pad_left( lv_menu_get_main_header( menu ), LV_PART_MAIN ), LV_PART_MAIN );
+
+    /*Create separator to separate content from header*/
+    lv_menu_separator_create( displayPage );
+
+    /*Create Section*/
+    section = lv_menu_section_create( displayPage );
+
+    /*Create Display slider*/
+    createDisplaySlider( section, LV_SYMBOL_SETTINGS, "Brightness", 0, 150, 100, eventHandlerDisplaySlider );
+    /*END DISPLAY PAGE//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+
+
     /*ROOT PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
     /*Create Root page*/
     rootPage = lv_menu_page_create(menu, "Settings");
@@ -436,8 +456,28 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     /*Create section on Root Page for the all the menu options*/
     section = lv_menu_section_create(rootPage);
 
+    /*Date Settings*/
+    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "Date      Date", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+    lv_menu_set_load_page_event( menu, container, datePage );
+    defaultcontainerToShow = container;
+
+    /*Time Settings*/
+    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "Time      Time ", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+    lv_menu_set_load_page_event( menu, container, timePage );
+
+    /*Alarm Settings*/
+    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "Alarm     Alarm", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+    lv_menu_set_load_page_event( menu, container, alarmPage );
+
+    /*Display settings*/
+    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "Display", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+    lv_menu_set_load_page_event( menu, container, displayPage );
+
     /*Set the Root page as sidebar page for menu*/
     lv_menu_set_sidebar_page(menu, rootPage);
+
+    /*Manually send event for Default Container to show*/
+    lv_event_send( defaultcontainerToShow, LV_EVENT_CLICKED, NULL);
 }
 
 /**
@@ -582,7 +622,7 @@ void guiBtnStyleInit(GUI_t *const gui_element)
     lv_style_set_outline_opa(&gui_element->styleBtnNormal, LV_OPA_100);
     
     /*Outline color*/
-    lv_style_set_outline_color(&gui_element->styleBtnNormal, lv_color_white());
+    lv_style_set_outline_color(&gui_element->styleBtnNormal, lv_color_black());
     
     /*Text color*/
     lv_style_set_text_color(&gui_element->styleBtnNormal, lv_color_white());
@@ -623,7 +663,7 @@ void guiBtnStyleInit(GUI_t *const gui_element)
     static lv_style_prop_t properties[] = {LV_STYLE_OUTLINE_WIDTH, LV_STYLE_OUTLINE_OPA};
 
     /*Initialize transition description object with above properties*/
-    lv_style_transition_dsc_init(&transition, properties, lv_anim_path_linear, 300, 0, NULL);
+    lv_style_transition_dsc_init(&transition, properties, lv_anim_path_linear, 325, 0, NULL);
 
     /*Set the transition to the style: lv_Btn_style_clicked*/
     lv_style_set_transition(&gui_element->styleBtnClicked, &transition);

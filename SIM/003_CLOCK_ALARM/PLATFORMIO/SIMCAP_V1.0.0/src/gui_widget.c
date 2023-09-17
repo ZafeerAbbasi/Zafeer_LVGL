@@ -49,7 +49,63 @@
 /*##############################################################################################################################################*/
 
 /**
- * @brief Create a Label object
+ * @brief Create a Slider object
+ * 
+ * @param parent Parent to place the Slider on
+ * @param icon Icon used for Slider Label
+ * @param txt Text used for Slider label
+ * @param min Minimum Value for the slider
+ * @param max Maximum Value for the slider
+ * @param currVal Current Value to set for the slider
+ * @return lv_obj_t* Pointer to the created slider
+ */
+lv_obj_t *createDisplaySlider( lv_obj_t *parent, const char *icon, const char*txt, int32_t min, int32_t max, int32_t currVal, lv_event_cb_t eventCallBack )
+{
+    /*Create Label Container*/
+    lv_obj_t *sliderLabelContainer = createLabelContainer( parent, icon, txt, LV_MENU_ITEM_BUILDER_VARIANT_2 );
+
+    /*Create slider object*/
+    lv_obj_t *slider = lv_slider_create( sliderLabelContainer );
+
+    /*Set Flex growth of slider*/
+    lv_obj_set_flex_grow( slider, 1 );
+
+    /*Set Range and Current value*/
+    lv_slider_set_range( slider, min, max );
+    lv_slider_set_value( slider, currVal, LV_ANIM_ON );
+
+    if( icon == NULL )
+    {
+        /*IF icon is null then start new flow from slider*/
+        lv_obj_add_flag( slider, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK );
+    }
+
+    /*Create New container for the slider percentage*/
+    lv_obj_t *sliderPercentContainer = lv_menu_cont_create( parent );
+
+    /*Set Flex Align of the Percent Container*/
+    lv_obj_set_flex_align( sliderPercentContainer, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER );
+
+    /*Create Label below the slider*/
+    lv_obj_t *sliderPercentLabel = lv_label_create( sliderPercentContainer );
+
+    /*Add flag to start new line of label*/
+    lv_obj_add_flag( sliderPercentLabel, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK );
+
+    /*Add current percent and align*/
+    lv_label_set_text_fmt( sliderPercentLabel, "%d%%", lv_slider_get_value( slider ) );
+
+    /*Align label*/
+    lv_obj_align_to( sliderPercentLabel, slider, LV_ALIGN_BOTTOM_MID, 0, 10 );
+
+    /*Add callback to slider*/
+    lv_obj_add_event_cb( slider, eventCallBack, LV_EVENT_VALUE_CHANGED, sliderPercentLabel );
+
+    return slider;
+}
+
+/**
+ * @brief Create a Label Container object
  * 
  * @param parent Parent to place the label on
  * @param icon Icon used in the Label
@@ -111,7 +167,7 @@ lv_obj_t *createLabelContainer(lv_obj_t *parent, const char *icon, const char *t
 }
 
 /**
- * @brief Create a Meridiem Switch object
+ * @brief Create a ON/OFF Switch
  * 
  * @param parent Parent to place the Meridiem Switch on
  * @param icon Icon to add to the switch label
@@ -258,7 +314,7 @@ lv_obj_t *createCalendar(lv_obj_t *parent, calendarData_t *data)
     lv_obj_t *calendar = lv_calendar_create(parent);
 
     /*Set size and align*/
-    lv_obj_set_size(calendar, 220, 220);
+    lv_obj_set_size(calendar, 220, 200);
     lv_obj_align(calendar, LV_ALIGN_CENTER, 0, 27);
     
     /*Set Calendar year and month preset*/
@@ -320,6 +376,26 @@ void collapseDropDownList(GUI_t *gui_element)
 }
 
 /*EVENT HANDLERS--------------------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * @brief Event Handler for when the Display slider changes value
+ * 
+ * @param event 
+ */
+void eventHandlerDisplaySlider( lv_event_t *event )
+{
+    /*Get Event code*/
+    lv_event_code_t eventCode = lv_event_get_code( event );
+
+    /*Get target, in this case we know its a slider*/
+    lv_obj_t *displaySlider = ( lv_obj_t * )lv_event_get_target( event );
+
+    /*Get Label, stored in the user data*/
+    lv_obj_t *displayLabel = ( lv_obj_t * )lv_event_get_user_data( event );
+
+    /*Update label according the value of slider*/
+    lv_label_set_text_fmt( displayLabel, "%d%%", lv_slider_get_value( displaySlider ) );
+}
 
 /**
  * @brief Event Handler for when the Alarm ON/OFF switch changes value
@@ -524,8 +600,9 @@ void eventHandlerSettingsTimeFormatCheckBoxs(lv_event_t *event)
     {
         /*User clicked either AM or PM Box at this point*/
 
-        /*Remove state from the previously selected radio btn*/
+        /*Remove state from the previously and currently selected radio btn*/
         lv_obj_clear_state(prevCheckBox, LV_STATE_CHECKED);
+        lv_obj_add_state( newCheckBox, LV_STATE_CHECKED );
 
         /*Add state to newly selected radio btn*/
         lv_obj_add_state(newCheckBox, LV_STATE_CHECKED);

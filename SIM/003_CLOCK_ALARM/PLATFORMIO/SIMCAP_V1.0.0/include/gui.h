@@ -97,6 +97,7 @@ typedef struct{
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+void GUIDisplayCurrentTime( GUI_t *const guiElement, char *const stringTime );
 void screenCleanup(GUI_t *gui_element);
 void guiStyleCreator(GUI_t *const gui_element);
 void lvglStyleInit(GUI_t *const gui_element);

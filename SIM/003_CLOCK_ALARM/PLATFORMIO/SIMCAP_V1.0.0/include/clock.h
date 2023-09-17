@@ -98,5 +98,8 @@ typedef enum{
 void createClock(clock_t *const clock_element);
 uint8_t clockGetAMorPM(uint32_t time24h);
 void clockGetDate(clock_t *const clk_inst, date_t *const date);
+uint32_t clockGetCurrentTime( clock_t *const clkData );
+uint8_t clockGetTimeMode( clock_t *const clkData );
+
 
 #endif

@@ -47,6 +47,28 @@
 /*##############################################################################################################################################*/
 
 /**
+ * @brief Get the current Clock Time
+ * 
+ * @param clk_inst Source of Date info
+ * @return uint32_t Value of current time in 24 hours, units: seconds
+ */
+uint32_t clockGetCurrentTime( clock_t *const clkData )
+{
+    return clkData->timeNow;
+}
+
+/**
+ * @brief Get the current Clock Mode
+ * 
+ * @param clkData Source of Data info
+ * @return uint8_t Current Clock Mode (24H/12H)
+ */
+uint8_t clockGetTimeMode( clock_t *const clkData )
+{
+    return clkData->timeMode;
+}
+
+/**
  * @brief Gets date info from clk inst and adds it to second arg
  * 
  * @param clk_inst Source of date info
@@ -68,7 +90,7 @@ void clockGetDate(clock_t *const clk_inst, date_t *const date)
 void createClock(clock_t *const clock_element)
 {
     clock_element->timeNow         = INITIAL_CURRENT_TIME;
-    clock_element->timeMode        = MODE_24H;
+    clock_element->timeMode        = MODE_12H;
     clock_element->alarmTime       = INITIAL_ALARM_TIME;
     clock_element->dateNow.day     = INITIAL_DAY;
     clock_element->dateNow.date    = INITIAL_DATE;
