@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 4:46:40 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Monday, September 4th 2023, 8:10:48 pm                        #
+# Last Modified: Sunday, September 17th 2023, 11:15:28 pm                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -23,6 +23,7 @@
 #include "gui.h"
 #include "lvgl.h"
 #include "project_clock_alarm.h"
+#include "clock.h"
 #include "gui_widget.h"
 #include <stdio.h>
 #include "examples/lv_examples.h"
@@ -33,7 +34,7 @@
 
 static void guiCreateTimeDateHeader(GUI_t *const gui_element);
 static lv_obj_t *createSettingsTimeAlarmRollersRow(lv_obj_t *parent, rollerData_t *rollerHour, rollerData_t *rollerMin, rollerData_t *rollerSec, lv_event_cb_t eventCallBack);
-static void createTimeFormatCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBoxData);
+static void createMeridiemCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBoxData);
 
 /*##############################################################################################################################################*/
 /*DEFINES_______________________________________________________________________________________________________________________________________*/
@@ -52,7 +53,82 @@ static void createTimeFormatCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBo
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-void GUIDisplayCurrentTime( GUI_t *const guiElement, char *const stringTime )
+/**
+ * @brief 
+ * 
+ * @param guiElement GUI element of main Clock Alarm object
+ * @param title the title of the message box
+ * @param msg the text of the message box
+ * @param opts the buttons as an array of texts terminated by an "" element. E.g. {"btn1", "btn2", ""}
+ * @param closeBtn add a close button
+ */
+void guiCreateMessageBox(GUI_t *const guiElement, const char *title, const char *msg, const char *opts[], bool closeBtn )
+{
+    createMessageBox( NULL, title, msg, opts, closeBtn );
+}
+
+/**
+ * @brief Display the Day on the Main Clock Page
+ * 
+ * @param gui_element GUI Element of the Main Clock Object
+ * @param date Source of Date information
+ */
+void guiDisplayMainPageDay( GUI_t *const gui_element, const char *const day )
+{
+    lv_label_set_text( gui_element->day, day );
+}
+
+/**
+ * @brief Display the Month on the Main Clock Page
+ * 
+ * @param gui_element GUI Element of the Main Clock Object
+ * @param date Source of Date information
+ */
+void guiDisplayMainPageMonth( GUI_t *const gui_element, const char *const month )
+{
+    lv_label_set_text( gui_element->month, month );
+}
+
+/**
+ * @brief Display the Date on the Main Clock Page
+ * 
+ * @param gui_element GUI Element of the Main Clock Object
+ * @param date Source of Date information
+ */
+void guiDisplayMainPageDate( GUI_t *const gui_element, uint8_t date )
+{
+    lv_label_set_text_fmt( gui_element->date, "%d", date );
+}
+
+/**
+ * @brief Display the Year on the Main Clock Page
+ * 
+ * @param gui_element GUI Element of the Main Clock Object
+ * @param date Source of Date information
+ */
+void guiDisplayMainPageYear( GUI_t *const gui_element, uint32_t year )
+{
+    lv_label_set_text_fmt( gui_element->year,"%ld", year );
+}
+
+/**
+ * @brief Display the Date Header on Settings Page
+ * 
+ * @param gui_element GUI Element of the Main Clock Object
+ * @param date Source of Date information
+ */
+void guiDisplaySettingDateHeader( GUI_t *const gui_element, uint8_t date, uint8_t month , uint32_t year )
+{
+    lv_label_set_text_fmt( gui_element->date, "%d/%d/%d", date, month, year );
+}
+
+/**
+ * @brief Update the GUI Clock Time Label
+ * 
+ * @param guiElement GUI Element of the Main Clock Object
+ * @param stringTime String time in format HH:MM:SS
+ */
+void guiDisplayCurrentTime( GUI_t *const guiElement, char *const stringTime )
 {
     /*Update Clock Time Label*/
     lv_label_set_text( guiElement->clock, stringTime );
@@ -64,7 +140,7 @@ void GUIDisplayCurrentTime( GUI_t *const guiElement, char *const stringTime )
  * @param parent 
  * @param CheckBoxData 
  */
-static void createTimeFormatCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBoxData)
+static void createMeridiemCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBoxData)
 {
     /*Create container on parent param passed into this function*/
     lv_obj_t *container = lv_obj_create(parent);
@@ -77,7 +153,7 @@ static void createTimeFormatCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBo
     lv_obj_set_height(container, LV_SIZE_CONTENT);
 
     /*Add event callback*/
-    lv_obj_add_event_cb(container, eventHandlerSettingsTimeFormatCheckBoxs, LV_EVENT_CLICKED, CheckBoxData);
+    lv_obj_add_event_cb(container, eventHandlerSettingsMeridiemFormatCheckBoxs, LV_EVENT_CLICKED, CheckBoxData);
 
     /*Create CheckBoxes*/
     createCheckBox(container, "AM", NULL, NULL); /*Created first, thus ID for this Btn = 0*/
@@ -307,25 +383,25 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     parentRow = createSettingsTimeAlarmRollersRow(section, &rollerTimeHour, &rollerTimeMinute, &rollerTimeSecond, eventHandlerTimeRollers);
 
     /*Create CheckBox Data type, make them static so they retain values between calls to this function*/
-    static CheckBoxData_t timeFormat;
+    static CheckBoxData_t meridiemFormat;
 
     /*Set CheckBox Data Setting Type*/
-    timeFormat.CheckBoxSettingType = SETTING_TIME;
+    meridiemFormat.CheckBoxSettingType = SETTING_TIME;
 
     /*Adjust Initial CheckBox Data based on Clock Format*/
     if( settingpagedata->clockFormat == FORMAT_AM )
     {
         /*Set CheckBox Active Value*/
-        timeFormat.CheckBoxBoxIndex = CHECK_BOX_INDEX_AM;
+        meridiemFormat.CheckBoxBoxIndex = CHECK_BOX_INDEX_AM;
     }
     else if( settingpagedata->clockFormat == FORMAT_PM )
     {
         /*Set CheckBox active value*/
-        timeFormat.CheckBoxBoxIndex = CHECK_BOX_INDEX_PM;
+        meridiemFormat.CheckBoxBoxIndex = CHECK_BOX_INDEX_PM;
     }
 
     /*Create Time Format CheckBoxes*/
-    createTimeFormatCheckBoxes(parentRow, &timeFormat);
+    createMeridiemCheckBoxes(parentRow, &meridiemFormat);
 
     /*Create a seperator, separates the parentRow from the 24 Hour Switch*/
     lv_menu_separator_create(timePage);
@@ -334,18 +410,18 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     section = lv_menu_section_create(timePage);
 
     /*Create meridiem Switch */
-    lv_obj_t *meridiemSwitch = createONOFFSwitch(section, LV_SYMBOL_SETTINGS, "24H", false, eventHandlerMeridiemSwitch);
+    lv_obj_t *switch12H24H = createONOFFSwitch(section, LV_SYMBOL_SETTINGS, "24H", false, eventHandler12H24HSwitch);
     
     /*Set the state of the meridiem switch based on current mode*/
     if( settingpagedata->clockMode == MODE_12H )
     {
         /*Set the switch off*/
-        lv_obj_add_state( meridiemSwitch, LV_STATE_DEFAULT );
+        lv_obj_add_state( switch12H24H, LV_STATE_DEFAULT );
     }
     else if( settingpagedata->clockMode == MODE_24H )
     {
         /*Turn on the switch*/
-        lv_obj_add_state( meridiemSwitch, LV_STATE_CHECKED );
+        lv_obj_add_state( switch12H24H, LV_STATE_CHECKED );
     }
 
     /*Create separator, separates 24hour switch from 'Save' button*/
@@ -400,7 +476,7 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     }
 
     /*Create Alarm Check Boxes*/
-    createTimeFormatCheckBoxes( parentRow, &alarmFormat );
+    createMeridiemCheckBoxes( parentRow, &alarmFormat );
 
     /*Create Variables to store Alarm ON/OFF status and text of the Alarm lable*/
     char *alarmTxt;
@@ -478,6 +554,7 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
 
     /*Manually send event for Default Container to show*/
     lv_event_send( defaultcontainerToShow, LV_EVENT_CLICKED, NULL);
+    /*END ROOT PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 }
 
 /**
@@ -554,7 +631,7 @@ void guiMainPageStyleInit(GUI_t *const gui_element)
  * 
  * @param gui_element GUI_t member of the main ClockAlarmUI_t object, i.e. gui_inst
  */
-void guiMainLabelsAndDropDownCreator(GUI_t *const gui_element)
+void guiCreateMainPageLabels(GUI_t *const gui_element)
 {
     /*Create label object and assign to clock element of gui_element*/
     gui_element->clock = lv_label_create(gui_element->screen);
@@ -653,6 +730,11 @@ void guiBtnStyleInit(GUI_t *const gui_element)
 
     /*Set gradient direction*/
     lv_style_set_bg_grad_dir(&gui_element->styleBtnClicked, LV_GRAD_DIR_VER);
+
+    lv_style_set_shadow_color( &gui_element->styleBtnClicked, lv_palette_main( LV_PALETTE_GREY ) );
+    lv_style_set_shadow_ofs_x( &gui_element->styleBtnClicked, 5);
+    lv_style_set_shadow_ofs_y( &gui_element->styleBtnClicked, 10);
+    lv_style_set_shadow_width( &gui_element->styleBtnClicked, 20);
     
 
     /*Transition-------------------------------------------------------------------------------------------------------------*/

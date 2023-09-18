@@ -5,7 +5,7 @@
 # Created Date: Tuesday, August 29th 2023, 7:31:05 pm                          #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Monday, September 4th 2023, 8:24:09 pm                        #
+# Last Modified: Sunday, September 17th 2023, 11:20:16 pm                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -47,6 +47,30 @@
 /*##############################################################################################################################################*/
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
+
+/**
+ * @brief Create a Message Box object ( The buttons are automatically bubbled )
+ * 
+ * @param parent pointer to parent or NULL to create a full screen modal message box
+ * @param title the title of the message box
+ * @param msg the text of the message box
+ * @param opts the buttons as an array of texts terminated by an "" element. E.g. {"btn1", "btn2", ""}
+ * @param closeBtn add a close button
+ * @return lv_obj_t* pointer to the message box object
+ */
+lv_obj_t *createMessageBox( lv_obj_t *parent, const char *title, const char *msg, const char*opts[], bool closeBtn )
+{
+    /*Create Message Box*/
+    lv_obj_t *messageBox = lv_msgbox_create( parent, title, msg, opts, closeBtn );
+
+    /*Center the Message Box*/
+    lv_obj_center( messageBox );
+
+    /*Add callback*/
+    lv_obj_add_event_cb( messageBox, eventHandlerMessageBox, LV_EVENT_VALUE_CHANGED, NULL );
+
+    return messageBox;
+}
 
 /**
  * @brief Create a Slider object
@@ -205,7 +229,7 @@ lv_obj_t *createONOFFSwitch(lv_obj_t *parent, const char *icon, const char *txt,
  * @param styleCheckBoxSelected Style for when the Check Box is checked
  * @return lv_obj_t* Pointer to the created checkbox
  */
-lv_obj_t *createCheckBox(lv_obj_t *parent, const char *txt, lv_style_t *styleCheckBox, lv_style_t *styleCheckBoxSelected)
+lv_obj_t * createCheckBox(lv_obj_t *parent, const char *txt, lv_style_t *styleCheckBox, lv_style_t *styleCheckBoxSelected)
 {
     /*Create Check box*/
     lv_obj_t *checkBox = lv_checkbox_create(parent);
@@ -378,6 +402,39 @@ void collapseDropDownList(GUI_t *gui_element)
 /*EVENT HANDLERS--------------------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @brief Event Handler for when a button is pressed on the 'Save Settings?' Message Box
+ * 
+ * @param event 
+ */
+void eventHandlerMessageBox( lv_event_t *event )
+{
+    /*Get code*/
+    lv_event_code_t eventCode = lv_event_get_code( event );
+
+    /*Get target, in this case we know its the message box*/
+    lv_obj_t *messageBox = lv_event_get_target( event );
+
+    /*Create a Generic event*/
+    guiGenericEvent_t messageBoxEvent;
+
+    if( eventCode == LV_EVENT_VALUE_CHANGED )
+    {
+        /*Get the active Button*/
+        int activeBtnId = lv_msgbox_get_active_btn( messageBox );
+
+        /*Close the MessageBox*/
+        lv_msgbox_close( messageBox );
+
+        /*Set up the event*/
+        messageBoxEvent.mainEvent.signal = E_SETTING_SAVE_YES_NO;
+        messageBoxEvent.param = activeBtnId;
+
+        /*Process Event*/
+        clockAlarmUIProcessEvent( &clockAlarmUI_inst, &messageBoxEvent.mainEvent );
+    }
+}
+
+/**
  * @brief Event Handler for when the Display slider changes value
  * 
  * @param event 
@@ -528,7 +585,7 @@ void eventHandlerTimeSave(lv_event_t *event)
  * 
  * @param event 
  */
-void eventHandlerMeridiemSwitch(lv_event_t *event)
+void eventHandler12H24HSwitch(lv_event_t *event)
 {
     /*Create Time Change Event*/
     guiTimeChangeEvent_t timeChangeEventMeridiemSwitch;
@@ -567,7 +624,7 @@ void eventHandlerMeridiemSwitch(lv_event_t *event)
  * 
  * @param event 
  */
-void eventHandlerSettingsTimeFormatCheckBoxs(lv_event_t *event)
+void eventHandlerSettingsMeridiemFormatCheckBoxs(lv_event_t *event)
 {
     /*Create Time Change Event*/
     guiTimeChangeEvent_t timeChangeEventCheckBoxes;

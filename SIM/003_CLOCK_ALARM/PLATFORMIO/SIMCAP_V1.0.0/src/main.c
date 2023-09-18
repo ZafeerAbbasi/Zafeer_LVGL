@@ -5,7 +5,7 @@
 # Created Date: Friday, August 18th 2023, 4:51:03 pm                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Monday, September 4th 2023, 1:18:55 pm                        #
+# Last Modified: Sunday, September 17th 2023, 10:52:05 pm                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -32,8 +32,8 @@
 #include <stdlib.h>
 #include "examples/lv_examples.h"
 #include "project_clock_alarm.h"
-#include "gui.h"
-#include "clock.h"
+// #include "gui.h"
+// #include "clock.h"
 
 /*Main Clock Alarm UI Application object*/
 ClockAlarmUI_t clockAlarmUI_inst;
@@ -45,7 +45,7 @@ int main(void)
   hal_setup();
 
   /*Main Clock Alarm UI Object Constructor*/
-  clockAlarmUI_Constructor(&clockAlarmUI_inst);
+  clockAlarmUIConstructor(&clockAlarmUI_inst);
 
 	hal_loop();
 }

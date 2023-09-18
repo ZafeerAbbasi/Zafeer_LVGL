@@ -5,7 +5,7 @@
 # Created Date: Sunday, August 20th 2023, 10:45:20 pm                          #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Saturday, September 2nd 2023, 6:16:39 am                      #
+# Last Modified: Sunday, September 17th 2023, 11:07:03 pm                      #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -97,12 +97,18 @@ typedef struct{
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-void GUIDisplayCurrentTime( GUI_t *const guiElement, char *const stringTime );
+void guiCreateMessageBox(GUI_t *const guiElement, const char *title, const char *msg, const char *opts[], bool closeBtn );
+void guiDisplayMainPageDay( GUI_t *const gui_element, const char *const day );
+void guiDisplayMainPageMonth( GUI_t *const gui_element, const char *const month );
+void guiDisplayMainPageDate( GUI_t *const gui_element, uint8_t date );
+void guiDisplayMainPageYear( GUI_t *const gui_element, uint32_t year );
+void guiDisplaySettingDateHeader( GUI_t *const gui_element, uint8_t date, uint8_t month , uint32_t year );
+void guiDisplayCurrentTime( GUI_t *const guiElement, char *const stringTime );
 void screenCleanup(GUI_t *gui_element);
 void guiStyleCreator(GUI_t *const gui_element);
 void lvglStyleInit(GUI_t *const gui_element);
 void guiBtnStyleInit(GUI_t *const gui_element);
-void guiMainLabelsAndDropDownCreator(GUI_t *const gui_element);
+void guiCreateMainPageLabels(GUI_t *const gui_element);
 void guiMainPageStyleInit(GUI_t *const gui_element);
 void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingpagedata);
 

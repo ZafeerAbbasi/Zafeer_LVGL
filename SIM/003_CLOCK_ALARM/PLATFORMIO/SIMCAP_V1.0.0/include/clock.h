@@ -71,8 +71,8 @@ typedef struct{
 typedef struct{
     uint32_t    timeNow;
     uint32_t    alarmTime;
-    uint32_t    timeFormat;
-    uint8_t     alarmTimeFormat;
+    uint32_t    meridiemFormat;
+    uint8_t     alarmmeridiemFormat;
     uint32_t    alarmStatus;
     uint32_t    timeMode;
     date_t      dateNow;
@@ -84,12 +84,12 @@ typedef enum{
     MODE_12H
 }timeMode_t;
 
-/*Time Format (24HR/AM/PM) Enum*/
+/*Time Format ( AM / PM / 24HR ) Enum*/
 typedef enum{
     FORMAT_24HR,
     FORMAT_AM,
     FORMAT_PM
-}timeFormat_t;
+}meridiemFormat_t;
 
 /*##############################################################################################################################################*/
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
