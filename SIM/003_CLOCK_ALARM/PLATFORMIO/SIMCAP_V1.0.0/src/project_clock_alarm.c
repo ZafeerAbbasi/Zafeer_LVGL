@@ -56,19 +56,116 @@ void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clkObject, guiEvent_t *event
     /*Extract event signal from event*/
     event_t currEvent = event->signal;
 
-    /*Main Event Process switch statement*/
+    /*Main Event Process if-else statement*/
     if( currEvent == E_SETTING )
     {
+        
         processEventESetting( clkObject, event );
+
     }
-    else if( currEvent == E_ROOT_BACK )
+    else if( currEvent == E_SETTING_ROOT_BACK )
     {
+        
         processEventERootBack( clkObject, event );
+
     }
     else if( currEvent == E_SETTING_SAVE_YES_NO )
     {
-        /*User has selected a button on the 'Save Settings, Yes or No?' Messagebox*/
+        
+        processEventESaveYesOrNo( clkObject, event );
+
     }
+    else if( currEvent == E_SETTING_CLOCK_HOUR )
+    {
+        
+        processEventEClockHour( clkObject, event );
+
+    }
+    // else if( currEvent == E_SETTING_CLOCK_MIN )
+    // {
+
+    //     processEventEClockMin( clkObject, event );
+
+    // }
+    // else if( currEvent == E_SETTING_CLOCK_SEC )
+    // {
+
+    //     processEventEClockSec( clkObject, event );
+        
+        
+    // }
+    // else if( currEvent == E_SETTING_CLOCK_MERIDIEM )
+    // {
+
+    //     processEventEClockMeridiem( clkObject, event );
+
+    // }
+    // else if( currEvent == E_SETTING_CLOCK_12H_24H )
+    // {
+
+    //     processEventEClock12H24H( clkObject, event );
+
+    // }
+    // else if( currEvent == E_SETTING_ALARM_HOUR )
+    // {
+
+    //     processEventEAlarmHour( clkObject, event );
+
+    // }
+    // else if( currEvent == E_SETTING_ALARM_MIN )
+    // {
+
+    //     processEventEAlarmMin( clkObject, event );
+
+    // }
+    // else if( currEvent == E_SETTING_ALARM_MERIDIEM )
+    // {
+
+    //     processEventEAlarmMeridiem( clkObject, event );
+
+    // }
+    // else if( currEvent == E_SETTING_DATE_CHANGE )
+    // {
+
+    //     processEventEDateChange( clkObject, event );
+
+    // }
+    // else if( currEvent == E_SETTING_DATE_SAVE )
+    // {
+        
+    //     processEventEDateSave( clkObject, event );
+
+    // }
+    // else if( currEvent == E_SETTING_CLOCK_SAVE )
+    // {
+
+    //     processEventEClockSave( clkObject, event );
+
+    // }
+    // else if( currEvent == E_SETTING_ALARM_SAVE )
+    // {
+
+    //     processEventEAlarmSave( clkObject, event );
+
+    // }
+    // else if( currEvent == E_SETTING_ALARM_ON_OFF )
+    // {
+
+    //     processEventEAlarmONOFF( clkObject, event );
+
+    // }
+    // else if( currEvent == E_ALARM_NOTIF_ON )
+    // {
+
+    //     processEventEAlarmNotifON( clkObject, event );
+
+    // }
+    // else if( currEvent == E_ALARM_NOTIF_CLOSE )
+    // {
+
+    //     processEventEAlarmNotifClose( clkObject, event );
+
+    // }
 }
 
 /**
@@ -79,7 +176,7 @@ void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clkObject, guiEvent_t *event
 void clockAlarmUIConstructor(ClockAlarmUI_t *const clkObject)
 {
     /*Update State to STATE_TICKING*/
-    UI_STATE_CHANGE(clkObject, STATE_TICKING);
+    GUI_STATE_CHANGE(clkObject, STATE_TICKING);
 
     /*Create a Clock (i.e. Initalize clock_t element of main clock object)*/
     createClock(&clkObject->clock_inst);

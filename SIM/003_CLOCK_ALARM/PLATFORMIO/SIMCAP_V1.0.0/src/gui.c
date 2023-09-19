@@ -40,8 +40,7 @@ static void createMeridiemCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBoxD
 /*DEFINES_______________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-#define CHECK_BOX_INDEX_AM 0
-#define CHECK_BOX_INDEX_PM 1
+
 
 /*##############################################################################################################################################*/
 /*TYPEDEFS/STRUCTS/ENUMS________________________________________________________________________________________________________________________*/
@@ -153,7 +152,7 @@ static void createMeridiemCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBoxD
     lv_obj_set_height(container, LV_SIZE_CONTENT);
 
     /*Add event callback*/
-    lv_obj_add_event_cb(container, eventHandlerSettingsMeridiemFormatCheckBoxs, LV_EVENT_CLICKED, CheckBoxData);
+    lv_obj_add_event_cb(container, eventHandlerMeridiemCheckBoxes, LV_EVENT_CLICKED, CheckBoxData);
 
     /*Create CheckBoxes*/
     createCheckBox(container, "AM", NULL, NULL); /*Created first, thus ID for this Btn = 0*/
@@ -409,16 +408,16 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     /*Create New section for 24 Hour switch*/
     section = lv_menu_section_create(timePage);
 
-    /*Create meridiem Switch */
+    /*Create 12H24H Switch */
     lv_obj_t *switch12H24H = createONOFFSwitch(section, LV_SYMBOL_SETTINGS, "24H", false, eventHandler12H24HSwitch);
     
     /*Set the state of the meridiem switch based on current mode*/
-    if( settingpagedata->clockMode == MODE_12H )
+    if( settingpagedata->clock12H24H == MODE_12H )
     {
         /*Set the switch off*/
         lv_obj_add_state( switch12H24H, LV_STATE_DEFAULT );
     }
-    else if( settingpagedata->clockMode == MODE_24H )
+    else if( settingpagedata->clock12H24H == MODE_24H )
     {
         /*Turn on the switch*/
         lv_obj_add_state( switch12H24H, LV_STATE_CHECKED );

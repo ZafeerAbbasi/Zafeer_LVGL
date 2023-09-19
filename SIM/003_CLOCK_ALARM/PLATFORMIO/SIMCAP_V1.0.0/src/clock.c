@@ -47,6 +47,43 @@
 /*##############################################################################################################################################*/
 
 /**
+ * @brief Set the Alarm Time
+ * 
+ * @param clkData Clock Data to store the new Alarm Time
+ * @param newTime Source of the Alarm Time
+ */
+void setAlarmTime( clock_t *const clkData, uint32_t newTime )
+{
+    clkData->alarmTime = newTime;
+}
+
+/**
+ * @brief Set the Clock Time 
+ * 
+ * @param clkData Clock Data to store the new Time
+ * @param newTime Source of Time Data
+ */
+void setClockTime( clock_t *const clkData, uint32_t newTime )
+{
+    clkData->timeNow = newTime;
+}
+
+/**
+ * @brief Set the Clock Date 
+ * 
+ * @param clkData Clock Data to store the new date
+ * @param newDate Source of Date Data
+ */
+void setClockDate( clock_t *const clkData, date_t *const newDate )
+{
+    /*Set ClkData = NewDate*/
+    clkData->dateNow.date = newDate->date;
+    clkData->dateNow.day = newDate->day;
+    clkData->dateNow.month = newDate->month;
+    clkData->dateNow.year = newDate->year;
+}
+
+/**
  * @brief Get the current Clock Time
  * 
  * @param clk_inst Source of Date info
@@ -63,9 +100,9 @@ uint32_t clockGetCurrentTime( clock_t *const clkData )
  * @param clkData Source of Data info
  * @return uint8_t Current Clock Mode (24H/12H)
  */
-uint8_t clockGetTimeMode( clock_t *const clkData )
+uint8_t clockGetTime12H24H( clock_t *const clkData )
 {
-    return clkData->timeMode;
+    return clkData->time12H24H;
 }
 
 /**
@@ -89,13 +126,14 @@ void clockGetDate(clock_t *const clk_inst, date_t *const date)
  */
 void createClock(clock_t *const clock_element)
 {
-    clock_element->timeNow         = INITIAL_CURRENT_TIME;
-    clock_element->timeMode        = MODE_12H;
-    clock_element->alarmTime       = INITIAL_ALARM_TIME;
-    clock_element->dateNow.day     = INITIAL_DAY;
-    clock_element->dateNow.date    = INITIAL_DATE;
-    clock_element->dateNow.month   = INITIAL_MONTH;
-    clock_element->dateNow.year    = INITIAL_YEAR;
+    clock_element->timeNow              = INITIAL_CURRENT_TIME;
+    clock_element->time12H24H             = MODE_12H;
+    clock_element->alarmTime            = INITIAL_ALARM_TIME;
+    clock_element->dateNow.day          = INITIAL_DAY;
+    clock_element->dateNow.date         = INITIAL_DATE;
+    clock_element->dateNow.month        = INITIAL_MONTH;
+    clock_element->dateNow.year         = INITIAL_YEAR;
+    clock_element->timeMeridiemFormat   = FORMAT_AM;
 }
 
 /**

@@ -54,6 +54,10 @@
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+
+
+void processEventEClockHour( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventESaveYesOrNo( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
 void processEventERootBack( ClockAlarmUI_t *const clkObject, guiEvent_t *event);
 void processEventESetting( ClockAlarmUI_t *const clkObject, guiEvent_t *event);
 uint32_t convert12HourFormatTo24Hour( uint32_t time12H, meridiemFormat_t meridiem );

@@ -40,6 +40,13 @@
 /*TYPEDEFS/STRUCTS/ENUMS________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+/*Check Box Index Enum*/
+typedef enum
+{
+    CHECK_BOX_INDEX_AM,
+    CHECK_BOX_INDEX_PM
+}checkBoxIndex;
+
 /*Menu Item Builder Variant*/
 typedef enum {
     LV_MENU_ITEM_BUILDER_VARIANT_1,
@@ -78,7 +85,7 @@ typedef struct{
     uint8_t clockMin;
     uint8_t clockSecond;
     uint8_t clockFormat;
-    uint8_t clockMode;
+    uint8_t clock12H24H;
     uint8_t alarmStatus;
     uint8_t alarmHour;
     uint8_t alarmMinute;

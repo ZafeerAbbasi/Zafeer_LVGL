@@ -39,8 +39,8 @@
 #define THURSDAY 4
 #define AUGUST  7
 #define MAX_TIME  (864000UL)
-#define INITIAL_CURRENT_TIME  FORMAT_TIME(12, 22, 22)
-#define INITIAL_ALARM_TIME  FORMAT_TIME(8, 0, 0)
+#define INITIAL_CURRENT_TIME ( ( 0 * 3600 ) + ( 12 * 60 ) + ( 12 ) )
+#define INITIAL_ALARM_TIME  ( 8 * 3600 )
 #define INITIAL_DAY THURSDAY
 #define INITIAL_MONTH  AUGUST
 #define INITIAL_YEAR  2023ul
@@ -60,7 +60,8 @@ typedef enum
 }alarmONOFF_t;
 
 /*Date structure*/
-typedef struct{
+typedef struct
+{
     uint32_t day;
     uint32_t date;
     uint32_t month;
@@ -68,24 +69,27 @@ typedef struct{
 }date_t;
 
 /*Clock Structure*/
-typedef struct{
+typedef struct
+{
     uint32_t    timeNow;
     uint32_t    alarmTime;
-    uint32_t    meridiemFormat;
-    uint8_t     alarmmeridiemFormat;
+    uint32_t    timeMeridiemFormat;
+    uint8_t     alarmMeridiemFormat;
     uint32_t    alarmStatus;
-    uint32_t    timeMode;
+    uint32_t    time12H24H;
     date_t      dateNow;
 }clock_t;
 
 /*Time Mode (24HR/12HR) Enum*/
 typedef enum{
+
     MODE_24H,
     MODE_12H
-}timeMode_t;
+}time12H24H_t;
 
 /*Time Format ( AM / PM / 24HR ) Enum*/
-typedef enum{
+typedef enum
+{
     FORMAT_24HR,
     FORMAT_AM,
     FORMAT_PM
@@ -95,11 +99,16 @@ typedef enum{
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+
+
+void setAlarmTime( clock_t *const clkData, uint32_t newTime );
+void setClockTime( clock_t *const clkData, uint32_t newTime );
+void setClockDate( clock_t *const clkData, date_t *const newDate );
 void createClock(clock_t *const clock_element);
 uint8_t clockGetAMorPM(uint32_t time24h);
 void clockGetDate(clock_t *const clk_inst, date_t *const date);
 uint32_t clockGetCurrentTime( clock_t *const clkData );
-uint8_t clockGetTimeMode( clock_t *const clkData );
+uint8_t clockGetTime12H24H( clock_t *const clkData );
 
 
 #endif

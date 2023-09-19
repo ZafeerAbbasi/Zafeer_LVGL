@@ -281,7 +281,7 @@ lv_obj_t *createRoller(lv_obj_t *parent, const char *opts, int currVal)
 
     /*Set height and width of roller*/
     lv_obj_set_height(roller, LV_PCT(100)); //Set hieght of the roller to the height of the container object*/
-    lv_obj_set_width(roller, 80);
+    lv_obj_set_width(roller, 60);
 
     /*Add style to the current middle selected option of the roller*/
     lv_obj_add_style(roller, &rollerStyle, LV_PART_SELECTED);
@@ -338,7 +338,7 @@ lv_obj_t *createCalendar(lv_obj_t *parent, calendarData_t *data)
     lv_obj_t *calendar = lv_calendar_create(parent);
 
     /*Set size and align*/
-    lv_obj_set_size(calendar, 220, 200);
+    lv_obj_set_size(calendar, 220, 190);
     lv_obj_align(calendar, LV_ALIGN_CENTER, 0, 27);
     
     /*Set Calendar year and month preset*/
@@ -420,7 +420,7 @@ void eventHandlerMessageBox( lv_event_t *event )
     if( eventCode == LV_EVENT_VALUE_CHANGED )
     {
         /*Get the active Button*/
-        int activeBtnId = lv_msgbox_get_active_btn( messageBox );
+        usrSaveSettingSelection activeBtnId = lv_msgbox_get_active_btn( messageBox );
 
         /*Close the MessageBox*/
         lv_msgbox_close( messageBox );
@@ -471,10 +471,10 @@ void eventHandlerAlarmONOFFSwitch(lv_event_t *event)
     lv_obj_t *alarmONOFFSwitch = lv_event_get_target( event );
 
     /*Get current state of Alarm ON OFF Switch*/
-    bool alarmSwitchState = lv_obj_get_state( alarmONOFFSwitch );
+    bool alarmSwitchState = lv_obj_has_state(alarmONOFFSwitch, LV_STATE_CHECKED);
 
     /*Set signal of the created Time Change event*/
-    timeChangeEventAlarmSwitch.mainEvent.signal = E_ALARM_ON_OFF;
+    timeChangeEventAlarmSwitch.mainEvent.signal = E_SETTING_ALARM_ON_OFF;
 
     /*Get label of the Switch*/
     lv_obj_t *ONOFFSwitchLabel = lv_event_get_user_data( event );
@@ -573,7 +573,7 @@ void eventHandlerTimeSave(lv_event_t *event)
     if( eventCode == LV_EVENT_CLICKED )
     {
         /*Set event signal*/
-        timeSaveEvent.signal = E_CLOCK_SAVE;
+        timeSaveEvent.signal = E_SETTING_CLOCK_SAVE;
 
         /*Process Event*/
         clockAlarmUIProcessEvent(&clockAlarmUI_inst, &timeSaveEvent);
@@ -588,33 +588,33 @@ void eventHandlerTimeSave(lv_event_t *event)
 void eventHandler12H24HSwitch(lv_event_t *event)
 {
     /*Create Time Change Event*/
-    guiTimeChangeEvent_t timeChangeEventMeridiemSwitch;
+    guiTimeChangeEvent_t timeChangeEventswitch12H24H;
 
     /*Get event Code*/
     lv_event_code_t eventCode = lv_event_get_code(event);
 
     /*Get Target, in this case its the switch*/
-    lv_obj_t *meridiemSwitch = lv_event_get_target(event);
+    lv_obj_t *switch12H24H = lv_event_get_target(event);
 
     /*Get current state of Meridiem Switch*/
-    bool meridiemSwitchState = lv_obj_get_state(meridiemSwitch);
+    bool meridiemSwitchState = lv_obj_has_state( switch12H24H, LV_STATE_CHECKED );
 
     /*Set signal of created Time Change Event*/
-    timeChangeEventMeridiemSwitch.mainEvent.signal = E_SETTING_CLOCK_MODE;
+    timeChangeEventswitch12H24H.mainEvent.signal = E_SETTING_CLOCK_12H_24H;
 
-    if( meridiemSwitch )
+    if( switch12H24H )
     {
         /*If meridiemSwitchState = 1, means its on, means user wants 24H*/
-        timeChangeEventMeridiemSwitch.param = MODE_24H;
+        timeChangeEventswitch12H24H.param = MODE_24H;
     }
     else
     {
         /*Switch is off, means 12H*/
-        timeChangeEventMeridiemSwitch.param = MODE_12H;
+        timeChangeEventswitch12H24H.param = MODE_12H;
     }
 
     /*Process Event*/
-    clockAlarmUIProcessEvent(&clockAlarmUI_inst, &timeChangeEventMeridiemSwitch.mainEvent);
+    clockAlarmUIProcessEvent(&clockAlarmUI_inst, &timeChangeEventswitch12H24H.mainEvent);
 
 }
 
@@ -624,7 +624,7 @@ void eventHandler12H24HSwitch(lv_event_t *event)
  * 
  * @param event 
  */
-void eventHandlerSettingsMeridiemFormatCheckBoxs(lv_event_t *event)
+void eventHandlerMeridiemCheckBoxes(lv_event_t *event)
 {
     /*Create Time Change Event*/
     guiTimeChangeEvent_t timeChangeEventCheckBoxes;
@@ -668,17 +668,20 @@ void eventHandlerSettingsMeridiemFormatCheckBoxs(lv_event_t *event)
         if( userDataCheckBox->CheckBoxSettingType == SETTING_TIME )
         {
             /*Event came from Clock Format*/
-            timeChangeEventCheckBoxes.mainEvent.signal = E_SETTING_CLOCK_FORMAT;
+            timeChangeEventCheckBoxes.mainEvent.signal = E_SETTING_CLOCK_MERIDIEM;
         }
         else if( userDataCheckBox->CheckBoxSettingType == SETTING_ALARM )
         {
             /*Event came from Alarm Format*/
-            timeChangeEventCheckBoxes.mainEvent.signal = E_SETTING_ALARM_FORMAT;
+            timeChangeEventCheckBoxes.mainEvent.signal = E_SETTING_ALARM_MERIDIEM;
         }
         else
         {
             timeChangeEventCheckBoxes.mainEvent.signal = E_NONE;
         }
+
+        /*Update previous checkbox, since now the current checkbox is the previous checkbox for next ISR*/
+        userDataCheckBox->CheckBoxBoxIndex = newCheckBoxIndex;
 
         /*Store the Index of the newly selected as paramter to the event*/
         timeChangeEventCheckBoxes.param = newCheckBoxIndex;
@@ -769,7 +772,7 @@ void eventHandlerDateSave(lv_event_t *event)
         /*If button was clicked*/
 
         /*Set event signal*/
-        dateSaveEvent.signal = E_DATE_SAVE;
+        dateSaveEvent.signal = E_SETTING_DATE_SAVE;
 
         /*Process event*/
         clockAlarmUIProcessEvent(&clockAlarmUI_inst, &dateSaveEvent);
@@ -843,7 +846,7 @@ void eventHandlerRootBackBtn(lv_event_t *event)
     {
         /*Create an Event and Process it*/
         guiEvent_t event;
-        event.signal = E_ROOT_BACK;
+        event.signal = E_SETTING_ROOT_BACK;
         clockAlarmUIProcessEvent(&clockAlarmUI_inst, &event);
     }
 }

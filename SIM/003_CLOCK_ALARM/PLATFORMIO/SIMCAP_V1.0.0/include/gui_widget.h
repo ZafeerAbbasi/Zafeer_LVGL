@@ -103,7 +103,7 @@ void eventHandlerAlarmONOFFSwitch( lv_event_t *event );
 void eventHandlerAlarmRollers( lv_event_t *event );
 void eventHandlerTimeSave( lv_event_t *event );
 void eventHandler12H24HSwitch( lv_event_t *event );
-void eventHandlerSettingsMeridiemFormatCheckBoxs( lv_event_t *event );
+void eventHandlerMeridiemCheckBoxes( lv_event_t *event );
 void eventHandlerTimeRollers( lv_event_t *event );
 void eventHandlerDateSave( lv_event_t *event );
 void eventHandlerDateChange( lv_event_t *event );
