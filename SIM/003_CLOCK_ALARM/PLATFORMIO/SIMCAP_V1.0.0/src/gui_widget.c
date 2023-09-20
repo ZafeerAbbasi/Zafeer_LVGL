@@ -345,7 +345,7 @@ lv_obj_t *createCalendar(lv_obj_t *parent, calendarData_t *data)
     lv_calendar_set_showed_date(calendar, data->year, data->month);
 
     /*Set Calendar date preset*/
-    lv_calendar_set_today_date(calendar, data->year, data->month, data->day);
+    lv_calendar_set_today_date(calendar, data->year, data->month, data->date);
 
     /*Use drop down for Year/Month header*/
     lv_calendar_header_dropdown_create(calendar);
@@ -402,6 +402,28 @@ void collapseDropDownList(GUI_t *gui_element)
 /*EVENT HANDLERS--------------------------------------------------------------------------------------------------------------------------------*/
 
 /**
+ * @brief Event Handler for when user clicks the 'Close' button on the alarm notif page
+ * 
+ * @param event 
+ */
+void eventHandlerNotifClose( lv_event_t *event )
+{
+    /*Create Empty event and get code*/
+    guiEvent_t alarmNotifCloseBtnEvent;
+    lv_event_code_t eventCode = lv_event_get_code( event );
+
+    /*Get Target, in this case we know its the 'Close' Button on the alarm notif page*/
+    lv_obj_t *closeBtn = lv_event_get_target( event );
+
+    if( eventCode == LV_EVENT_CLICKED )
+    {
+        /*If correct event code then set up signal and process it*/
+        alarmNotifCloseBtnEvent.signal = E_ALARM_NOTIF_CLOSE;
+        clockAlarmUIProcessEvent( &clockAlarmUI_inst, &alarmNotifCloseBtnEvent );
+    }
+}
+
+/**
  * @brief Event Handler for when a button is pressed on the 'Save Settings?' Message Box
  * 
  * @param event 
@@ -412,7 +434,7 @@ void eventHandlerMessageBox( lv_event_t *event )
     lv_event_code_t eventCode = lv_event_get_code( event );
 
     /*Get target, in this case we know its the message box*/
-    lv_obj_t *messageBox = lv_event_get_target( event );
+    lv_obj_t *messageBox = lv_event_get_current_target( event );
 
     /*Create a Generic event*/
     guiGenericEvent_t messageBoxEvent;
@@ -602,7 +624,7 @@ void eventHandler12H24HSwitch(lv_event_t *event)
     /*Set signal of created Time Change Event*/
     timeChangeEventswitch12H24H.mainEvent.signal = E_SETTING_CLOCK_12H_24H;
 
-    if( switch12H24H )
+    if( meridiemSwitchState )
     {
         /*If meridiemSwitchState = 1, means its on, means user wants 24H*/
         timeChangeEventswitch12H24H.param = MODE_24H;
@@ -790,7 +812,7 @@ void eventHandlerDateChange(lv_event_t *event)
     lv_event_code_t eventCode = lv_event_get_code(event);
 
     /*Get target, in form of lv_obj_t * and lv_calendar_t * */
-    lv_obj_t *calendarObject = lv_event_get_target(event);
+    lv_obj_t *calendarObject = lv_event_get_current_target(event);
     lv_obj_t *btnMatrix = lv_calendar_get_btnmatrix(calendarObject);
 
     /*Place holders for date and Date Change Event*/
@@ -812,7 +834,7 @@ void eventHandlerDateChange(lv_event_t *event)
             lv_btnmatrix_clear_btn_ctrl_all(btnMatrix, LV_BTNMATRIX_CTRL_CUSTOM_2);
 
             /*Highlight current selected Day*/
-            lv_btnmatrix_set_btn_ctrl_all(btnMatrix, LV_BTNMATRIX_CTRL_CUSTOM_2);
+            lv_btnmatrix_set_btn_ctrl(btnMatrix, currBtn, LV_BTNMATRIX_CTRL_CUSTOM_2);
 
             /*Set event signal to send to main event processing function*/
             dateChangeEvent.mainEvent.signal = E_SETTING_DATE_CHANGE;

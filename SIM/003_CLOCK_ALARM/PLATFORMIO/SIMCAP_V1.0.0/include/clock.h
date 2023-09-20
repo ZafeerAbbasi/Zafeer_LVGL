@@ -38,12 +38,12 @@
 
 #define THURSDAY 4
 #define AUGUST  7
-#define MAX_TIME  (864000UL)
+#define MAX_TIME  (86400UL)
 #define INITIAL_CURRENT_TIME ( ( 0 * 3600 ) + ( 12 * 60 ) + ( 12 ) )
 #define INITIAL_ALARM_TIME  ( 8 * 3600 )
 #define INITIAL_DAY THURSDAY
 #define INITIAL_MONTH  AUGUST
-#define INITIAL_YEAR  2023ul
+#define INITIAL_YEAR  2023UL
 #define INITIAL_DATE  12
 #define INITIAL_alarmStatus ALARM_ON  
 #define BASE_YEAR 2000
@@ -90,7 +90,6 @@ typedef enum{
 /*Time Format ( AM / PM / 24HR ) Enum*/
 typedef enum
 {
-    FORMAT_24HR,
     FORMAT_AM,
     FORMAT_PM
 }meridiemFormat_t;
@@ -99,8 +98,8 @@ typedef enum
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-
-
+bool isAlarm( clock_t *const clkData );
+void dataBaseUpdateCurrentTime( clock_t *const clkData );
 void setAlarmTime( clock_t *const clkData, uint32_t newTime );
 void setClockTime( clock_t *const clkData, uint32_t newTime );
 void setClockDate( clock_t *const clkData, date_t *const newDate );

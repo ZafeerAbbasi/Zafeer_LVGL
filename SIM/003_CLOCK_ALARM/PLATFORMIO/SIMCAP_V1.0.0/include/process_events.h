@@ -54,15 +54,31 @@
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-
-
+void processEventENewDay( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventEAlarmNotifClose( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventEAlarmNotifON( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventEAlarmONOFF( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventEAlarmSave( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventEClockSave( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventEDateSave( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventEDateChange( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventEAlarmMeridiem( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventEAlarmMin( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventEAlarmHour( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventEClock12H24H( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventEClockMeridiem( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventEClockSec( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
+void processEventEClockMin( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
 void processEventEClockHour( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
 void processEventESaveYesOrNo( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
 void processEventERootBack( ClockAlarmUI_t *const clkObject, guiEvent_t *event);
 void processEventESetting( ClockAlarmUI_t *const clkObject, guiEvent_t *event);
+void processSettingsPage( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
 uint32_t convert12HourFormatTo24Hour( uint32_t time12H, meridiemFormat_t meridiem );
 uint32_t convert24HourFormatTo12Hour(uint32_t time24h);
 void convertTimeToString( uint32_t time, char *const buffer);
+void convertTimeToString12H( uint32_t time, char *const buffer, uint32_t meridiem);
+void convertTimeToString12Header( uint32_t time, char *const buffer, uint32_t meridiem);
 bool isSettingsChanged( ClockAlarmUI_t *const clkObject );
 bool isAlarmSettingsChanged( ClockAlarmUI_t *const clkObject );
 bool isTimeSettingsChanged( ClockAlarmUI_t *const clkObject);

@@ -97,6 +97,7 @@ typedef struct
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+void eventHandlerNotifClose( lv_event_t *event );
 void eventHandlerMessageBox( lv_event_t *event );
 void eventHandlerDisplaySlider( lv_event_t *event );
 void eventHandlerAlarmONOFFSwitch( lv_event_t *event );

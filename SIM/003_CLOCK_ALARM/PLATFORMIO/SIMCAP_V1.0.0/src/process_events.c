@@ -30,7 +30,7 @@ static uint8_t getDayOfTheWeek(uint32_t year, uint32_t month, uint32_t day);
 /*GLOBALS_______________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
-const  char *g_days[] = { "Sunday", "Monday", "Tuesday", "Wednseday", "Thursday", "Firday", "Saturday" };
+const  char *g_days[] = { "Sunday", "Monday", "Tuesday", "Wednseday", "Thursday", "Friday", "Saturday" };
 
 const char *g_months[] = { "January" , "February", "March","April","May", "June", "July", "August","September",\
                           "October","November","December" };
@@ -53,6 +53,153 @@ const char *g_months[] = { "January" , "February", "March","April","May", "June"
 /*##############################################################################################################################################*/
 
 /**
+ * @brief Process When a New Day has occured
+ * 
+ * @param clkObject Main Clock Alarm Object
+ * @param event Event 
+ */
+void processEventENewDay( ClockAlarmUI_t *const clkObject, guiEvent_t *event )
+{
+    /*New day has occurred, increment day*/
+    /*Get the Full Time Change Event, since the passed into the function is just a member of guiDateChangeEvent_t, see respective EventHandler*/
+    guiDateChangeEvent_t *dateChangeEvent = ( guiDateChangeEvent_t *)event;
+
+    /*Set Time to 0*/
+    clkObject->clock_inst.timeNow = 0;
+
+    /*Increase Date by one*/
+    clkObject->clock_inst.dateNow.date += 1;
+
+    /*Change from PM to AM*/
+    clkObject->clock_inst.timeMeridiemFormat = FORMAT_AM;
+
+    /*Set day of the week*/
+    clkObject->clock_inst.dateNow.day = getDayOfTheWeek( clkObject->clock_inst.dateNow.month, clkObject->clock_inst.dateNow.month, clkObject->clock_inst.dateNow.date );
+
+
+    /*Reload based on current state*/
+    if( clkObject->state == STATE_TICKING || clkObject->state == STATE_ALARM )
+    {
+        /*Update Time and Date*/
+        guiUpdateCurrentDate( clkObject );
+        guiUpdateCurrentTime( clkObject );
+    }
+    else if( clkObject->state == STATE_SETTING )
+    {
+
+        screenCleanup( &clkObject->gui_inst );
+        /*Create Main Page*/
+        //guiCreateMainPageLabels( &clkObject->gui_inst );
+        processSettingsPage( clkObject, event );
+    }
+}
+
+/**
+ * @brief Process Event E_ALARM_NOTIF_CLOSE: Event generated when the user closes Alarm Notification page*
+ * 
+ * @param clkObject Main Clock Alarm Object
+ * @param event Event 
+ */
+void processEventEAlarmNotifClose( ClockAlarmUI_t *const clkObject, guiEvent_t *event )
+{
+    /*Clean the Screen*/
+    screenCleanup( &clkObject->gui_inst );
+
+    if( clkObject->history == STATE_TICKING )
+    {
+        /*Previous state was main page*/
+
+        /*Update State, clean screen and open main page*/
+        GUI_STATE_CHANGE( clkObject, STATE_TICKING );
+        screenCleanup( &clkObject->gui_inst );
+        guiCreateMainPageLabels( &clkObject->gui_inst );
+        guiCreateMainPageStyle( &clkObject->gui_inst );
+        guiUpdateCurrentDate( clkObject );
+        guiUpdateCurrentTime( clkObject );
+    }
+    else if( clkObject->history == STATE_SETTING )
+    {
+        /*Previous state was setting*/
+
+        /*Load the setting Page*/
+        processSettingsPage( clkObject, event );
+    }
+}
+
+/**
+ * @brief Process Event E_ALARM_NOTIF_ON: Event generated when the time hits the Alarm Time and the Alarm GIF Notif pops up
+ * 
+ * @param clkObject Main Clock Alarm Object
+ * @param event Event 
+ */
+void processEventEAlarmNotifON( ClockAlarmUI_t *const clkObject, guiEvent_t *event )
+{
+    /*Save Current State and change it*/
+    clkObject->history = clkObject->state;
+    GUI_STATE_CHANGE( clkObject, STATE_ALARM );
+
+    /*Clean screen and create Alarm Notification Page*/
+    screenCleanup( &clkObject->gui_inst );
+    guiCreateAlarmNotifPage( &clkObject->gui_inst );
+}
+
+/**
+ * @brief Process Event E_SETTING_ALARM_ON_OFF: Event generated when user switches Alarm ON or OFF
+ * 
+ * @param clkObject Main Clock Alarm Object
+ * @param event Event 
+ */
+void processEventEAlarmONOFF( ClockAlarmUI_t *const clkObject, guiEvent_t *event )
+{
+    /*Get the Full Time Change Event, since the passed into the function is just a member of guiDateChangeEvent_t, see respective EventHandler*/
+    guiTimeChangeEvent_t *alarmONOFFEvent = ( guiTimeChangeEvent_t *)event;
+
+    /*Instantly Set Alarm Status*/
+    clkObject->clock_inst.alarmStatus = alarmONOFFEvent->param;
+}
+
+/**
+ * @brief Process Event E_SETTING_ALARM_SAVE: Event generated when user saves the Alarm Time in the setttings
+ * 
+ * @param clkObject Main Clock Alarm Object
+ * @param event Event 
+ */
+void processEventEAlarmSave( ClockAlarmUI_t *const clkObject, guiEvent_t *event )
+{
+    /*Copy the user settings to settings save*/
+    clkObject->setting_save.alarmMeridiemFormat = clkObject->usr_setting.alarmMeridiemFormat;
+    clkObject->setting_save.alarmTime = clkObject->usr_setting.alarmTime;
+
+    /*Get New time in 24H format*/
+    uint32_t newTime = convert12HourFormatTo24Hour( clkObject->usr_setting.alarmTime, clkObject->usr_setting.alarmMeridiemFormat );
+
+    /*Save the new time*/
+    setAlarmTime( &clkObject->clock_inst, newTime );
+}
+
+/**
+ * @brief Process Event E_SETTING_CLOCK_SAVE: Event generated when user saves Clock Time in the settings
+ * 
+ * @param clkObject Main Clock Alarm Object
+ * @param event Event 
+ */
+void processEventEClockSave( ClockAlarmUI_t *const clkObject, guiEvent_t *event )
+{
+    /*Copy the user settings to settings save*/
+    clkObject->setting_save.timeMeridiemFormat = clkObject->usr_setting.timeMeridiemFormat;
+    clkObject->setting_save.timeNow = clkObject->usr_setting.timeNow;
+
+    /*Save Time Meridiem*/
+    clkObject->clock_inst.timeMeridiemFormat = clkObject->usr_setting.timeMeridiemFormat;
+
+    /*Get New time in 24H format*/
+    uint32_t newTime = convert12HourFormatTo24Hour( clkObject->usr_setting.timeNow, clkObject->usr_setting.timeMeridiemFormat );
+
+    /*Save the new time*/
+    setClockTime( &clkObject->clock_inst, newTime );
+}
+
+/**
  * @brief Process Event E_SETTING_DATE_SAVE: Event generated when user saves date on the calendar in settings
  * 
  * @param clkObject Main Clock Alarm Object
@@ -60,15 +207,12 @@ const char *g_months[] = { "January" , "February", "March","April","May", "June"
  */
 void processEventEDateSave( ClockAlarmUI_t *const clkObject, guiEvent_t *event )
 {
-    /*Save the Date to the Main Clock_instance*/
-
     /*Copy the user settings to the settings save*/
     memcpy( &clkObject->setting_save.dateNow, &clkObject->usr_setting.dateNow, sizeof( date_t ) );
 
     /*Set the Main Clock Instance data as the settings save*/
     setClockDate( &clkObject->clock_inst, &clkObject->usr_setting.dateNow );
     guiUpdateCurrentDate( clkObject );
-
 }
 
 /**
@@ -192,9 +336,9 @@ void processEventEClockMeridiem( ClockAlarmUI_t *const clkObject, guiEvent_t *ev
     guiTimeChangeEvent_t *timeChangeClockMeridiem = ( guiTimeChangeEvent_t *)event;
 
     /*Get Button ID*/
-    uint8_t btnID = timeChangeClockMeridiem->param;   
+    uint8_t btnID = timeChangeClockMeridiem->param;  
 
-    if( btnID = CHECK_BOX_INDEX_AM )
+    if( btnID == CHECK_BOX_INDEX_AM )
     {
         /*If User selected AM set accordingly*/
         clkObject->usr_setting.timeMeridiemFormat = FORMAT_AM;
@@ -326,17 +470,12 @@ void processEventESaveYesOrNo( ClockAlarmUI_t *const clkObject, guiEvent_t *even
             setAlarmTime( &clkObject->clock_inst, newTime );
         }
     }
-    else
-    {
-        /*User does NOT want to save changes, so dont save anything*/
-        ;
-    }
 
     /*Update State, clean screen and open main page*/
     GUI_STATE_CHANGE( clkObject, STATE_TICKING );
     screenCleanup( &clkObject->gui_inst );
     guiCreateMainPageLabels( &clkObject->gui_inst );
-    guiMainPageStyleInit( &clkObject->gui_inst );
+    guiCreateMainPageStyle( &clkObject->gui_inst );
 
     /*Update Time and Date*/
     guiUpdateCurrentDate( clkObject );
@@ -359,10 +498,10 @@ void processEventERootBack( ClockAlarmUI_t *const clkObject, guiEvent_t *event)
         static const char* options[] = { "Yes", "No", "" };
 
         /*Create Message Box for 'Save Changes?' */
-        guiCreateMessageBox( &clkObject->gui_inst, "Settings", "Do you want ot save changes?", options, false );
+        guiCreateMessageBox( &clkObject->gui_inst, "Settings", "Do you want to save changes?", options, false );
     }
     else
-    {
+    {        
         /*Nothing has changed*/
         /*Update State*/
         GUI_STATE_CHANGE( clkObject, STATE_TICKING );
@@ -374,11 +513,12 @@ void processEventERootBack( ClockAlarmUI_t *const clkObject, guiEvent_t *event)
         guiCreateMainPageLabels( &clkObject->gui_inst );
 
         /*Set Main Page style*/
-        guiMainPageStyleInit( &clkObject->gui_inst );
+        guiCreateMainPageStyle( &clkObject->gui_inst );
 
         /*Update Current time/date*/
         guiUpdateCurrentTime( clkObject );
         guiUpdateCurrentDate( clkObject );
+
     }
 }
 
@@ -396,12 +536,18 @@ void processEventESetting( ClockAlarmUI_t *const clkObject, guiEvent_t *event)
     /*Main Event Process switch statement*/
     if( currEvent == E_SETTING )
     {
-        
-        /*User Has Pressed the Setting button
-        retrieve current user settings,clock, date info
-        set the settings save config
-        open the settings menu*/
-        
+        processSettingsPage( clkObject, event );
+    }
+}
+
+/**
+ * @brief Process the Settings Page ( Includes creating the setting GUI )
+ * 
+ * @param clkObject Main Clock Alarm Object
+ * @param event Event 
+ */
+void processSettingsPage( ClockAlarmUI_t *const clkObject, guiEvent_t *event )
+{
         /*CLOCK USER SETTINGS---------------------------------------------------------------------------------------------------*/
         /*Create a variable of type settingPageData_t to hold setting page data*/
         settingPageData_t settingPageData;
@@ -416,7 +562,7 @@ void processEventESetting( ClockAlarmUI_t *const clkObject, guiEvent_t *event)
         /*CLOCK SETTING SAVE----------------------------------------------------------------------------------------------------*/
         clkObject->setting_save.timeNow = clkObject->usr_setting.timeNow;
         clkObject->setting_save.timeMeridiemFormat = clkObject->usr_setting.timeMeridiemFormat;
-        clkObject->setting_save.alarmTime = clkObject->usr_setting.timeMeridiemFormat;
+        clkObject->setting_save.alarmTime = clkObject->usr_setting.alarmTime;
         clkObject->setting_save.alarmMeridiemFormat = clkObject->usr_setting.alarmMeridiemFormat;
 
         /*SETTING PAGE DATA - CLOCK---------------------------------------------------------------------------------------------*/
@@ -465,7 +611,6 @@ void processEventESetting( ClockAlarmUI_t *const clkObject, guiEvent_t *event)
         /*Update Current time/date*/
         guiUpdateCurrentTime( clkObject );
         guiUpdateCurrentDate( clkObject );
-    }
 }
 
 /**
@@ -475,6 +620,7 @@ void processEventESetting( ClockAlarmUI_t *const clkObject, guiEvent_t *event)
  */
 void guiUpdateCurrentTime( ClockAlarmUI_t *const clkObject )
 {
+    char stringTime[10];
     /*Get the time in 24 Hours*/
     uint32_t time24H = clockGetCurrentTime( &clkObject->clock_inst );
 
@@ -485,16 +631,24 @@ void guiUpdateCurrentTime( ClockAlarmUI_t *const clkObject )
     uint32_t time;
     if( time12H24H == MODE_12H )
     {   
-        time = convert24HourFormatTo12Hour( time24H );
+        time = convert24HourFormatTo12Hour( time24H);
+        /*If we are in settings*/
+        if( clkObject->state == STATE_SETTING || clkObject->state == STATE_ALARM )
+        {
+            convertTimeToString12Header( time, stringTime, clkObject->clock_inst.timeMeridiemFormat );
+        }
+        else
+        {
+            convertTimeToString12H( time, stringTime, clkObject->clock_inst.timeMeridiemFormat );
+        }
     }
     else if( time12H24H == MODE_24H )
     {
         time = time24H;
+        convertTimeToString( time, stringTime );
     }
 
     /*Convert time to string*/
-    char stringTime[10];
-    convertTimeToString( time, stringTime );
     guiDisplayCurrentTime( &clkObject->gui_inst, stringTime );
 }
 
@@ -628,6 +782,58 @@ bool isSettingsChanged( ClockAlarmUI_t *const clkObject )
 }
 
 /**
+ * @brief Converts Integer Time into string for header in settings
+ * 
+ * @param time Time represented in seconds
+ * @param buffer Buffer to place string in, format: HH:MM:SS
+ */
+void convertTimeToString12Header( uint32_t time, char *const buffer, uint32_t meridiem)
+{
+    uint8_t hour, minute, second;
+    char AMPM[3];
+    hour = ( uint8_t )GET_HOUR( time );
+    minute = ( uint8_t )GET_MIN( time );
+    second = ( uint8_t )GET_SEC( time );
+
+    if( meridiem )
+    {
+        strcpy( AMPM, "PM");
+    }
+    else
+    {
+        strcpy( AMPM, "AM");
+    }
+
+    sprintf( buffer, "%02d:%02d:%02d %s", hour, minute, second, AMPM);
+}
+
+/**
+ * @brief Converts Integer Time into string 12H 
+ * 
+ * @param time Time represented in seconds
+ * @param buffer Buffer to place string in, format: HH:MM:SS
+ */
+void convertTimeToString12H( uint32_t time, char *const buffer, uint32_t meridiem)
+{
+    uint8_t hour, minute, second;
+    char AMPM[3];
+    hour = ( uint8_t )GET_HOUR( time );
+    minute = ( uint8_t )GET_MIN( time );
+    second = ( uint8_t )GET_SEC( time );
+
+    if( meridiem )
+    {
+        strcpy( AMPM, "PM");
+    }
+    else
+    {
+        strcpy( AMPM, "AM");
+    }
+
+    sprintf( buffer, "%02d:%02d:%02d\n%s", hour, minute, second, AMPM);
+}
+
+/**
  * @brief Converts Integer Time into string
  * 
  * @param time Time represented in seconds
@@ -648,7 +854,7 @@ void convertTimeToString( uint32_t time, char *const buffer)
  * 
  * @param time12H 12 Hour Time
  * @param meridiem Meridiem ( AM / PM )
- * @return uint32_t The time in 12 Hour
+ * @return uint32_t The time in 24 Hour
  */
 uint32_t convert12HourFormatTo24Hour( uint32_t time12H, meridiemFormat_t meridiem )
 {

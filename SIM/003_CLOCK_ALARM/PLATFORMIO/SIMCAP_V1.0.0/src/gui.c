@@ -53,6 +53,31 @@ static void createMeridiemCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBoxD
 /*##############################################################################################################################################*/
 
 /**
+ * @brief Create the Alarm Notification Page
+ * 
+ * @param guiElement GUI Element of the main clock object
+ */
+void guiCreateAlarmNotifPage( GUI_t *const guiElement )
+{
+    /*Create Time Date Header*/
+    guiCreateTimeDateHeader( guiElement );
+
+    /*Declare New Image ( Bell Notif GIF )*/
+    LV_IMG_DECLARE( bellNotifGIF );
+
+    /*Create GIF*/
+    lv_obj_t *img = lv_gif_create( guiElement->screen );
+    lv_gif_set_src( img, &bellNotifGIF );
+    lv_obj_align( img, LV_ALIGN_CENTER, 0, 0 );
+
+    /*Create Close Button*/
+    lv_obj_t *closeBtn = createSaveBtn( guiElement->screen, "Close", &guiElement->styleBtnNormal, &guiElement->styleBtnClicked, eventHandlerNotifClose );
+
+    /*Align the Close Button*/
+    lv_obj_align_to( closeBtn, img, LV_ALIGN_OUT_BOTTOM_MID, 0, 0 );
+}
+
+/**
  * @brief 
  * 
  * @param guiElement GUI element of main Clock Alarm object
@@ -561,7 +586,7 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
  * 
  * @param gui_element 
  */
-void screenCleanup(GUI_t *gui_element)
+void screenCleanup(GUI_t *const gui_element)
 {
     lv_obj_clean(gui_element->screen);
     gui_element->dropDownList = NULL;
@@ -572,7 +597,7 @@ void screenCleanup(GUI_t *gui_element)
  * 
  * @param gui_element GUI_t member of the main ClockAlarmUI_t object, i.e. gui_inst
  */
-void guiMainPageStyleInit(GUI_t *const gui_element)
+void guiCreateMainPageStyle(GUI_t *const gui_element)
 {
     /*Set background color of main page*/
     lv_obj_set_style_bg_color(gui_element->screen, lv_color_make(11, 11, 69), LV_PART_MAIN);
@@ -649,7 +674,7 @@ void guiCreateMainPageLabels(GUI_t *const gui_element)
     /*Create button for drop down button on main screen*/
     gui_element->dropDownBtn = lv_btn_create(gui_element->screen);
 
-    /*Remove all the syle properties, so button exits, but cannot be seen and has no style elements, style init @fn guiMainPageStyleInit*/
+    /*Remove all the syle properties, so button exits, but cannot be seen and has no style elements, style init @fn guiCreateMainPageStyle*/
     lv_obj_remove_style_all(gui_element->dropDownBtn);
 
     /*Add callback for screen*/

@@ -21,6 +21,7 @@
 
 #include "clock.h"
 #include "common_includes.h"
+#include "project_clock_alarm.h"
 
 
 
@@ -45,6 +46,41 @@
 /*##############################################################################################################################################*/
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
+
+/**
+ * @brief Checks if Current time == Alarm Time
+ * 
+ * @param clkData Clock Data
+ * @return true If Current Time == Alarm Time
+ * @return false If Current Time != Alarm Time
+ */
+bool isAlarm( clock_t *const clkData )
+{
+    return ( clkData->timeNow == clkData->alarmTime );
+}
+
+/**
+ * @brief Update Current Time in the DataBase
+ * 
+ * @param clkData 
+ */
+void dataBaseUpdateCurrentTime( clock_t *const clkData )
+{
+    /*Increment Time*/
+    clkData->timeNow += 1;
+
+    /*Check if max time reached (End of day)*/
+    if( clkData->timeNow >= 86400UL )
+    {
+        /*Reset Time*/
+        clkData->timeNow = 0;
+
+        /*Create Event for Newday and process it*/
+        guiDateChangeEvent_t newDay;
+        newDay.mainEvent.signal = E_NEW_DAY;
+        clockAlarmUIProcessEvent( &clockAlarmUI_inst, &newDay.mainEvent );
+    }
+}
 
 /**
  * @brief Set the Alarm Time

@@ -21,7 +21,9 @@
 #include "indev/mousewheel.h"
 #include "indev/keyboard.h"
 #include "sdl/sdl.h"
+#include "project_clock_alarm.h"
 
+static uint64_t millis1, millis2;
 
 /**
  * A task to measure the elapsed time for LittlevGL
@@ -84,8 +86,32 @@ void hal_setup(void)
 
 void hal_loop(void)
 {
-    while(1) {
+    millis1 = SDL_GetTicks64( );
+    while(1) 
+    {
         SDL_Delay(1);
         lv_task_handler();
+
+        if( SDL_GetTicks64( ) - millis1 >= 1000UL )
+        {
+            /*One Second has passed*/
+            /*Update Current Time on Database*/
+            dataBaseUpdateCurrentTime( &clockAlarmUI_inst.clock_inst );
+
+            /*Update Current Time on Display*/
+            guiUpdateCurrentTime( &clockAlarmUI_inst );
+
+            /*Check for alarm*/
+            if( isAlarm( &clockAlarmUI_inst.clock_inst ) && clockAlarmUI_inst.clock_inst.alarmStatus == ALARM_ON )
+            {
+                /*Create Event and process it*/
+                guiEvent_t alarmEvent;
+                alarmEvent.signal = E_ALARM_NOTIF_ON;
+                clockAlarmUIProcessEvent( &clockAlarmUI_inst, &alarmEvent );
+            }
+
+            /*Update Millis1*/
+            millis1 = SDL_GetTicks64( );
+        }
     }
 }

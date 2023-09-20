@@ -81,91 +81,97 @@ void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clkObject, guiEvent_t *event
         processEventEClockHour( clkObject, event );
 
     }
-    // else if( currEvent == E_SETTING_CLOCK_MIN )
-    // {
+    else if( currEvent == E_SETTING_CLOCK_MIN )
+    {
 
-    //     processEventEClockMin( clkObject, event );
+        processEventEClockMin( clkObject, event );
 
-    // }
-    // else if( currEvent == E_SETTING_CLOCK_SEC )
-    // {
+    }
+    else if( currEvent == E_SETTING_CLOCK_SEC )
+    {
 
-    //     processEventEClockSec( clkObject, event );
+        processEventEClockSec( clkObject, event );
         
         
-    // }
-    // else if( currEvent == E_SETTING_CLOCK_MERIDIEM )
-    // {
+    }
+    else if( currEvent == E_SETTING_CLOCK_MERIDIEM )
+    {
 
-    //     processEventEClockMeridiem( clkObject, event );
+        processEventEClockMeridiem( clkObject, event );
 
-    // }
-    // else if( currEvent == E_SETTING_CLOCK_12H_24H )
-    // {
+    }
+    else if( currEvent == E_SETTING_CLOCK_12H_24H )
+    {
 
-    //     processEventEClock12H24H( clkObject, event );
+        processEventEClock12H24H( clkObject, event );
 
-    // }
-    // else if( currEvent == E_SETTING_ALARM_HOUR )
-    // {
+    }
+    else if( currEvent == E_SETTING_ALARM_HOUR )
+    {
 
-    //     processEventEAlarmHour( clkObject, event );
+        processEventEAlarmHour( clkObject, event );
 
-    // }
-    // else if( currEvent == E_SETTING_ALARM_MIN )
-    // {
+    }
+    else if( currEvent == E_SETTING_ALARM_MIN )
+    {
 
-    //     processEventEAlarmMin( clkObject, event );
+        processEventEAlarmMin( clkObject, event );
 
-    // }
-    // else if( currEvent == E_SETTING_ALARM_MERIDIEM )
-    // {
+    }
+    else if( currEvent == E_SETTING_ALARM_MERIDIEM )
+    {
 
-    //     processEventEAlarmMeridiem( clkObject, event );
+        processEventEAlarmMeridiem( clkObject, event );
 
-    // }
-    // else if( currEvent == E_SETTING_DATE_CHANGE )
-    // {
+    }
+    else if( currEvent == E_SETTING_DATE_CHANGE )
+    {
 
-    //     processEventEDateChange( clkObject, event );
+        processEventEDateChange( clkObject, event );
 
-    // }
-    // else if( currEvent == E_SETTING_DATE_SAVE )
-    // {
+    }
+    else if( currEvent == E_SETTING_DATE_SAVE )
+    {
         
-    //     processEventEDateSave( clkObject, event );
+        processEventEDateSave( clkObject, event );
 
-    // }
-    // else if( currEvent == E_SETTING_CLOCK_SAVE )
-    // {
+    }
+    else if( currEvent == E_SETTING_CLOCK_SAVE )
+    {
 
-    //     processEventEClockSave( clkObject, event );
+        processEventEClockSave( clkObject, event );
 
-    // }
-    // else if( currEvent == E_SETTING_ALARM_SAVE )
-    // {
+    }
+    else if( currEvent == E_SETTING_ALARM_SAVE )
+    {
 
-    //     processEventEAlarmSave( clkObject, event );
+        processEventEAlarmSave( clkObject, event );
 
-    // }
-    // else if( currEvent == E_SETTING_ALARM_ON_OFF )
-    // {
+    }
+    else if( currEvent == E_SETTING_ALARM_ON_OFF )
+    {
 
-    //     processEventEAlarmONOFF( clkObject, event );
+        processEventEAlarmONOFF( clkObject, event );
 
-    // }
-    // else if( currEvent == E_ALARM_NOTIF_ON )
-    // {
+    }
+    else if( currEvent == E_ALARM_NOTIF_ON )
+    {
 
-    //     processEventEAlarmNotifON( clkObject, event );
+        processEventEAlarmNotifON( clkObject, event );
 
-    // }
-    // else if( currEvent == E_ALARM_NOTIF_CLOSE )
-    // {
+    }
+    else if( currEvent == E_ALARM_NOTIF_CLOSE )
+    {
 
-    //     processEventEAlarmNotifClose( clkObject, event );
+        processEventEAlarmNotifClose( clkObject, event );
 
-    // }
+    }
+    else if( currEvent == E_NEW_DAY )
+    {
+
+        processEventENewDay( clkObject, event );
+        
+    }
 }
 
 /**
@@ -188,6 +194,10 @@ void clockAlarmUIConstructor(ClockAlarmUI_t *const clkObject)
     guiCreateMainPageLabels(&clkObject->gui_inst);
 
     /*Initialize style for main page*/
-    guiMainPageStyleInit(&clkObject->gui_inst);
+    guiCreateMainPageStyle(&clkObject->gui_inst);
+
+    /*Update Current Time and Date*/
+    guiUpdateCurrentTime( clkObject );
+    guiUpdateCurrentDate( clkObject );
 }
 

@@ -96,7 +96,7 @@ typedef struct{
     uint8_t day;
     uint8_t date;
     uint8_t month;
-    uint8_t year;
+    uint32_t year;
 }settingPageData_t;
 
 
@@ -104,6 +104,7 @@ typedef struct{
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+void guiCreateAlarmNotifPage( GUI_t *const guiElement );
 void guiCreateMessageBox(GUI_t *const guiElement, const char *title, const char *msg, const char *opts[], bool closeBtn );
 void guiDisplayMainPageDay( GUI_t *const gui_element, const char *const day );
 void guiDisplayMainPageMonth( GUI_t *const gui_element, const char *const month );
@@ -116,7 +117,7 @@ void guiStyleCreator(GUI_t *const gui_element);
 void lvglStyleInit(GUI_t *const gui_element);
 void guiBtnStyleInit(GUI_t *const gui_element);
 void guiCreateMainPageLabels(GUI_t *const gui_element);
-void guiMainPageStyleInit(GUI_t *const gui_element);
+void guiCreateMainPageStyle(GUI_t *const gui_element);
 void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingpagedata);
 
 #endif
