@@ -64,7 +64,7 @@ static void lv_obj_set_state(lv_obj_t * obj, lv_state_t new_state);
  *  STATIC VARIABLES
  **********************/
 static bool lv_initialized = false;
-const lv_obj_class_t lv_obj_class = {
+const lv_obj_class_t  lv_obj_class = {
     .constructor_cb = lv_obj_constructor,
     .destructor_cb = lv_obj_destructor,
     .event_cb = lv_obj_event,

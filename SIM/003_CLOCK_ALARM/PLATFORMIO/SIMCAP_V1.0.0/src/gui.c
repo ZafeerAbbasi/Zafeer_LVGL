@@ -329,6 +329,19 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     /*Create main settings menu*/
     menu = createMenu(gui_element->screen, true, eventHandlerRootBackBtn);
 
+    if( gui_element->theme == THEME_DARK )
+    {
+        lv_obj_set_style_bg_color(menu, lv_color_make( 13, 17, 23 ), LV_PART_MAIN);
+        lv_obj_set_style_bg_grad_color( menu , lv_color_make( 40, 52, 71 ), LV_PART_MAIN );
+        lv_obj_set_style_bg_grad_dir( menu, LV_GRAD_DIR_VER, LV_PART_MAIN );
+    }
+    else
+    {
+        lv_obj_set_style_bg_color(menu, lv_color_make(255, 211, 165), LV_PART_MAIN);
+        lv_obj_set_style_bg_grad_color( menu , lv_color_make(213, 145, 142), LV_PART_MAIN );
+        lv_obj_set_style_bg_grad_dir( menu, LV_GRAD_DIR_VER, LV_PART_MAIN );
+    }
+
     /*Store Background color of menu in a variable*/
     lv_color_t bgColor = lv_obj_get_style_bg_color(menu, LV_PART_MAIN);
 
@@ -557,24 +570,28 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     section = lv_menu_section_create(rootPage);
 
     /*Date Settings*/
-    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "Date      Date", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "#FFFFFF     Date         Date", LV_MENU_ITEM_BUILDER_VARIANT_1 );
     lv_menu_set_load_page_event( menu, container, datePage );
     defaultcontainerToShow = container;
 
     /*Time Settings*/
-    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "Time      Time ", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "#FFFFFF    Time         Time ", LV_MENU_ITEM_BUILDER_VARIANT_1 );
     lv_menu_set_load_page_event( menu, container, timePage );
 
     /*Alarm Settings*/
-    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "Alarm     Alarm", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "#FFFFFF    Alarm        Alarm", LV_MENU_ITEM_BUILDER_VARIANT_1 );
     lv_menu_set_load_page_event( menu, container, alarmPage );
 
     /*Display settings*/
-    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "Display", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "#FFFFFF    Display      Display", LV_MENU_ITEM_BUILDER_VARIANT_1 );
     lv_menu_set_load_page_event( menu, container, displayPage );
+
 
     /*Set the Root page as sidebar page for menu*/
     lv_menu_set_sidebar_page(menu, rootPage);
+
+    lv_obj_set_style_text_color( lv_menu_get_sidebar_header_back_btn( menu ), lv_color_white( ), LV_PART_MAIN );
+    lv_obj_set_style_text_color( lv_menu_get_sidebar_header( menu ), lv_color_white( ), LV_PART_MAIN );
 
     /*Manually send event for Default Container to show*/
     lv_event_send( defaultcontainerToShow, LV_EVENT_CLICKED, NULL);
@@ -599,9 +616,18 @@ void screenCleanup(GUI_t *const gui_element)
  */
 void guiCreateMainPageStyle(GUI_t *const gui_element)
 {
-    /*Set background color of main page*/
-    lv_obj_set_style_bg_color(gui_element->screen, lv_color_make(11, 11, 69), LV_PART_MAIN);
-    lv_obj_set_style_bg_grad_color(gui_element->screen, lv_color_make(138, 138, 162), LV_PART_MAIN);
+    /*Set background color of main page based on current theme */
+    if( gui_element->theme == THEME_LIGHT )
+    {
+        lv_obj_set_style_bg_color(gui_element->screen, lv_color_make(255, 211, 165), LV_PART_MAIN);
+        lv_obj_set_style_bg_grad_color(gui_element->screen, lv_color_make(213, 145, 142), LV_PART_MAIN);
+    }
+    else
+    {
+        lv_obj_set_style_bg_color(gui_element->screen, lv_color_make( 13, 17, 23 ), LV_PART_MAIN);
+        lv_obj_set_style_bg_grad_color(gui_element->screen, lv_color_make( 40, 52, 71 ), LV_PART_MAIN);
+    }
+
     lv_obj_set_style_bg_grad_dir(gui_element->screen, LV_GRAD_DIR_VER, LV_PART_MAIN);
     
     /*Set clock text font*/
@@ -617,7 +643,7 @@ void guiCreateMainPageStyle(GUI_t *const gui_element)
     lv_obj_align(gui_element->clock, LV_ALIGN_TOP_RIGHT, lv_pct(-5), lv_pct(40));
 
     /*Set various date elements alignment*/
-    lv_obj_align(gui_element->clock, LV_ALIGN_TOP_RIGHT, LV_PCT(-5), LV_PCT(40));
+    lv_obj_align(gui_element->clock, LV_ALIGN_TOP_RIGHT, LV_PCT(-5), LV_PCT(30));
     lv_obj_align(gui_element->date, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(40));
     lv_obj_align(gui_element->day, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(35));
     lv_obj_align(gui_element->month, LV_ALIGN_TOP_LEFT, LV_PCT(5), LV_PCT(30));
@@ -630,7 +656,7 @@ void guiCreateMainPageStyle(GUI_t *const gui_element)
     lv_obj_align(gui_element->dropDownBtn, LV_ALIGN_TOP_RIGHT, 0, 0);
 
     /*Set background opacity to 90% ONLY when pressed*/
-    lv_obj_set_style_bg_opa(gui_element->dropDownBtn, LV_OPA_90, LV_STATE_PRESSED);
+    lv_obj_set_style_bg_opa(gui_element->dropDownBtn, LV_OPA_TRANSP, LV_STATE_PRESSED);
     
     /*Set corner radius to 5 pixels ONLY when pressed*/
     lv_obj_set_style_radius(gui_element->dropDownBtn, 5, LV_STATE_PRESSED);
@@ -682,7 +708,23 @@ void guiCreateMainPageLabels(GUI_t *const gui_element)
     
     /*Add callback for drop down button*/
     lv_obj_add_event_cb(gui_element->dropDownBtn, eventHandlerDropDownBtn, LV_EVENT_CLICKED, (void *)gui_element);
-    
+
+    /*Create Theme Switch, align and add callback*/
+    gui_element->themeSwitch = lv_switch_create( gui_element->screen );
+    lv_obj_align( gui_element->themeSwitch, LV_ALIGN_BOTTOM_RIGHT, lv_pct(-5), lv_pct( -5) );  
+    if( gui_element->theme == THEME_DARK )
+    {
+        lv_obj_add_state( gui_element->themeSwitch, LV_STATE_CHECKED );
+    }
+    lv_obj_add_event_cb( gui_element->themeSwitch, eventHandlerThemeSwitch, LV_EVENT_VALUE_CHANGED, NULL );
+
+    /*Style Theme Switch Normal*/
+    lv_obj_set_style_bg_opa( gui_element->themeSwitch, LV_OPA_0, LV_PART_MAIN);
+    lv_obj_set_style_border_color( gui_element->themeSwitch, lv_color_white(), LV_PART_MAIN | LV_PART_INDICATOR);
+    lv_obj_set_style_border_opa( gui_element->themeSwitch, LV_OPA_100, LV_PART_MAIN | LV_PART_INDICATOR);
+    lv_obj_set_style_border_width( gui_element->themeSwitch, 2, LV_PART_MAIN | LV_PART_INDICATOR);
+    lv_obj_set_style_outline_opa( gui_element->themeSwitch, LV_OPA_100, LV_PART_MAIN );
+    lv_obj_set_style_bg_opa( gui_element->themeSwitch, LV_OPA_0, LV_PART_INDICATOR | LV_STATE_CHECKED );
 }
 
 /**
@@ -695,6 +737,9 @@ void guiBtnStyleInit(GUI_t *const gui_element)
     /*Initialize default style for normal and clicked*/
     lv_style_init(&gui_element->styleBtnNormal);
     lv_style_init(&gui_element->styleBtnClicked);
+    lv_style_init( &gui_element->styleThemeChecked );
+    gui_element->lightThemeColor = lv_color_make(255, 211, 165);
+    gui_element->darkThemeColor = lv_color_make( 13, 17, 23 );
 
     /*Border vs Outline
     Border - increasing the border width on a rectangle will consume more of its interior space
@@ -802,6 +847,9 @@ void guiStyleCreator(GUI_t *const gui_element)
 {
     /*Set screen member of gui_element = current active screen*/
     gui_element->screen = lv_scr_act();
+
+    /*Set Initial Theme as Light*/
+    gui_element->theme = THEME_LIGHT;
 
     /*Initialize LVGL Style*/
     lvglStyleInit(gui_element);

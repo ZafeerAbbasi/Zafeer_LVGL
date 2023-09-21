@@ -54,6 +54,7 @@
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+void processEventEThemeSwitch( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
 void processEventENewDay( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
 void processEventEAlarmNotifClose( ClockAlarmUI_t *const clkObject, guiEvent_t *event );
 void processEventEAlarmNotifON( ClockAlarmUI_t *const clkObject, guiEvent_t *event );

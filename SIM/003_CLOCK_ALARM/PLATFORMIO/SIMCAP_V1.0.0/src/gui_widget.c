@@ -151,6 +151,7 @@ lv_obj_t *createLabelContainer(lv_obj_t *parent, const char *icon, const char *t
         /*If icon param is valid*/
         /*create image*/
         img = lv_img_create(container);
+        lv_obj_set_style_text_color( img, lv_color_white(), LV_PART_MAIN);
 
         /*Set source for img, i.e. the icon*/
         lv_img_set_src(img, icon);
@@ -161,6 +162,7 @@ lv_obj_t *createLabelContainer(lv_obj_t *parent, const char *icon, const char *t
         /*If txt param is valid*/
         /*Create lable*/
         label = lv_label_create(container);
+        lv_label_set_recolor( label, true );
 
         /*Set label text*/
         lv_label_set_text( label, txt );
@@ -186,6 +188,8 @@ lv_obj_t *createLabelContainer(lv_obj_t *parent, const char *icon, const char *t
         lv_obj_swap(img, label);
 
     }
+
+
 
     return container;
 }
@@ -338,7 +342,7 @@ lv_obj_t *createCalendar(lv_obj_t *parent, calendarData_t *data)
     lv_obj_t *calendar = lv_calendar_create(parent);
 
     /*Set size and align*/
-    lv_obj_set_size(calendar, 220, 190);
+    lv_obj_set_size(calendar, 200, 180);
     lv_obj_align(calendar, LV_ALIGN_CENTER, 0, 27);
     
     /*Set Calendar year and month preset*/
@@ -400,6 +404,16 @@ void collapseDropDownList(GUI_t *gui_element)
 }
 
 /*EVENT HANDLERS--------------------------------------------------------------------------------------------------------------------------------*/
+
+void eventHandlerThemeSwitch( lv_event_t *event )
+{
+    /*Create Event*/
+    guiTimeChangeEvent_t themeSwitch;
+    themeSwitch.mainEvent.signal = E_THEME_SWITCH;
+
+    /*Process Event*/
+    clockAlarmUIProcessEvent( &clockAlarmUI_inst, &themeSwitch.mainEvent );
+}
 
 /**
  * @brief Event Handler for when user clicks the 'Close' button on the alarm notif page
@@ -967,14 +981,31 @@ void eventHandlerDropDownBtn(lv_event_t *e)
         /*Create List, dropdown doesnt work since its too hard to implement a callback per list option*/
         gui_element->dropDownList = lv_list_create(gui_element->screen);
 
+        if( gui_element->theme == THEME_DARK )
+        {
+            lv_obj_set_style_bg_color( gui_element->dropDownList, gui_element->darkThemeColor, LV_PART_MAIN );
+        }
+
         /*Create a list button and store the lv_obj_t pointer in the btn var so we can add a cb to it's address*/
         btn = lv_list_add_btn(gui_element->dropDownList, LV_SYMBOL_SETTINGS, "Settings");
+
+        if( gui_element->theme == THEME_DARK )
+        {
+            lv_obj_set_style_bg_color( btn, gui_element->darkThemeColor, LV_PART_MAIN );
+            lv_obj_set_style_text_color( btn, lv_color_white(), LV_PART_MAIN );
+        }
 
         /*Add a cb to the btn pointer which contains the address of the 'Settings' button*/
         lv_obj_add_event_cb(btn, eventHandlerDropDownBtnOptionSettings, LV_EVENT_CLICKED, (void *)gui_element);
 
         /*Create a list button - 'About' and store the address in the temp btn var*/
         btn = lv_list_add_btn(gui_element->dropDownList, LV_SYMBOL_FILE, "About");
+
+        if( gui_element->theme == THEME_DARK )
+        {
+            lv_obj_set_style_bg_color( btn, gui_element->darkThemeColor, LV_PART_MAIN );
+            lv_obj_set_style_text_color( btn, lv_color_white(), LV_PART_MAIN );
+        }
         
         /*Add a cb to the btn pointer which contains address of the 'About' button*/
         lv_obj_add_event_cb(btn, eventHandlerDropDownBtnOptionAbout, LV_EVENT_CLICKED, (void *)gui_element);

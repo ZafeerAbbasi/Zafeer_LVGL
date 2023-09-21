@@ -52,6 +52,29 @@ const char *g_months[] = { "January" , "February", "March","April","May", "June"
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+void processEventEThemeSwitch( ClockAlarmUI_t *const clkObject, guiEvent_t *event )
+{
+    /*Change State depending on switch value*/
+    if( lv_obj_has_state( clkObject->gui_inst.themeSwitch, LV_STATE_CHECKED) )
+    {
+        /*Dark Mode*/
+        clkObject->gui_inst.theme = THEME_DARK;
+    }
+    else
+    {
+        /*Light Mode*/
+        clkObject->gui_inst.theme = THEME_LIGHT;
+    }
+
+    /*reload Main Page*/
+    screenCleanup( &clkObject->gui_inst );
+    guiCreateMainPageLabels( &clkObject->gui_inst );
+    guiCreateMainPageStyle( &clkObject->gui_inst );
+    guiUpdateCurrentDate( clkObject );
+    guiUpdateCurrentTime( clkObject );
+
+}
+
 /**
  * @brief Process When a New Day has occured
  * 

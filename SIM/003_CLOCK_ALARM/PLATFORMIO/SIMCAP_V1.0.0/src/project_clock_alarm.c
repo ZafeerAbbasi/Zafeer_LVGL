@@ -172,6 +172,12 @@ void clockAlarmUIProcessEvent(ClockAlarmUI_t *const clkObject, guiEvent_t *event
         processEventENewDay( clkObject, event );
         
     }
+    else if( currEvent == E_THEME_SWITCH )
+    {
+
+        processEventEThemeSwitch( clkObject, event );
+
+    }
 }
 
 /**

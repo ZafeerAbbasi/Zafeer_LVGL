@@ -40,6 +40,13 @@
 /*TYPEDEFS/STRUCTS/ENUMS________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+/*Theme Enum*/
+typedef enum
+{
+    THEME_LIGHT,
+    THEME_DARK,
+}theme_t;
+
 /*Check Box Index Enum*/
 typedef enum
 {
@@ -55,11 +62,15 @@ typedef enum {
 
 /*GUI Structure*/
 typedef struct{
+    uint32_t theme; 
+    lv_color_t lightThemeColor;
+    lv_color_t darkThemeColor;
     /*private*/
     lv_obj_t *screen;
     
     /*public*/
     lv_obj_t *clock;
+    lv_obj_t *themeSwitch;
 
     /*private*/
     lv_obj_t *day;
@@ -72,7 +83,8 @@ typedef struct{
     lv_obj_t *dropDownBtn;
     lv_style_t styleClock;
     lv_style_t styleBtnNormal;
-    lv_style_t styleBtnClicked;
+    lv_style_t styleBtnClicked; 
+    lv_style_t styleThemeChecked;        
 }GUI_t;
 
 /**

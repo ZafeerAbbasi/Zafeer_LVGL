@@ -76,6 +76,7 @@ typedef enum{
     E_ALARM_NOTIF_ON,               /*Event generated when the time hits the Alarm Time and the Alarm GIF Notif pops up*/
     E_ALARM_NOTIF_CLOSE,            /*Event generated when the Alarm GIF notif closes*/
     E_NEW_DAY,                      /*Event generated when the time goes to a new day*/
+    E_THEME_SWITCH,                 /*Event generated when user clicks the theme switch on main page*/
     E_NONE
 }event_t;
 
