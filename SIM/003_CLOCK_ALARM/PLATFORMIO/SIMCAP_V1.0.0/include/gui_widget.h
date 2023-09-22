@@ -125,4 +125,6 @@ lv_obj_t *createLabelContainer( lv_obj_t *parent, const char *icon, const char *
 lv_obj_t *createDisplaySlider( lv_obj_t *parent, const char *icon, const char*txt, int32_t min, int32_t max, int32_t currVal, lv_event_cb_t eventCallBack );
 lv_obj_t *createMessageBox( lv_obj_t *parent, const char *title, const char *msg, const char*opts[], bool closeBtn );
 
+extern ClockAlarmUI_t clockAlarmUI_inst;
+
 #endif

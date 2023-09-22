@@ -34,7 +34,7 @@
 
 static void guiCreateTimeDateHeader(GUI_t *const gui_element);
 static lv_obj_t *createSettingsTimeAlarmRollersRow(lv_obj_t *parent, rollerData_t *rollerHour, rollerData_t *rollerMin, rollerData_t *rollerSec, lv_event_cb_t eventCallBack);
-static void createMeridiemCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBoxData);
+static void createMeridiemCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBoxData, GUI_t *const guiElement );
 
 /*##############################################################################################################################################*/
 /*DEFINES_______________________________________________________________________________________________________________________________________*/
@@ -88,7 +88,24 @@ void guiCreateAlarmNotifPage( GUI_t *const guiElement )
  */
 void guiCreateMessageBox(GUI_t *const guiElement, const char *title, const char *msg, const char *opts[], bool closeBtn )
 {
-    createMessageBox( NULL, title, msg, opts, closeBtn );
+    lv_obj_t *messageBox = createMessageBox( NULL, title, msg, opts, closeBtn );
+
+    if( guiElement->theme == THEME_DARK )
+    {
+        lv_obj_set_style_border_color( messageBox, lv_color_white(), LV_PART_MAIN );
+        lv_obj_set_style_text_color( messageBox, lv_color_white(), LV_PART_MAIN );
+        lv_obj_set_style_bg_color( messageBox, lv_color_make( 13, 17, 23 ), LV_PART_MAIN );
+        lv_obj_set_style_bg_grad_color( messageBox, lv_color_make( 40, 52, 71 ), LV_PART_MAIN );
+        lv_obj_set_style_bg_grad_dir( messageBox, LV_GRAD_DIR_VER, LV_PART_MAIN );
+    }
+    else
+    {
+        lv_obj_set_style_border_color( messageBox, lv_color_black(), LV_PART_MAIN );
+        lv_obj_set_style_text_color( messageBox, lv_color_black(), LV_PART_MAIN );
+        lv_obj_set_style_bg_color( messageBox, lv_color_make(255, 211, 165), LV_PART_MAIN );
+        lv_obj_set_style_bg_grad_color( messageBox, lv_color_make(213, 145, 142), LV_PART_MAIN );
+        lv_obj_set_style_bg_grad_dir( messageBox, LV_GRAD_DIR_VER, LV_PART_MAIN );
+    }
 }
 
 /**
@@ -164,13 +181,23 @@ void guiDisplayCurrentTime( GUI_t *const guiElement, char *const stringTime )
  * @param parent 
  * @param CheckBoxData 
  */
-static void createMeridiemCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBoxData)
+static void createMeridiemCheckBoxes(lv_obj_t *parent, CheckBoxData_t *CheckBoxData, GUI_t *const guiElement )
 {
     /*Create container on parent param passed into this function*/
     lv_obj_t *container = lv_obj_create(parent);
+    lv_obj_set_style_bg_opa( container, LV_OPA_TRANSP, LV_PART_MAIN );
 
     /*Set Flex Flow of container to coloumn to add buttons in vertical order*/
     lv_obj_set_flex_flow(container, LV_FLEX_FLOW_COLUMN);
+
+    if( guiElement->theme == THEME_DARK )
+    {
+        lv_obj_set_style_border_color( container, lv_color_white(), LV_PART_MAIN );
+    }
+    else
+    {
+        lv_obj_set_style_border_color( container, lv_color_black(), LV_PART_MAIN );
+    }
 
     /*Set height and width of container*/
     lv_obj_set_width(container, LV_SIZE_CONTENT);
@@ -233,6 +260,7 @@ static lv_obj_t *createSettingsTimeAlarmRollersRow(lv_obj_t *parent, rollerData_
 
     /*Create Hour roller*/
     rollerHourObject = createRoller(containerRow, optsHour, rollerHour->rollerActiveVal);
+    lv_obj_set_style_bg_opa( rollerHourObject, LV_OPA_TRANSP, LV_PART_MAIN );
 
     /*Set Roller type for the Roller Hour Struct passed into the function*/
     rollerHour->rollerType = ROLLER_HOUR;
@@ -246,6 +274,7 @@ static lv_obj_t *createSettingsTimeAlarmRollersRow(lv_obj_t *parent, rollerData_
 
     /*Create Minute Roller*/
     rollerMinObject = createRoller(containerRow, optsMinSec, rollerMin->rollerActiveVal);
+    lv_obj_set_style_bg_opa( rollerMinObject, LV_OPA_TRANSP, LV_PART_MAIN );
 
     /*Set Roller type for the Roller Min struct passed into this function*/
     rollerMin->rollerType = ROLLER_MIN;
@@ -262,6 +291,7 @@ static lv_obj_t *createSettingsTimeAlarmRollersRow(lv_obj_t *parent, rollerData_
 
         /*Create Second roller*/
         rollerSecObject = createRoller(containerRow, optsMinSec, rollerSec->rollerActiveVal);
+        lv_obj_set_style_bg_opa( rollerSecObject, LV_OPA_TRANSP, LV_PART_MAIN );
 
         /*Set Roller type for the roller sec struct passed into this function*/
         rollerSec->rollerType = ROLLER_SEC;
@@ -285,7 +315,6 @@ static void guiCreateTimeDateHeader(GUI_t *const gui_element)
     
     /*Assign blank text at first, will update later*/
     lv_label_set_text(gui_element->clock, "");
-    lv_obj_set_style_text_color(gui_element->clock, lv_color_white(), LV_PART_MAIN);
     
     /*Set Font*/
     lv_obj_set_style_text_font(gui_element->clock, &lv_font_montserrat_14, 0);
@@ -298,13 +327,18 @@ static void guiCreateTimeDateHeader(GUI_t *const gui_element)
     
     /*Assign blank text at first, will update later*/
     lv_label_set_text(gui_element->date, "");
-    lv_obj_set_style_text_color(gui_element->date, lv_color_white(), LV_PART_MAIN);
 
     /*Set font*/
     lv_obj_set_style_text_font(gui_element->date, &lv_font_montserrat_14, 0);
 
     /*Align date to top left*/
     lv_obj_align(gui_element->date, LV_ALIGN_TOP_LEFT, 5, 0);
+
+    if( gui_element->theme == THEME_DARK )
+    {
+        lv_obj_set_style_text_color(gui_element->clock, lv_color_white(), LV_PART_MAIN);
+        lv_obj_set_style_text_color(gui_element->date, lv_color_white(), LV_PART_MAIN);
+    }
 }
 
 /**
@@ -383,12 +417,27 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     calendarData.year = settingpagedata->year;
     
     /*Create Calendar Widget*/
-    createCalendar(datePage, &calendarData);
+    lv_obj_t *calendar = createCalendar(datePage, &calendarData);
+    if( gui_element->theme == THEME_DARK )
+    {
+        lv_obj_set_style_bg_color(calendar, lv_color_make( 13, 17, 23 ), LV_PART_MAIN);
+        lv_obj_set_style_bg_grad_color( calendar , lv_color_make( 40, 52, 71 ), LV_PART_MAIN );
+        lv_obj_set_style_bg_grad_dir( calendar, LV_GRAD_DIR_VER, LV_PART_MAIN );
+        lv_obj_set_style_text_color( calendar, lv_color_white(), LV_PART_MAIN );
+    }
+    else
+    {
+        lv_obj_set_style_bg_color(calendar, lv_color_make(255, 211, 165), LV_PART_MAIN);
+        lv_obj_set_style_bg_grad_color( calendar , lv_color_make(213, 145, 142), LV_PART_MAIN );
+        lv_obj_set_style_bg_grad_dir( calendar, LV_GRAD_DIR_VER, LV_PART_MAIN );
+        lv_obj_set_style_border_color( calendar, lv_color_black(), LV_PART_MAIN );
+    }
 
     /*Create a separator, separates sections, in this case separates save button from calendar*/
     lv_menu_separator_create(datePage);
 
     /*Create 'Save' Button*/
+    guiBtnStyleInit( gui_element );
     createSaveBtn(datePage,"Save",&gui_element->styleBtnNormal,&gui_element->styleBtnClicked,eventHandlerDateSave);
     /*END DATE PAGE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
     
@@ -406,6 +455,7 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
 
     /*Create section*/
     section = lv_menu_section_create(timePage);
+    lv_obj_set_style_bg_opa( section, LV_OPA_TRANSP, LV_PART_MAIN );
 
     /*Create Roller data placeholders, since there will be 3 rollers, one for hour, minute and second
     Make the roller static since we want the roller to retain values between calls to this function*/
@@ -419,8 +469,19 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     /*Create Parent row*/
     parentRow = createSettingsTimeAlarmRollersRow(section, &rollerTimeHour, &rollerTimeMinute, &rollerTimeSecond, eventHandlerTimeRollers);
 
+    if( gui_element->theme == THEME_DARK )
+    {
+        lv_obj_set_style_bg_opa( parentRow, LV_OPA_TRANSP, LV_PART_MAIN );
+        lv_obj_set_style_text_color( parentRow, lv_color_white(), LV_PART_MAIN );
+    }
+    else
+    {
+        lv_obj_set_style_bg_opa( parentRow, LV_OPA_TRANSP, LV_PART_MAIN );
+        lv_obj_set_style_border_color( parentRow, lv_color_black(), LV_PART_MAIN );
+    }
+
     /*Create CheckBox Data type, make them static so they retain values between calls to this function*/
-    static CheckBoxData_t meridiemFormat;
+    static CheckBoxData_t meridiemFormat; 
 
     /*Set CheckBox Data Setting Type*/
     meridiemFormat.CheckBoxSettingType = SETTING_TIME;
@@ -438,13 +499,14 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     }
 
     /*Create Time Format CheckBoxes*/
-    createMeridiemCheckBoxes(parentRow, &meridiemFormat);
+    createMeridiemCheckBoxes(parentRow, &meridiemFormat, gui_element);
 
     /*Create a seperator, separates the parentRow from the 24 Hour Switch*/
     lv_menu_separator_create(timePage);
 
     /*Create New section for 24 Hour switch*/
     section = lv_menu_section_create(timePage);
+    lv_obj_set_style_bg_opa( section, LV_OPA_TRANSP, LV_PART_MAIN );
 
     /*Create 12H24H Switch */
     lv_obj_t *switch12H24H = createONOFFSwitch(section, LV_SYMBOL_SETTINGS, "24H", false, eventHandler12H24HSwitch);
@@ -482,6 +544,7 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
 
     /*Create section*/
     section = lv_menu_section_create(alarmPage);
+    lv_obj_set_style_bg_opa( section, LV_OPA_TRANSP, LV_PART_MAIN );
 
     /*Create Roller data placeholders, since there will be 2 rollers, one for hour and minute
     Make the roller static since we want the roller to retain values between calls to this function*/
@@ -493,6 +556,17 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
 
     /*Create Parent row*/
     parentRow = createSettingsTimeAlarmRollersRow( section, &rollerAlarmHour, &rollerAlarmMinute, NULL, eventHandlerAlarmRollers );
+
+    if( gui_element->theme == THEME_DARK )
+    {
+        lv_obj_set_style_bg_opa( parentRow, LV_OPA_TRANSP, LV_PART_MAIN );
+        lv_obj_set_style_text_color( parentRow, lv_color_white(), LV_PART_MAIN );
+    }
+    else
+    {
+        lv_obj_set_style_bg_opa( parentRow, LV_OPA_TRANSP, LV_PART_MAIN );
+        lv_obj_set_style_border_color( parentRow, lv_color_black(), LV_PART_MAIN );
+    }
 
     /*Create checkbox data type for Alarm, make it static so it retains values between calls to this function*/
     static CheckBoxData_t alarmFormat;
@@ -513,7 +587,7 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     }
 
     /*Create Alarm Check Boxes*/
-    createMeridiemCheckBoxes( parentRow, &alarmFormat );
+    createMeridiemCheckBoxes( parentRow, &alarmFormat, gui_element);
 
     /*Create Variables to store Alarm ON/OFF status and text of the Alarm lable*/
     char *alarmTxt;
@@ -536,9 +610,11 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
 
     /*Create a section for the Alarm ON/OFF lable*/
     section = lv_menu_section_create( alarmPage );
+    lv_obj_set_style_bg_opa( section, LV_OPA_TRANSP, LV_PART_MAIN );
 
     /*Create the ON/OFF Switch on the section*/
-    createONOFFSwitch( section, LV_SYMBOL_BELL, alarmTxt, alarmCurrVal, eventHandlerAlarmONOFFSwitch );
+    container = createONOFFSwitch( section, LV_SYMBOL_BELL, alarmTxt, alarmCurrVal, eventHandlerAlarmONOFFSwitch );
+    lv_obj_set_style_border_color( container, lv_color_black(), LV_PART_MAIN );
     /*END ALARM PAGE////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 
@@ -555,6 +631,7 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
 
     /*Create Section*/
     section = lv_menu_section_create( displayPage );
+    lv_obj_set_style_bg_opa( section, LV_OPA_TRANSP, LV_PART_MAIN );
 
     /*Create Display slider*/
     createDisplaySlider( section, LV_SYMBOL_SETTINGS, "Brightness", 0, 150, 100, eventHandlerDisplaySlider );
@@ -569,29 +646,54 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
     /*Create section on Root Page for the all the menu options*/
     section = lv_menu_section_create(rootPage);
 
-    /*Date Settings*/
-    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "#FFFFFF     Date         Date", LV_MENU_ITEM_BUILDER_VARIANT_1 );
-    lv_menu_set_load_page_event( menu, container, datePage );
-    defaultcontainerToShow = container;
+    if( gui_element->theme == THEME_DARK )
+    {
+        /*Date Settings*/
+        container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "#FFFFFF     Date         Date", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+        lv_menu_set_load_page_event( menu, container, datePage );
+        defaultcontainerToShow = container;
 
-    /*Time Settings*/
-    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "#FFFFFF    Time         Time ", LV_MENU_ITEM_BUILDER_VARIANT_1 );
-    lv_menu_set_load_page_event( menu, container, timePage );
+        /*Time Settings*/
+        container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "#FFFFFF    Time         Time ", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+        lv_menu_set_load_page_event( menu, container, timePage );
 
-    /*Alarm Settings*/
-    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "#FFFFFF    Alarm        Alarm", LV_MENU_ITEM_BUILDER_VARIANT_1 );
-    lv_menu_set_load_page_event( menu, container, alarmPage );
+        /*Alarm Settings*/
+        container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "#FFFFFF    Alarm        Alarm", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+        lv_menu_set_load_page_event( menu, container, alarmPage );
 
-    /*Display settings*/
-    container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "#FFFFFF    Display      Display", LV_MENU_ITEM_BUILDER_VARIANT_1 );
-    lv_menu_set_load_page_event( menu, container, displayPage );
+        /*Display settings*/
+        container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "#FFFFFF    Display      Display", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+        lv_menu_set_load_page_event( menu, container, displayPage );
 
+        /*Set the Root page as sidebar page for menu*/
+        lv_menu_set_sidebar_page(menu, rootPage);
 
-    /*Set the Root page as sidebar page for menu*/
-    lv_menu_set_sidebar_page(menu, rootPage);
+        lv_obj_set_style_text_color( lv_menu_get_sidebar_header_back_btn( menu ), lv_color_white( ), LV_PART_MAIN );
+        lv_obj_set_style_text_color( lv_menu_get_sidebar_header( menu ), lv_color_white( ), LV_PART_MAIN );
 
-    lv_obj_set_style_text_color( lv_menu_get_sidebar_header_back_btn( menu ), lv_color_white( ), LV_PART_MAIN );
-    lv_obj_set_style_text_color( lv_menu_get_sidebar_header( menu ), lv_color_white( ), LV_PART_MAIN );
+    }
+    else
+    {
+         /*Date Settings*/
+        container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "     Date         Date", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+        lv_menu_set_load_page_event( menu, container, datePage );
+        defaultcontainerToShow = container;
+
+        /*Time Settings*/
+        container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "    Time         Time ", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+        lv_menu_set_load_page_event( menu, container, timePage );
+
+        /*Alarm Settings*/
+        container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "   Alarm        Alarm", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+        lv_menu_set_load_page_event( menu, container, alarmPage );
+
+        /*Display settings*/
+        container = createLabelContainer( rootPage, LV_SYMBOL_SETTINGS, "    Display      Display", LV_MENU_ITEM_BUILDER_VARIANT_1 );
+        lv_menu_set_load_page_event( menu, container, displayPage );
+
+        /*Set the Root page as sidebar page for menu*/
+        lv_menu_set_sidebar_page(menu, rootPage);
+    }
 
     /*Manually send event for Default Container to show*/
     lv_event_send( defaultcontainerToShow, LV_EVENT_CLICKED, NULL);
@@ -669,7 +771,10 @@ void guiCreateMainPageStyle(GUI_t *const gui_element)
 
     /*Set the icon and icon color for dropdown label*/
     lv_label_set_text(label, LV_SYMBOL_LIST);
-    lv_obj_set_style_text_color(label, lv_color_white(), 0);
+    if( gui_element->theme == THEME_DARK )
+    {
+        lv_obj_set_style_text_color(label, lv_color_white(), 0);
+    }
     lv_obj_set_style_text_font(label, &lv_font_montserrat_30, LV_PART_MAIN);
 
     /*Center the label to center of its parent(droppdwnbtn)*/
@@ -685,17 +790,33 @@ void guiCreateMainPageLabels(GUI_t *const gui_element)
 {
     /*Create label object and assign to clock element of gui_element*/
     gui_element->clock = lv_label_create(gui_element->screen);
-    lv_obj_set_style_text_color(gui_element->clock, lv_color_white(), LV_PART_MAIN);
 
     /*Create label objects and assign to date elements of gui_element*/
     gui_element->day = lv_label_create(gui_element->screen);
+    gui_element->month = lv_label_create(gui_element->screen);
+    gui_element->year = lv_label_create(gui_element->screen);
+    gui_element->date = lv_label_create(gui_element->screen);
+
+    if( gui_element->theme == THEME_DARK )
+    {
+    lv_obj_set_style_text_color(gui_element->day, lv_color_white(), LV_PART_MAIN);
     lv_obj_set_style_text_color(gui_element->day, lv_color_white(), LV_PART_MAIN);
     gui_element->month = lv_label_create(gui_element->screen);
+        lv_obj_set_style_text_color(gui_element->day, lv_color_white(), LV_PART_MAIN);
+    gui_element->month = lv_label_create(gui_element->screen);
+    lv_obj_set_style_text_color(gui_element->month, lv_color_white(), LV_PART_MAIN);
     lv_obj_set_style_text_color(gui_element->month, lv_color_white(), LV_PART_MAIN);
     gui_element->year = lv_label_create(gui_element->screen);
+        lv_obj_set_style_text_color(gui_element->month, lv_color_white(), LV_PART_MAIN);
+    gui_element->year = lv_label_create(gui_element->screen);
+    lv_obj_set_style_text_color(gui_element->year, lv_color_white(), LV_PART_MAIN);
     lv_obj_set_style_text_color(gui_element->year, lv_color_white(), LV_PART_MAIN);
     gui_element->date = lv_label_create(gui_element->screen);
-    lv_obj_set_style_text_color(gui_element->date, lv_color_white(), LV_PART_MAIN);
+        lv_obj_set_style_text_color(gui_element->year, lv_color_white(), LV_PART_MAIN);
+    gui_element->date = lv_label_create(gui_element->screen);
+        lv_obj_set_style_text_color(gui_element->date, lv_color_white(), LV_PART_MAIN);
+        lv_obj_set_style_text_color(gui_element->clock, lv_color_white(), LV_PART_MAIN);
+    }
 
     /*Create button for drop down button on main screen*/
     gui_element->dropDownBtn = lv_btn_create(gui_element->screen);
@@ -711,6 +832,7 @@ void guiCreateMainPageLabels(GUI_t *const gui_element)
 
     /*Create Theme Switch, align and add callback*/
     gui_element->themeSwitch = lv_switch_create( gui_element->screen );
+    lv_obj_set_style_bg_opa( gui_element->themeSwitch, LV_OPA_0, LV_PART_INDICATOR | LV_STATE_CHECKED );
     lv_obj_align( gui_element->themeSwitch, LV_ALIGN_BOTTOM_RIGHT, lv_pct(-5), lv_pct( -5) );  
     if( gui_element->theme == THEME_DARK )
     {
@@ -720,11 +842,20 @@ void guiCreateMainPageLabels(GUI_t *const gui_element)
 
     /*Style Theme Switch Normal*/
     lv_obj_set_style_bg_opa( gui_element->themeSwitch, LV_OPA_0, LV_PART_MAIN);
-    lv_obj_set_style_border_color( gui_element->themeSwitch, lv_color_white(), LV_PART_MAIN | LV_PART_INDICATOR);
     lv_obj_set_style_border_opa( gui_element->themeSwitch, LV_OPA_100, LV_PART_MAIN | LV_PART_INDICATOR);
     lv_obj_set_style_border_width( gui_element->themeSwitch, 2, LV_PART_MAIN | LV_PART_INDICATOR);
     lv_obj_set_style_outline_opa( gui_element->themeSwitch, LV_OPA_100, LV_PART_MAIN );
     lv_obj_set_style_bg_opa( gui_element->themeSwitch, LV_OPA_0, LV_PART_INDICATOR | LV_STATE_CHECKED );
+
+    if( gui_element->theme == THEME_DARK )
+    {
+        lv_obj_set_style_border_color( gui_element->themeSwitch, lv_color_white(), LV_PART_MAIN | LV_PART_INDICATOR);
+
+    }
+    else
+    {
+        lv_obj_set_style_bg_color( gui_element->themeSwitch, lv_color_black(), LV_PART_KNOB );
+    }
 }
 
 /**
@@ -750,35 +881,38 @@ void guiBtnStyleInit(GUI_t *const gui_element)
     lv_style_set_radius(&gui_element->styleBtnNormal, 15);
     
     /*Background Opacity*/
-    lv_style_set_bg_opa(&gui_element->styleBtnNormal, LV_OPA_100);
+    lv_style_set_bg_opa(&gui_element->styleBtnNormal, LV_OPA_TRANSP);
     
     /*Background Color*/
-    lv_style_set_bg_color(&gui_element->styleBtnNormal, lv_color_make(11, 11, 69));
+    //lv_style_set_bg_color(&gui_element->styleBtnNormal, lv_color_make(11, 11, 69));
 
     /*Border Opacity*/
-    lv_style_set_bg_opa(&gui_element->styleBtnNormal, LV_OPA_40);
+    //lv_style_set_bg_opa(&gui_element->styleBtnNormal, LV_OPA_40);
 
     /*Border width*/
     lv_style_set_border_width(&gui_element->styleBtnNormal, 2);
-
-    /*Border color*/
-    lv_style_set_border_color(&gui_element->styleBtnNormal, lv_palette_main(LV_PALETTE_GREY));
 
     /*Outline Opacity*/
     lv_style_set_outline_opa(&gui_element->styleBtnNormal, LV_OPA_100);
     
     /*Outline color*/
-    lv_style_set_outline_color(&gui_element->styleBtnNormal, lv_color_black());
+    if( gui_element->theme == THEME_DARK )
+    {
+        lv_style_set_outline_color(&gui_element->styleBtnNormal, gui_element->lightThemeColor);
+        /*Border color*/
+        lv_style_set_border_color(&gui_element->styleBtnNormal, lv_color_white() );
+        lv_style_set_text_color(&gui_element->styleBtnNormal, lv_color_white());
+    }
+    else
+    {
+        lv_style_set_outline_color(&gui_element->styleBtnNormal, gui_element->darkThemeColor);
+        /*Border color*/
+        lv_style_set_border_color(&gui_element->styleBtnNormal, lv_color_black() );
+    }
     
-    /*Text color*/
-    lv_style_set_text_color(&gui_element->styleBtnNormal, lv_color_white());
     
     /*Set padding, increase distance from text to edge of container in all directions by 10 pixels*/
     lv_style_set_pad_all(&gui_element->styleBtnNormal, 10);
-
-    /*Add shadow*/
-    lv_style_set_shadow_color(&gui_element->styleBtnNormal, lv_palette_main(LV_PALETTE_GREY));
-    // lv_style_set_shadow_spread(&gui_element->styleBtnNormal, )
 
     /*Clicked Btn---------------------------------------------------------------------------------------------------------*/
     /*Set outline width when pressed*/
@@ -790,17 +924,24 @@ void guiBtnStyleInit(GUI_t *const gui_element)
     /*Add slight vertical translation after pressing*/
     lv_style_set_translate_y(&gui_element->styleBtnClicked, 5);
 
-    /*Set background color of the button when clicked (Darker shade of original background color)*/
-    lv_style_set_bg_color(&gui_element->styleBtnClicked, lv_color_make(11, 11, 69));
-
-    /*Set background gradient color, when pressed, color goes from bg color to bg grad color, giving a depth effect
-    making the Btn look more 3-dimensional, top to bottom gradient */
-    lv_style_set_bg_grad_color(&gui_element->styleBtnClicked, lv_color_make(138, 138, 162));
+    if( gui_element->theme == THEME_DARK )
+    {
+        lv_style_set_bg_color(&gui_element->styleBtnClicked, lv_color_white() );
+        lv_style_set_bg_grad_color(&gui_element->styleBtnClicked, lv_color_black());
+        //lv_style_set_shadow_color( &gui_element->styleBtnClicked, lv_color_make( 40, 52, 71 ) );
+    }
+    else
+    {
+        lv_style_set_bg_color(&gui_element->styleBtnClicked, lv_color_make( 13, 17, 23 ));
+        lv_style_set_bg_grad_color(&gui_element->styleBtnClicked, lv_color_make(138, 138, 162));
+        lv_style_set_shadow_color( &gui_element->styleBtnClicked, gui_element->darkThemeColor );
+        lv_style_set_text_color(&gui_element->styleBtnClicked, lv_color_white());
+    }
 
     /*Set gradient direction*/
     lv_style_set_bg_grad_dir(&gui_element->styleBtnClicked, LV_GRAD_DIR_VER);
+    lv_style_set_bg_opa( &gui_element->styleBtnClicked, LV_OPA_100 );
 
-    lv_style_set_shadow_color( &gui_element->styleBtnClicked, lv_palette_main( LV_PALETTE_GREY ) );
     lv_style_set_shadow_ofs_x( &gui_element->styleBtnClicked, 5);
     lv_style_set_shadow_ofs_y( &gui_element->styleBtnClicked, 10);
     lv_style_set_shadow_width( &gui_element->styleBtnClicked, 20);

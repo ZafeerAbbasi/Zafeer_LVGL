@@ -87,6 +87,7 @@ lv_obj_t *createDisplaySlider( lv_obj_t *parent, const char *icon, const char*tx
 {
     /*Create Label Container*/
     lv_obj_t *sliderLabelContainer = createLabelContainer( parent, icon, txt, LV_MENU_ITEM_BUILDER_VARIANT_2 );
+    //lv_obj_set_style_opa( sliderLabelContainer, LV_OPA_TRANSP, LV_PART_MAIN );
 
     /*Create slider object*/
     lv_obj_t *slider = lv_slider_create( sliderLabelContainer );
@@ -118,6 +119,11 @@ lv_obj_t *createDisplaySlider( lv_obj_t *parent, const char *icon, const char*tx
 
     /*Add current percent and align*/
     lv_label_set_text_fmt( sliderPercentLabel, "%d%%", lv_slider_get_value( slider ) );
+
+    if( clockAlarmUI_inst.gui_inst.theme == THEME_DARK )
+    {
+        lv_obj_set_style_text_color( sliderPercentLabel, lv_color_white(), LV_PART_MAIN );
+    }
 
     /*Align label*/
     lv_obj_align_to( sliderPercentLabel, slider, LV_ALIGN_BOTTOM_MID, 0, 10 );
@@ -151,7 +157,11 @@ lv_obj_t *createLabelContainer(lv_obj_t *parent, const char *icon, const char *t
         /*If icon param is valid*/
         /*create image*/
         img = lv_img_create(container);
-        lv_obj_set_style_text_color( img, lv_color_white(), LV_PART_MAIN);
+        
+        if( clockAlarmUI_inst.gui_inst.theme == THEME_DARK )
+        {
+            lv_obj_set_style_text_color( img, lv_color_white(), LV_PART_MAIN);
+        }
 
         /*Set source for img, i.e. the icon*/
         lv_img_set_src(img, icon);
@@ -166,6 +176,11 @@ lv_obj_t *createLabelContainer(lv_obj_t *parent, const char *icon, const char *t
 
         /*Set label text*/
         lv_label_set_text( label, txt );
+
+        if( clockAlarmUI_inst.gui_inst.theme == THEME_DARK )
+        {
+            lv_obj_set_style_text_color( label, lv_color_white(), LV_PART_MAIN);
+        }
 
         /*Set long mode, so circular scroll when text is too long*/
         lv_label_set_long_mode(label, LV_LABEL_LONG_SCROLL_CIRCULAR);
@@ -207,21 +222,22 @@ lv_obj_t *createLabelContainer(lv_obj_t *parent, const char *icon, const char *t
 lv_obj_t *createONOFFSwitch(lv_obj_t *parent, const char *icon, const char *txt, bool currSwitchVal, lv_event_cb_t eventCallBack)
 {
     /*Create Container with Label*/
-    lv_obj_t *labelContainer = createLabelContainer(parent, icon, txt, LV_MENU_ITEM_BUILDER_VARIANT_1);
+    lv_obj_t *labelContainer1 = createLabelContainer(parent, icon, txt, LV_MENU_ITEM_BUILDER_VARIANT_1);
+    lv_obj_set_style_bg_opa( labelContainer1, LV_OPA_TRANSP, LV_PART_MAIN );
 
     /*Create switch on label object*/
-    lv_obj_t *ONOFFSwitch = lv_switch_create(labelContainer);
+    lv_obj_t *ONOFFSwitch = lv_switch_create(labelContainer1);
 
     /*Add state based on currSwitchVal*/
     lv_obj_add_state( ONOFFSwitch, ( currSwitchVal ? LV_STATE_CHECKED : 0 ) );
 
     /*Get Label from labelContainer, 0 is img, 1 is label*/
-    lv_obj_t *ONOFFSwitchLabel = lv_obj_get_child( labelContainer, 1 );
+    lv_obj_t *ONOFFSwitchLabel = lv_obj_get_child( labelContainer1, 1 );
 
     /*Add event callback to meridiem switch*/
     lv_obj_add_event_cb( ONOFFSwitch, eventCallBack, LV_EVENT_VALUE_CHANGED, ONOFFSwitchLabel );
 
-    return ONOFFSwitch;
+    return labelContainer1;
 }
 
 /**
@@ -240,6 +256,15 @@ lv_obj_t * createCheckBox(lv_obj_t *parent, const char *txt, lv_style_t *styleCh
 
     /*Set text*/
     lv_checkbox_set_text(checkBox, txt);
+
+    if( clockAlarmUI_inst.gui_inst.theme == THEME_DARK )
+    {
+        lv_obj_set_style_text_color( checkBox, lv_color_white(), LV_PART_MAIN );
+    }
+    else
+    {
+        lv_obj_set_style_text_color( checkBox, lv_color_black(), LV_PART_MAIN );
+    }
 
     /*Add Flag to make the box bubbled so an event from the checkbox causes a event for the parent container*/
     lv_obj_add_flag(checkBox, LV_OBJ_FLAG_EVENT_BUBBLE);
@@ -289,9 +314,24 @@ lv_obj_t *createRoller(lv_obj_t *parent, const char *opts, int currVal)
 
     /*Add style to the current middle selected option of the roller*/
     lv_obj_add_style(roller, &rollerStyle, LV_PART_SELECTED);
+    lv_obj_set_style_bg_opa( roller, LV_OPA_TRANSP, LV_PART_SELECTED );
 
     /*Align roller option text to the left*/
     lv_style_set_text_align(&rollerStyle, LV_TEXT_ALIGN_LEFT);
+
+    if( clockAlarmUI_inst.gui_inst.theme == THEME_DARK )
+    {
+        lv_obj_set_style_border_color( roller, lv_color_white(), LV_PART_MAIN );
+        lv_obj_set_style_text_color( roller, lv_color_white(), LV_PART_SELECTED );
+        lv_obj_set_style_text_color( roller, lv_color_white(), LV_PART_MAIN );
+
+    }
+    else
+    {
+        lv_obj_set_style_border_color( roller, lv_color_black(), LV_PART_MAIN );
+        lv_obj_set_style_text_color( roller, lv_color_black(), LV_PART_SELECTED );
+        lv_obj_set_style_text_color( roller, lv_color_black(), LV_PART_MAIN );
+    }
 
     return roller;
 }
@@ -322,6 +362,7 @@ lv_obj_t *createSaveBtn(lv_obj_t *parent, const char* txt, lv_style_t *normal, l
 
     /*Create label object on top of button, set text and align*/
     lv_obj_t *label = lv_label_create(btnObj);
+    lv_label_set_recolor( label, true );
     lv_label_set_text(label, txt);
     lv_obj_center(label);
 
@@ -352,7 +393,60 @@ lv_obj_t *createCalendar(lv_obj_t *parent, calendarData_t *data)
     lv_calendar_set_today_date(calendar, data->year, data->month, data->date);
 
     /*Use drop down for Year/Month header*/
-    lv_calendar_header_dropdown_create(calendar);
+    lv_obj_t *header = lv_calendar_header_dropdown_create(calendar);
+    lv_obj_t *year = lv_obj_get_child( header, 0 );
+    lv_obj_t *month = lv_obj_get_child( header, 1 );
+    lv_obj_t *yearList = lv_dropdown_get_list( year );
+    lv_obj_t *monthList = lv_dropdown_get_list( month );
+    lv_obj_set_style_bg_opa( year, LV_OPA_TRANSP, LV_PART_MAIN );
+    lv_obj_set_style_bg_opa( month, LV_OPA_TRANSP, LV_PART_MAIN );
+
+    if( clockAlarmUI_inst.gui_inst.theme == THEME_DARK )
+    {
+        lv_obj_set_style_border_color( year, lv_color_white(), LV_PART_MAIN );
+        lv_obj_set_style_border_color( month, lv_color_white(), LV_PART_MAIN );
+
+        lv_obj_set_style_border_color( yearList, lv_color_white(), LV_PART_MAIN );
+        lv_obj_set_style_border_color( monthList, lv_color_white(), LV_PART_MAIN );
+
+        lv_obj_set_style_text_color( year, lv_color_white(), LV_PART_MAIN );
+        lv_obj_set_style_text_color( month, lv_color_white(), LV_PART_MAIN );
+
+        lv_obj_set_style_text_color( yearList, lv_color_white(), LV_PART_MAIN );
+        lv_obj_set_style_text_color( monthList, lv_color_white(), LV_PART_MAIN );
+
+        lv_obj_set_style_bg_color( yearList, lv_color_make( 13, 17, 23 ), LV_PART_MAIN );
+        lv_obj_set_style_bg_color( monthList, lv_color_make( 13, 17, 23 ), LV_PART_MAIN );
+
+        lv_obj_set_style_bg_grad_color( yearList, lv_color_make( 40, 52, 71 ), LV_PART_MAIN );
+        lv_obj_set_style_bg_grad_color( monthList, lv_color_make( 40, 52, 71 ), LV_PART_MAIN );
+
+        lv_obj_set_style_bg_grad_dir( yearList, LV_GRAD_DIR_VER, LV_PART_MAIN );
+        lv_obj_set_style_bg_grad_dir( monthList, LV_GRAD_DIR_VER, LV_PART_MAIN );
+    }
+    else
+    {
+        lv_obj_set_style_border_color( year, lv_color_black(), LV_PART_MAIN );
+        lv_obj_set_style_border_color( month, lv_color_black(), LV_PART_MAIN );
+
+        lv_obj_set_style_border_color( yearList, lv_color_black(), LV_PART_MAIN );
+        lv_obj_set_style_border_color( monthList, lv_color_black(), LV_PART_MAIN );
+
+        lv_obj_set_style_text_color( year, lv_color_black(), LV_PART_MAIN );
+        lv_obj_set_style_text_color( month, lv_color_black(), LV_PART_MAIN );
+
+        lv_obj_set_style_text_color( yearList, lv_color_black(), LV_PART_MAIN );
+        lv_obj_set_style_text_color( monthList, lv_color_black(), LV_PART_MAIN );
+
+        lv_obj_set_style_bg_color( yearList, lv_color_make(255, 211, 165), LV_PART_MAIN );
+        lv_obj_set_style_bg_color( monthList, lv_color_make(255, 211, 165), LV_PART_MAIN );
+
+        lv_obj_set_style_bg_grad_color( yearList, lv_color_make(213, 145, 142), LV_PART_MAIN );
+        lv_obj_set_style_bg_grad_color( monthList, lv_color_make(213, 145, 142), LV_PART_MAIN );
+
+        lv_obj_set_style_bg_grad_dir( yearList, LV_GRAD_DIR_VER, LV_PART_MAIN );
+        lv_obj_set_style_bg_grad_dir( monthList, LV_GRAD_DIR_VER, LV_PART_MAIN );
+    }
 
     /*Add Callback event*/
     lv_obj_add_event_cb(calendar, eventHandlerDateChange, LV_EVENT_VALUE_CHANGED, NULL);
