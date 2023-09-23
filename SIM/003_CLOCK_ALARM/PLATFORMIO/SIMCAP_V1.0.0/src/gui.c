@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 4:46:40 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Sunday, September 17th 2023, 11:15:28 pm                      #
+# Last Modified: Friday, September 22nd 2023, 9:00:01 pm                       #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -614,7 +614,11 @@ void guiCreateSettingsPage(GUI_t *const gui_element, settingPageData_t *settingp
 
     /*Create the ON/OFF Switch on the section*/
     container = createONOFFSwitch( section, LV_SYMBOL_BELL, alarmTxt, alarmCurrVal, eventHandlerAlarmONOFFSwitch );
-    lv_obj_set_style_border_color( container, lv_color_black(), LV_PART_MAIN );
+    /*Create separator, separates 24hour switch from 'Save' button*/
+    lv_menu_separator_create( timePage );
+
+    /*Create Save Button with Time Change Handler*/
+    createSaveBtn(alarmPage, "Save", &gui_element->styleBtnNormal, &gui_element->styleBtnClicked, eventHandlerAlarmSave );  
     /*END ALARM PAGE////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 

@@ -5,7 +5,7 @@
 # Created Date: Tuesday, August 29th 2023, 7:31:05 pm                          #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Sunday, September 17th 2023, 11:20:16 pm                      #
+# Last Modified: Friday, September 22nd 2023, 9:18:30 pm                       #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -237,7 +237,7 @@ lv_obj_t *createONOFFSwitch(lv_obj_t *parent, const char *icon, const char *txt,
     /*Add event callback to meridiem switch*/
     lv_obj_add_event_cb( ONOFFSwitch, eventCallBack, LV_EVENT_VALUE_CHANGED, ONOFFSwitchLabel );
 
-    return labelContainer1;
+    return ONOFFSwitch;
 }
 
 /**
@@ -498,6 +498,17 @@ void collapseDropDownList(GUI_t *gui_element)
 }
 
 /*EVENT HANDLERS--------------------------------------------------------------------------------------------------------------------------------*/
+
+void eventHandlerAlarmSave( lv_event_t *event )
+{
+    guiEvent_t alarmSaveEvent;
+    lv_event_code_t code = lv_event_get_code( event );
+    if( code == LV_EVENT_CLICKED )
+    {
+        alarmSaveEvent.signal = E_SETTING_ALARM_SAVE;
+        clockAlarmUIProcessEvent( &clockAlarmUI_inst, &alarmSaveEvent );
+    }
+}
 
 void eventHandlerThemeSwitch( lv_event_t *event )
 {

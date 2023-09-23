@@ -5,7 +5,7 @@
 # Created Date: Monday, August 21st 2023, 4:49:16 am                           #
 # Author: Zafeer Abbasi                                                        #
 # ----------------------------------------------                               #
-# Last Modified: Sunday, September 17th 2023, 11:19:25 pm                      #
+# Last Modified: Friday, September 22nd 2023, 9:02:20 pm                       #
 # Modified By: Zafeer Abbasi                                                   #
 # ----------------------------------------------                               #
 # Copyright (c) 2023 Zafeer.A                                                  #
@@ -97,6 +97,7 @@ typedef struct
 /*FUNCTIONS_____________________________________________________________________________________________________________________________________*/
 /*##############################################################################################################################################*/
 
+void eventHandlerAlarmSave( lv_event_t *event );
 void eventHandlerThemeSwitch( lv_event_t *event );
 void eventHandlerNotifClose( lv_event_t *event );
 void eventHandlerMessageBox( lv_event_t *event );
