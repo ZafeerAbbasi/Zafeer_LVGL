@@ -803,21 +803,9 @@ void guiCreateMainPageLabels(GUI_t *const gui_element)
 
     if( gui_element->theme == THEME_DARK )
     {
-    lv_obj_set_style_text_color(gui_element->day, lv_color_white(), LV_PART_MAIN);
-    lv_obj_set_style_text_color(gui_element->day, lv_color_white(), LV_PART_MAIN);
-    gui_element->month = lv_label_create(gui_element->screen);
         lv_obj_set_style_text_color(gui_element->day, lv_color_white(), LV_PART_MAIN);
-    gui_element->month = lv_label_create(gui_element->screen);
-    lv_obj_set_style_text_color(gui_element->month, lv_color_white(), LV_PART_MAIN);
-    lv_obj_set_style_text_color(gui_element->month, lv_color_white(), LV_PART_MAIN);
-    gui_element->year = lv_label_create(gui_element->screen);
         lv_obj_set_style_text_color(gui_element->month, lv_color_white(), LV_PART_MAIN);
-    gui_element->year = lv_label_create(gui_element->screen);
-    lv_obj_set_style_text_color(gui_element->year, lv_color_white(), LV_PART_MAIN);
-    lv_obj_set_style_text_color(gui_element->year, lv_color_white(), LV_PART_MAIN);
-    gui_element->date = lv_label_create(gui_element->screen);
         lv_obj_set_style_text_color(gui_element->year, lv_color_white(), LV_PART_MAIN);
-    gui_element->date = lv_label_create(gui_element->screen);
         lv_obj_set_style_text_color(gui_element->date, lv_color_white(), LV_PART_MAIN);
         lv_obj_set_style_text_color(gui_element->clock, lv_color_white(), LV_PART_MAIN);
     }
